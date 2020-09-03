@@ -1,0 +1,26 @@
+configfile: "Utils/features_config_python.json"
+CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['Y','X']]
+
+rule get_feature_cpgIslandExt:
+	input:
+	output:
+		path = temp("input/features/{data}/cpgIslandExt/cpgIslandExt.txt.gz")
+	params:
+		url =  lambda wildcards, output: config[wildcards.data]['GCContent']+'cpgIslandExt.txt.gz'
+
+	shell:
+		"""
+		 rsync -a -P rsync://{params.url} {output.path} ;
+		"""
+
+
+rule get_feature_priPhyloP46way:
+    	input:
+    	output:
+    		 path = temp("input/features/hg38/priPhyloP46way/rsync.sh")
+    	params:
+    		url = lambda wildcards, output: config['hg38']['priPhyloP46way'],
+    		filter = 'chr[0-24].phyloP30way.wigFix.gz'
+    	script:
+		# run rsync.sh is auskommentiert in generate_rsync
+    		"scripts/generate_rsync.py"

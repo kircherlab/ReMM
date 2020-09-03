@@ -1,0 +1,15 @@
+__default__:
+   time: '00:10'
+   threads: 1
+   mem: 2000
+   queue: debug
+   error: 'logs/%x_%j_%N.err'
+   output: 'logs/%x_%j_%N.log'
+createSingleFeatureVCF:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+getFeatureConsScoreMamVer:
+   time: '12:00'
+   mem: 10000
+   queue: medium

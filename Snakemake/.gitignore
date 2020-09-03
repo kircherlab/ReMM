@@ -1,0 +1,13 @@
+logs
+input
+delete
+ftp.1000genomes.ebi.ac.uk
+hgdownload.cse.ucsc.edu
+hgdownload.soe.ucsc.edu
+output
+bin
+.snakemake
+.ipynb_checkpoints
+.bash_profile
+.DS_Store
+untitled.txt

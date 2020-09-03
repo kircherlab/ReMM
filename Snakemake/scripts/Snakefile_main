@@ -1,0 +1,69 @@
+FILES = ['features','folds','labels']
+rule all:
+	input:
+		'output/{data}/{data}_predictions.txt'
+
+rule get_data:
+	input:
+	output:
+		"input/{data}/{data}.rda"
+	params:
+		file = lambda wildcards, output: ''.join({wildcards.data}).replace('-',':')
+
+	shell:
+		"""
+		wget http://homes.di.unimi.it/valentini/DATA/Mendelian/{params.file}.rda  -O input/{wildcards.data}/{wildcards.data}.rda
+		"""
+
+
+# cannot access snakemake object via snakemake@params[['name']] or input[[1]], hard coded 'input/Mendelian_1-10'
+rule convert_data:
+	input:
+		'input/{data}/{data}.rda'
+	output:
+		'input/{data}/{data}.txt'
+	script:
+		"scripts/convert_data.R"
+
+# makes sense to merge with get_data using r
+rule split_data:
+	input:
+		'input/{data}/{data}.txt'
+	output:
+		expand('output/{{data}}/{{data}}.{file}.txt', file=FILES)
+
+	shell:
+		"""
+		cut -d$'\t' -f 1-26 < {input} > {output[0]};
+		cut -f27 < {input} > {output[1]};
+		cut -f28 < {input} > {output[2]}
+		"""
+
+
+rule generate_parsmurf_config:
+	input:
+		features="output/{data}/{data}.features.txt",
+		folds="output/{data}/{data}.folds.txt",
+		labels="output/{data}/{data}.labels.txt",
+		scaffold="scaffold.json"
+	output:
+		config="output/{data}/{data}.json"
+	params:
+		name = '{data}'
+
+	script:
+		"scripts/generate_parsmurf_config.py"
+
+
+# set PATH to parSMURF folder with the executable
+rule run_parSMURF:
+	input:
+		expand("output/{{data}}/{{data}}.{file}.txt", file=FILES),
+		config="output/{data}/{data}.json"
+	output:
+		'output/{data}/{data}_predictions.txt'
+	shell:
+		"""
+		parSMURF1 --cfg {input.config}
+		"""
+

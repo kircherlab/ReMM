@@ -1,0 +1,164 @@
+## links for download come from https://hgdownload.soe.ucsc.edu/goldenPath/hg38/
+
+from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
+from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+from os.path import join
+from glob import glob
+import datetime
+import ftplib 
+import pandas as pd
+import fnmatch
+
+HTTP = HTTPRemoteProvider()
+# install python package ftputil
+
+FTP = FTPRemoteProvider()
+# CHROMS = ['chr'+str(s)  for s in list(range(1,25))]
+
+
+def concat(my_list, string):
+    return [x + string for x in my_list]
+
+
+CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['Y','X']]
+
+configfile: "config/features_config.json"
+#configfile: "config/property_dict.json"
+
+
+# include: "features.snakerule"
+
+
+def get_properties(d):
+    dd = []
+    for key, value in d.items():
+        dd.append(key + " = " + value)
+    return " \n".join(dd[3:])
+
+
+rule get_feature_cpgIslandExt:
+    input: lambda wildcards: HTTP.remote(expand("{url}", url=config[wildcards.genomeBuild][wildcards.feature]["url"]), keep_local=True)
+    output:
+        temp(touch("input/features/{genomeBuild}/{feature}/done.txt"))
+        #"input/features/{genomeBuild}/{feature}/{feature}.bed.gz"
+    params:
+        path = "input/features/{genomeBuild}/{feature}/"
+    shell:
+         """  mv {input} {params.path} 
+          for file in  {params.path}*; do 
+        if  [[ $file == *txt.gz ]]; then
+            a=$(basename $file .txt.gz); 
+            zcat $file | cut -f 2- | bgzip >{params.path}$a.bed.gz; rm $file;
+            elif  [[ $file == *txt ]]; then
+                a=$(basename $file .txt); 
+                cat $file | cut -f 2- | gzip > {params.path}$a.bed.gz; rm $file;
+                elif [[ $file == *wigFix.gz ]]; then
+                do a=$(basename $file .wigFix.gz); 
+                    zcat $file | wig2bed | bgzip  > $a.bed.gz; done;
+                    rename .wigFix.gz .wig.gz {params.path}*.wigFix.gz;  
+                    elif [[ $file == *gvf.gz ]]; then
+                    a=$(basename $file .txt.gz); 
+                    gvcf2bed -I $file -O {params.path}$a.bed; rm $file;
+                  #  convert2bed --input=gvf < GRCh38.variant_call.all.gvf > GRCh38.variant_call.all.bed
+                   #     a=$(basename $file .gvf.gz); 
+          fi;  
+done;"""
+
+rule getFeatureConsScoreMamVer:
+    input:   
+        lambda wildcards: HTTP.remote(expand('{url}{chr}.{extension}', url = config[wildcards.genomeBuild][wildcards.feature]["url"], chr = CHROMS, extension = config[wildcards.genomeBuild][wildcards.feature]["extension"]))  
+    output:
+        dynamic("input/features/{genomeBuild}/{feature}/{file}.wigFix.gz")
+    params:
+        path = "input/features/{genomeBuild}/{feature}/"
+    shell:
+        """ mv {input}   {params.path} """
+
+
+CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['X']]
+        
+rule getFeatureVariants:
+    input:   
+        lambda wildcards: HTTP.remote(expand('{url}ALL.{chr}.{extension}', url = config[wildcards.genomeBuild][wildcards.feature]["url"], chr = CHROMS, extension = config[wildcards.genomeBuild][wildcards.feature]["extension"]))  
+    output:
+        #dynamic("input/features/{genomeBuild}/{feature}/{file}.vcf.gz")
+        temp(touch("input/features/{genomeBuild}/{feature}/bla.txt"))
+    params:
+        path = "input/features/{genomeBuild}/{feature}/"
+    shell:
+        """ mv {input}   {params.path} """
+
+
+rule get_feature_EncH3K27Ac:
+    input:
+        lambda wildcards: HTTP.remote("%s%s.bigWig" % (config[wildcards.genomeBuild][wildcards.feature]['url'], wildcards.file), 
+					keep_local=False)
+    output:
+        "input/features/{genomeBuild}/EncH3K27Ac/EncH3K27Ac.{file}.bigWig"
+    shell: 
+        """
+        mv {input} {output}
+        """
+
+rule convert_feature_EncH3K27Ac:
+    input:
+	"input/features/{genomeBuild}/EncH3K27Ac/EncH3K27Ac.{file}.bigWig"
+    output:
+	 "input/features/{genomeBuild}/EncH3K27Ac/EncH3K27Ac.{file}.wig.gz"
+    shell:
+        """
+	bigWigToWig {input} >(bgzip -c > {output})
+	"""
+rule get_feature_1KG:
+    output:
+        "input/features/{genomeBuild}/1GK/1GK.{chr}.vcf.gz"
+    params:
+        chr="{chr}"
+    shell:
+        """
+         curl http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls/ALL.{params.chr}.freebayes.20200518.snps_indels.NYhc.GRCh38.vcf.gz | zcat | cut -f 1-9 | bgzip -c > {output}
+        """
+rule get_feature_rareVar:
+    input:
+       "input/features/{genomeBuild}/rarVar/rarVar.{chr}.tsv.gz"
+    output:
+        "input/features/{genomeBuild}/rareVar/rarVar.{chr}.tsv.gz"
+    shell:
+        """
+        scripts/
+        """
+       
+rule create_property_file:
+    input:
+        lambda wc: expand("input/features/{{genomeBuild}}/{{feature}}/{{feature}}.{files}.{extension}.gz", 
+			files=config[wc.genomeBuild][wc.feature]['files'],
+			extension=config[wc.genomeBuild][wc.feature]['type']) 
+    output:
+        config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties"
+    run:
+        date = datetime.date.today()
+        files = " \n".join(["file = " + file for file in input])
+        properties = get_properties(config[wildcards.genomeBuild][wildcards.feature])
+        shell(""" echo '{properties} \nname = {wildcards.feature} \ndate = {date} \n{files} ' >> {output}""")
+
+        
+        
+rule createSingleFeatureVCF:
+    input:
+        config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties",
+    output:
+        vcf="output/features/single/{genomeBuild}/{feature}.vcf.gz",
+        #tbi="output/features/single/{genomeBuild}/{feature}.vcf.gz.tbi",
+    params:
+        mem="5g",
+    shell:
+        """
+        export LC_ALL=C;
+        java -Xmx{params.mem} -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar \
+        vcf -p {input} --output {output.vcf};
+        #zcat {output.vcf} | sort -k1,1 -k2,2n | bgzip -c > {output.vcf};
+         #tabix {output.vcf};
+        """
+
+
+  

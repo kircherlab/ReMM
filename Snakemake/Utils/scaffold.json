@@ -1,0 +1,32 @@
+{
+	"name": "cfgEx_dataFromFile",
+	"exec": {
+		"name": "parSMURF1",
+		"ensThrd": 4,
+		"rfThrd": 1,
+		"seed": 1,
+		"verboseLevel": 1,
+		"saveTime": true,
+		"timeFile": "timeout.txt",
+		"printCfg": true,
+		"mode": "cv",
+		"optimizer": "no"
+	},
+	"data": {
+		"dataFile": "../exampleDataset/data1.txt",
+		"foldFile": "../exampleDataset/folds1.txt",
+		"labelFile": "../exampleDataset/labels1.txt",
+		"outFile": "predictions.txt"
+	},
+	"folds": {
+		"nFolds": 10
+	},
+	"params": {
+		"nParts": [10],
+		"fp": [1],
+		"ratio": [1],
+		"k": [5],
+		"nTrees": [10],
+		"mtry": [5]
+	}
+}

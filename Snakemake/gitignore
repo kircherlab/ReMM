@@ -1,0 +1,12 @@
+.snakemake
+.ipynb_checkpoints
+.bash_profile
+.DS_Store
+Snakemake/input
+Snakemake/output
+Snakemake/ftp.1000genomes.ebi.ac.uk
+Snakemake/hgdownload.cse.ucsc.edu
+Snakemake/hgdownload.soe.ucsc.edu
+Snakemake/logs
+Snakemake/delete
+Snakemake/bin

@@ -1,0 +1,245 @@
+{
+  "hg38": {
+    "cpgIslandExt": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
+      
+    "GCContent": {
+            "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
+            "rule" : "rules.get_feature_cpgIslandExt.output",
+            "extension":"txt.gz",
+            "type":"bed",
+            "method":"upload",
+            "column":"7",
+            "description": "GC-content in a range of +-75"
+        },    
+
+    "CpGperGC": {
+            "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
+            "rule" : "rules.get_feature_cpgIslandExt.output",
+            "extension":"txt.gz",
+            "type":"bed",
+            "method":"upload",
+            "column":"9",
+           "description": "CpG islands. Percentage of island that is C or G. Downloaded from UCSC table browser"
+        }, 
+ 
+    "CpGperCpG":  {
+            "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
+            "rule" : "rules.get_feature_cpgIslandExt.output",
+            "extension":"txt.gz",
+            "type":"bed",
+            "method":"upload",
+            "column":"8",
+            "description": "CpG islands. Percentage of island that is CpG. Downloaded from UCSC table browser"
+        },
+      
+    "CpGobsExp":{
+          "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
+          "rule" : "rules.get_feature_cpgIslandExt.output",
+          "extension":"bed",
+          "type":"bed",
+          "column":"10",
+          "method":"upload",
+          "description": "CpG islands. Ratio of observed (cpgNum) to expected(numC*numG/length) CpG in island downloaded from UCSC table browser"},
+      
+    "priPhyloPXway": {
+            "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP17way/hg38.phyloP17way.wigFix.gz",
+            "rule":"rules.get_files.output",
+            "extension":"wigFix.gz",
+            "type":"bed",
+            "positions": "???/positions.txt",
+            "method":"upload",
+           "description": "Conservation primate phyloP46way downloaded from USCS"
+        },
+      
+    "verPhyloPXway": {
+            "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.100way.phyloP100way/",
+            "rule":"rules.get_feature_MamPri.output",
+            "extension":"phyloP100way.wigFix.gz",
+            "type":"bed",
+            "method":"upload",
+            "description": "Conservation vertebrate phyloP46way downloaded from UCSC"
+        },
+        
+    "mamPhyloXway":{
+            "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP30way/hg38.30way.phyloP/",
+            "rule":"rules.get_feature_MamPri.output",
+            "extension":"phyloP30way.wigFix.gz",
+            "type":"bed",
+            "method":"upload",
+            "description": "Conservation placental mammals phyloP46way downloaded from USCS"
+        },
+      
+    "priPhastConsXway": {
+        "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons17way/hg38.phastCons17way.wigFix.gz",
+            "rule":"rules.get_feature_MamPri.output",
+            "extension":"wigFix.gz",
+            "type":"bed",
+            "method":"upload",
+            "description": "Conservation primates phastCons46way downloaded from UCSC"
+        },
+
+    "verPhastConsXway":   {
+    "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.100way.phastCons/",
+            "rule":"rules.get_feature_MamPri.output",
+            "extension":"phastCons100way.wigFix.gz",
+            "type":"bed",
+            "method":"upload",
+            "description": "Conservation vertebrate phastCons46way downloaded from UCSC"
+        },
+      
+    "mamPhastConsXway": {
+            "url":"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons30way/hg38.30way.phastCons/",
+            "rule":"rules.get_feature_MamPri.output",
+            "extension":"phastCons30way.wigFix.gz",
+            "type":"bed",
+            "method":"upload",
+            "description": "Conservation placental mammals phastCons46way downloaded from UCSC"
+        },
+    
+    "GerpRS": NaN,
+    "GerpRSpv": NaN,
+    "EncH3K27Ac": {
+            "url":"http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k27ac/",
+            "files" : ["wgEncodeBroadHistoneGm12878H3k27acStdSig", "wgEncodeBroadHistoneH1hescH3k27acStdSig", "wgEncodeBroadHistoneHsmmH3k27acStdSig", "wgEncodeBroadHistoneHuvecH3k27acStdSig", "wgEncodeBroadHistoneK562H3k27acStdSig", "wgEncodeBroadHistoneNhekH3k27acStdSig", "wgEncodeBroadHistoneNhlfH3k27acStdSig"],
+            "rule": "rules.get_feature_MaxEncode.output",
+            "extension":"bigWig",
+            "type":"wig",
+            "column":"4",
+            "method":"upload-max",
+            "description": "Maximum ENCODE H3K27 acetylation level"
+        },
+   
+    "EncH3K4Me1": {
+            "url":"http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me1/",
+            "rule": "rules.get_feature_MaxEncode.output",
+            "extension":"bigWig",
+            "type":"wig",
+            "column":"4",
+            "method":"upload-max",
+            "description": "Maximum ENCODE H3K4 methylation level"
+        },      
+    "EncH3K4Me3": {
+            "url": "http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me3/",
+            "rule": "rules.get_feature_MaxEncode.output",
+            "extension":"bigWig",
+            "type":"wig",
+            "column":"4",
+            "method":"upload-max",
+            "description": "Maximum ENCODE H3K4 trimethylation level"
+        },
+
+    "DnaseClusteredHyp": 
+      {
+            "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeRegDnaseClustered.txt.gz",
+            "rule": "",
+            "extension":"txt.gz",
+            "type":"bed",
+            "column":"4",
+            "method":"upload-max",
+            "description": "Number of DnaseClustered V3 cells that are hypersensitive in that region. This track shows DNase hypersensitive areas assayed in a large collection of cell types by the ENCODE project. Regulatory regions in general, and promoters in particular, tend to be DNase-sensitive. Additional views of this data and additional documentation on the methods used to identify hypersensitive sites are available from the Uniform DNaseI HS page. The uniform peaks in that track are the basis for the clusters shown here, which combine data from the peaks of the different cell lines."
+        },
+      
+    "DnaseClusteredScore":  {
+            "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeRegDnaseClustered.txt.gz",
+            "rule": "",
+            "extension":"txt.gz",
+            "type":"bed",
+            "column":"5",
+            "method":"upload-max",
+            "description": "DnaseClustered V3 Score. This track shows DNase hypersensitive areas assayed in a large collection of cell types by the ENCODE project. Regulatory regions in general, and promoters in particular, tend to be DNase-sensitive. Additional views of this data and additional documentation on the methods used to identify hypersensitive sites are available from the Uniform DNaseI HS page. The uniform peaks in that track are the basis for the clusters shown here, which combine data from the peaks of the different cell lines."
+    },
+      
+        "Fantom5Perm": {
+            "url":"https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts3.bed.gz?download=1",
+            "rule":"rules.get_feature_Fantom5.output",
+            "extension":"bed.gz",
+            "type":"bed",
+            "column":"5",
+            "method":"upload",
+            "description": "permissive enhancers by the Andersson et al. paper."},
+      
+    "Fantom5Robust": {
+            "url":"https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts11_ctssMaxTpm1.bed.gz?download=1",
+            "extension":"bed.gz",
+            "rule":"rules.get_feature_Fantom5.output",
+            "type":"bed",
+            "column":"5",
+            "method":"upload",
+            "description": "robust enhancers by the Andersson et al. paper."
+        },
+      
+    "numTFBSConserved": NaN,
+    "rareVar": {
+            "url":"http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls/",
+            "extension":"freebayes.20200518.snps_indels.NYhc.GRCh38.vcf.gz",
+            "rule":"",
+            "type":"bed",
+            "column":"5",
+            "method":"upload",
+            "description": "Number of rare 1000 genome variants (>= 0.5% allele frequency) in a +-500 window."
+        },
+    "commonVar": NaN,
+    "fracRareCommon": NaN,
+    "ISCApath":  {
+      
+      "url":"https://ftp.clinicalgenome.org/ClinGen%20recurrent%20CNV%20.bed%20file%20V1.1-hg38.bed",
+            "extension":"bed.gz",
+            "rule":"rules.get_feature_Fantom5.output.vcf.gz",
+            "type":"bed",
+            "column":"4",
+            "method":"upload",
+            "description": "Count of overlapping ISCA entries (nstd37_45_75). Use only pathogenic or likely pathogenic."
+        },
+             
+    "dbVARCount":  { "url":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.variant_call.all.gvf.gz",
+            "extension":"bed.gz",
+            "rule":"",
+            "type":"gvf.gz",
+            "column":"4",
+            "method":"upload",
+            "description": "Count of overlapping dbVar entries. Not benign or or likley benign."
+        },
+      
+    "DGVCount": {
+            "url":"http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_2020-02-25.txt",
+            "extension":"txt",
+            "rule":"",
+            "type":"bed",
+            "column":"4",
+            "method":"upload",
+            "description": "Count of overlapping DGV entries."
+        },   
+  },
+    
+   
+  "hg19": {
+    "cpgIslandExt": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/",
+      "GCContent": NaN,
+      "CpGperGC": NaN,
+      "CpGperCpG": NaN,
+      "CpGobsExp": NaN,
+       "priPhyloP46way": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/primates",
+    "verPhyloP46way": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/vertebrate",
+    "mamPhyloP46way": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/placentalMammals/",
+    "priPhastCons46way": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/primates",
+    "verPhastCons46way": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/vertebrate",
+    "mamPhastCons46way": "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals",
+    "GerpRS": "http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz",
+    "GerpRSpv": "http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz",
+    "EncH3K27Ac": "http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegMarkH3k27ac",
+    "EncH3K4Me1": "http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegMarkH3k4me1",
+    "EncH3K4Me3": "http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegMarkH3k4me3",
+    "DnaseClusteredHyp": "http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegDnaseClustered",
+    "DnaseClusteredScore": "http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegDnaseClustered",
+    "fantom5Perm": "http://enhancer.binf.ku.dk/presets/permissive_enhancers.bed",
+    "fantom5Robust": "http://enhancer.binf.ku.dk/presets/robust_enhancers.bed",
+    "numTFBSConserved": "UCSC table tfbsConsSites",
+    "rareVar": NaN,
+    "commonVar": NaN,
+    "fracRareCommon": NaN,
+    "ISCApath": NaN,
+    "dbVARCount": NaN,
+    "DGVCount": NaN,
+    "NaN": NaN
+  }
+}

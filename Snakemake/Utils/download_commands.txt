@@ -1,0 +1,28 @@
+snakemake -s feature_download_example -f input/features/hg38/ProportyFiles/{GCContent,CpGperGC,CpGobsExp,CpGperCpG,Fantom5Robust,Fantom5Perm,priPhastConsXway,priPhyloPXway,DGVCount}.properties -j12
+
+snakemake -s feature_download -f input/features/hg38/ProportyFiles/{verPhyloPXway, mamPhyloXway,verPhastConsXway,mamPhastConsXway}.properties -j12
+
+snakemake -s feature_download_example -f input/features/hg38/ProportyFiles/{priPhastConsXway,priPhyloPXway}.properties -j12
+
+
+snakemake -s feature_download_example -f input/features/hg38/ProportyFiles/mamPhastConsXway.properties -j12
+snakemake -s feature_download_example -f input/features/hg38/DGVCount/done.txt  -j12
+
+snakemake -s df -f output/features/single/hg38/mamPhastConsXway.vcf.gz 
+
+output/features/single/hg38/priPhastConsXway.vcf.gz.tbi -j20
+
+
+Probleme:
+dbVARCount: gvf.gz klappt nicht
+GCContent: column 4 same, but java doesnt work 
+hg38 https://genome.ucsc.edu/cgi-bin/hgTables
+hg19 http://genome.ucsc.edu/cgi-bin/hgTables?hgta_doSchemaDb=hg19&hgta_doSchemaTable=cpgIslandExt
+
+
+awk '{print NF; exit}' 
+
+rm -r input/features/hg38/EncH3K27Ac
+rm input/features/hg38/ProportyFiles/ISCApath.properties 
+output/features/single/hg38/CpGperCpG.vcf.gz
+
