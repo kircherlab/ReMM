@@ -1,0 +1,65 @@
+rule get_priPhyloP:
+    input:
+        lambda wildcards: HTTP.remote(config['hg38']['priPhyloP']["url"],
+        keep_local=False)
+    output:
+        "input/features/hg38/priPhyloP/priPhyloP.all.wig.gz"
+    shell:
+        """
+        mv {input}  {output}
+        """
+
+rule get_priPhastCons:
+    input:
+        lambda wildcards: HTTP.remote(config['hg38']['priPhastCons']["url"],
+        keep_local=False)
+    output:
+        "input/features/hg38/priPhastCons/priPhastCons.all.wig.gz"
+    shell:
+        """
+        mv {input}  {output}
+        """
+
+rule get_verPhyloP:
+    input:
+        lambda wildcards: HTTP.remote("%s%s.phyloP100way.wigFix.gz" % (config['hg38']['verPhyloP']["url"], wildcards.chr),
+        keep_local=False)
+    output:
+        "input/features/hg38/verPhyloP/verPhyloP.{chr}.wig.gz"
+    shell:
+        """
+        mv {input}  {output}
+        """
+
+rule get_verPhastCons:
+    input:
+        lambda wildcards: HTTP.remote("%s%s.phastCons100way.wigFix.gz" % (config['hg38']['verPhastCons']["url"], wildcards.chr),
+        keep_local=False)
+    output:
+        "input/features/hg38/verPhastCons/verPhastCons.{chr}.wig.gz"
+    shell:
+        """
+        mv {input}  {output}
+        """
+
+rule get_mamPhastCons:
+    input:
+        lambda wildcards: HTTP.remote("%s%s.phastCons30way.wigFix.gz" % (config['hg38']['mamPhastCons']["url"], wildcards.chr),
+        keep_local=False)
+    output:
+        "input/features/hg38/mamPhastCons/mamPhastCons.{chr}.wig.gz"
+    shell:
+        """
+        mv {input}  {output}
+        """
+
+rule get_mamPhyloP:
+    input:
+        lambda wildcards: HTTP.remote("%s%s.phyloP30way.wigFix.gz" % (config['hg38']['mamPhyloP']["url"], wildcards.chr),
+        keep_local=False)
+    output:
+        "input/features/hg38/mamPhyloP/mamPhyloP.{chr}.wig.gz"
+    shell:
+        """
+        mv {input}  {output}
+        """

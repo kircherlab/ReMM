@@ -1,0 +1,26 @@
+rule get_cpgIslandExt_file:
+    input:
+        HTTP.remote("https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
+        keep_local=False)
+    output:
+        "input/features/hg38/cpgIslandExt/cpgIslandExt.all.bed.gz"
+    shell:
+        """
+        zcat {input} | cut -f 2- | bgzip -c > {output}
+        """
+
+
+rule get_GCContent:
+    input:
+        lambda wc: config['global_files']['genome_builds'][wc.genomeBuild]['reference']
+    output:
+        "input/features/{genomeBuild}/GCContent/GCContent.all.bed.gz"
+    params:
+        width=lambda wc: config[wc.genomeBuild]['GCContent']['window_size']
+    conda:
+        "../../envs/GCContent.yml"
+    shell:
+        """
+        ruby scripts/getGCContentGenomeWide.rb {input} {params.width} | \
+        bgzip -c > {output}
+        """
