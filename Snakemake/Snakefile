@@ -37,40 +37,13 @@ def get_properties(d):
     return " \n".join(dd[3:])
 
 
-rule get_feature_cpgIslandExt:
-    input: lambda wildcards: HTTP.remote(expand("{url}", url=config[wildcards.genomeBuild][wildcards.feature]["url"]), keep_local=True)
-    output:
-        temp(touch("input/features/{genomeBuild}/{feature}/done.txt"))
-        #"input/features/{genomeBuild}/{feature}/{feature}.bed.gz"
-    params:
-        path = "input/features/{genomeBuild}/{feature}/"
-    shell:
-         """  mv {input} {params.path}
-          for file in  {params.path}*; do
-        if  [[ $file == *txt.gz ]]; then
-            a=$(basename $file .txt.gz);
-            zcat $file | cut -f 2- | bgzip >{params.path}$a.bed.gz; rm $file;
-            elif  [[ $file == *txt ]]; then
-                a=$(basename $file .txt);
-                cat $file | cut -f 2- | gzip > {params.path}$a.bed.gz; rm $file;
-                elif [[ $file == *wigFix.gz ]]; then
-                do a=$(basename $file .wigFix.gz);
-                    zcat $file | wig2bed | bgzip  > $a.bed.gz; done;
-                    rename .wigFix.gz .wig.gz {params.path}*.wigFix.gz;
-                    elif [[ $file == *gvf.gz ]]; then
-                    a=$(basename $file .txt.gz);
-                    gvcf2bed -I $file -O {params.path}$a.bed; rm $file;
-                  #  convert2bed --input=gvf < GRCh38.variant_call.all.gvf > GRCh38.variant_call.all.bed
-                   #     a=$(basename $file .gvf.gz);
-          fi;
-done;"""
-
-
 CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['X']]
 
 rule getFeatureVariants:
     input:
-        lambda wildcards: HTTP.remote(expand('{url}ALL.{chr}.{extension}', url = config[wildcards.genomeBuild][wildcards.feature]["url"], chr = CHROMS, extension = config[wildcards.genomeBuild][wildcards.feature]["extension"]))
+        lambda wildcards: HTTP.remote(expand('{url}ALL.{chr}.{extension}', url = config[wildcards.genomeBuild][wildcards.feature]["url"],
+        chr = CHROMS,
+        extension = config[wildcards.genomeBuild][wildcards.feature]["extension"]))
     output:
         #dynamic("input/features/{genomeBuild}/{feature}/{file}.vcf.gz")
         temp(touch("input/features/{genomeBuild}/{feature}/bla.txt"))
@@ -89,6 +62,8 @@ include: "rules/features/encode_epigenetics.snakerule"
 
 include: "rules/features/population.snakerule"
 
+include: "rules/features/fantom.snakerule"
+
 
 rule create_property_file:
     input:
@@ -98,12 +73,16 @@ rule create_property_file:
 			extension=config[wc.genomeBuild][wc.feature]['type'])
     output:
         config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties"
+    params:
+        type=lambda wc: config[wc.genomeBuild][wc.feature]['type'],
+        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column']) if config[wc.genomeBuild][wc.feature]['type'] == "bed" else "",
+        method=lambda wc: config[wc.genomeBuild][wc.feature]['method'],
+        description=lambda wc: config[wc.genomeBuild][wc.feature]['description'],
     run:
-        date = datetime.date.today()
-        files = " \n".join(["file = " + file for file in input])
-        properties = get_properties(config[wildcards.genomeBuild][wildcards.feature])
-        shell(""" echo '{properties} \nname = {wildcards.feature} \ndate = {date} \n{files} ' >> {output}""")
-
+        files=" \n".join(["file = " + file for file in input])
+        shell("""
+        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type} \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
+        """)
 
 
 rule createSingleFeatureVCF:
@@ -114,6 +93,8 @@ rule createSingleFeatureVCF:
         #tbi="output/features/single/{genomeBuild}/{feature}.vcf.gz.tbi",
     params:
         mem="5g",
+    conda:
+        "envs/jdk11.yml"
     shell:
         """
         export LC_ALL=C;
@@ -121,4 +102,14 @@ rule createSingleFeatureVCF:
         vcf -p {input} --output {output.vcf};
         #zcat {output.vcf} | sort -k1,1 -k2,2n | bgzip -c > {output.vcf};
          #tabix {output.vcf};
+        """
+rule mergeSingleFeatureVCF:
+    input:
+        lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz",
+            feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
+    output:
+        vcf="output/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz",
+    shell:
+        """
+        bcftools {input} | bgzip -c > {output}
         """

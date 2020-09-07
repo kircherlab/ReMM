@@ -9,7 +9,59 @@ createSingleFeatureVCF:
    time: '12:00'
    mem: 10000
    queue: medium
-getFeatureConsScoreMamVer:
+mergeSingleFeatureVCF:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+get_priPhyloP:
+   time: '12:00'
+   mem: 2000
+   queue: medium
+get_priPhastCons:
+   time: '12:00'
+   mem: 2000
+   queue: medium
+get_verPhyloP:
+   time: '12:00'
+   mem: 2000
+   queue: medium
+get_verPhastCons:
+   time: '12:00'
+   mem: 2000
+   queue: medium
+get_mamPhastCons:
+   time: '12:00'
+   mem: 2000
+   queue: medium
+get_mamPhyloP:
+   time: '12:00'
+   mem: 2000
+   queue: medium
+get_GCContent:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+get_feature_1KG:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+convert_feature_1kG:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+get_feature_EncH3K4Me3:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+get_feature_EncH3K4Me1:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+get_feature_EncH3K27Ac:
+   time: '12:00'
+   mem: 10000
+   queue: medium
+convert_bigwig_to_wig:
    time: '12:00'
    mem: 10000
    queue: medium

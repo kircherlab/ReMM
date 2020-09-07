@@ -1,0 +1,8 @@
+global_files:
+  genome_builds:
+    hg38:
+      reference: "/fast/projects/cubit/current/static_data/reference/GRCh38/hs38/hs38.fa"
+      genome: "/fast/projects/cubit/current/static_data/reference/GRCh38/hs38/hs38.fa.genome"
+    hg19:
+      reference: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa"
+      genome: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa.genome"

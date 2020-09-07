@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 
 def remove(array, pos)
 	
