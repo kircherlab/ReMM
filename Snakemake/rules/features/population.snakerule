@@ -5,7 +5,6 @@ rule get_feature_1KG:
         chr="{chr}"
     shell:
         """
-        set +o pipefail;
         curl http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls/ALL.{params.chr}.freebayes.20200518.snps_indels.NYhc.GRCh38.vcf.gz | \
         zcat | \
         cut -f 1-9 | \

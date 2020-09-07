@@ -5,7 +5,20 @@ rule get_priPhyloP:
         url=config['hg38']['priPhyloP']["url"]
     shell:
         """
-        curl {params.url} > {output}
+        curl {params.url} | zcat | \
+        awk -v 'put="F"' '{{
+          if ($0 ~ /chrom/) {{
+            if ($0 ~ /(\schrom=(chr([0-9]+|X|Y|M))\sstart=[0-9]+\sstep=[0-9]+)/) {{
+              print $0;
+              put="T";
+            }} else {{
+              put="F";
+            }}
+          }} else {{
+            if (put=="T") {{
+              print $0;
+            }}
+          }} }}' | bgzip -c > {output}
         """
 
 rule get_priPhastCons:
@@ -15,7 +28,20 @@ rule get_priPhastCons:
         url=config['hg38']['priPhastCons']["url"]
     shell:
         """
-        curl {params.url} > {output}
+        curl {params.url} | zcat | \
+        awk -v 'put="F"' '{{
+          if ($0 ~ /chrom/) {{
+            if ($0 ~ /(\schrom=(chr([0-9]+|X|Y|M))\sstart=[0-9]+\sstep=[0-9]+)/) {{
+              print $0;
+              put="T";
+            }} else {{
+              put="F";
+            }}
+          }} else {{
+            if (put=="T") {{
+              print $0;
+            }}
+          }} }}' | bgzip -c > {output}
         """
 
 rule get_verPhyloP:
