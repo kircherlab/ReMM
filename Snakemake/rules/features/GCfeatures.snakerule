@@ -1,12 +1,11 @@
 rule get_cpgIslandExt_file:
-    input:
-        HTTP.remote("https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz",
-        keep_local=False)
     output:
         "input/features/hg38/cpgIslandExt/cpgIslandExt.all.bed.gz"
+    params:
+        url="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz"
     shell:
         """
-        zcat {input} | cut -f 2- | bgzip -c > {output}
+        curl {params.url} | zcat | cut -f 2- | bgzip -c > {output}
         """
 
 
