@@ -1,7 +1,7 @@
 {
   "feature_set" :{
     "hg38": {
-      "test_feature_set": ["CpGperGC","CpGperCpG","CpGobsExp","GCContent","priPhyloP","priPhastCons","verPhyloP","verPhastCons","mamPhyloP","mamPhastCons","EncH3K27Ac","DnaseClusteredHyp","DnaseClusteredScore","Fantom5Perm","Fantom5Robust","rareVar","commonVar","fracRareCommon"]
+      "test_feature_set": ["CpGperGC","CpGperCpG","CpGobsExp","GCContent","priPhyloP","priPhastCons","verPhyloP","verPhastCons","mamPhyloP","mamPhastCons","EncH3K27Ac","EncH3K4Me1","EncH3K4Me3","DnaseClusteredHyp","DnaseClusteredScore","Fantom5Perm","Fantom5Robust","rareVar","commonVar","fracRareCommon"]
     }
   },
   "hg38": {
@@ -112,7 +112,7 @@
     "EncH3K4Me1": {
             "url":"http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me1/",
             "file" : "EncH3K4Me1",
-            "files" : ["TODO"],
+            "files" : ["wgEncodeBroadHistoneGm12878H3k4me1StdSig","wgEncodeBroadHistoneH1hescH3k4me1StdSig","wgEncodeBroadHistoneHsmmH3k4me1StdSig","wgEncodeBroadHistoneHuvecH3k4me1StdSig","wgEncodeBroadHistoneK562H3k4me1StdSig","wgEncodeBroadHistoneNhekH3k4me1StdSig","wgEncodeBroadHistoneNhlfH3k4me1StdSig"],
             "type":"wig",
             "method":"upload-max",
             "description": "Maximum ENCODE H3K4 methylation level"
@@ -120,14 +120,13 @@
     "EncH3K4Me3": {
             "url": "http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me3/",
             "file" : "EncH3K4Me3",
-            "files" : ["TODO"],
+            "files" : ["wgEncodeBroadHistoneGm12878H3k4me3StdSig","wgEncodeBroadHistoneH1hescH3k4me3StdSig","wgEncodeBroadHistoneHsmmH3k4me3StdSig","wgEncodeBroadHistoneHuvecH3k4me3StdSig","wgEncodeBroadHistoneK562H3k4me3StdSig","wgEncodeBroadHistoneNhekH3k4me3StdSig","wgEncodeBroadHistoneNhlfH3k4me3StdSig"],
             "type":"wig",
             "method":"upload-max",
             "description": "Maximum ENCODE H3K4 trimethylation level"
         },
 
-    "DnaseClusteredHyp":
-      {
+    "DnaseClusteredHyp" : {
             "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeRegDnaseClustered.txt.gz",
             "file" : "DnaseClusteredHyp",
             "files" : "all",
@@ -192,17 +191,16 @@
             "description": "Fraction of rare and common variants in a +-500 window."
         },
     "ISCApath":  {
-
-      "url":"https://ftp.clinicalgenome.org/ClinGen%20recurrent%20CNV%20.bed%20file%20V1.1-hg38.bed",
-            "extension":"bed.gz",
-            "rule":"rules.get_feature_Fantom5.output.vcf.gz",
+            "ur":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/",
+            "file" : "ISCApath",
+            "files" : ["nstd37.GRCh38.variant_call", "nstd45.GRCh38.variant_call" , "nstd75.GRCh38.variant_call" ]
             "type":"bed",
             "column":"4",
             "method":"upload",
             "description": "Count of overlapping ISCA entries (nstd37_45_75). Use only pathogenic or likely pathogenic."
         },
-
-    "dbVARCount":  { "url":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.variant_call.all.gvf.gz",
+    "dbVARCount":  { 
+            "url":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.variant_call.all.gvf.gz",
             "extension":"bed.gz",
             "rule":"",
             "type":"gvf.gz",
@@ -210,7 +208,6 @@
             "method":"upload",
             "description": "Count of overlapping dbVar entries. Not benign or or likley benign."
         },
-
     "DGVCount": {
             "url":"http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_2020-02-25.txt",
             "extension":"txt",
@@ -219,10 +216,11 @@
             "column":"4",
             "method":"upload",
             "description": "Count of overlapping DGV entries."
-        },
+        }
   },
 
-
+    
+    
   "hg19": {
     "cpgIslandExt": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/",
       "GCContent": NaN,

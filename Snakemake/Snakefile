@@ -24,6 +24,8 @@ CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['Y','X']]
 
 configfile: "config/features_config.json"
 configfile: "config.yml"
+
+localrules: get_feature_1KG
 #configfile: "config/property_dict.json"
 
 
@@ -32,10 +34,10 @@ configfile: "config.yml"
 
 def get_properties(d):
     dd = []
-    for key, value in d.items():
-        dd.append(key + " = " + value)
-    return " \n".join(dd[3:])
-
+    d_ = pd.Series(d)['type':].to_dict()
+    for key, value in d_.items():
+        dd.append(key + ' = ' + value)
+    return " \n".join(dd)
 
 CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['X']]
 

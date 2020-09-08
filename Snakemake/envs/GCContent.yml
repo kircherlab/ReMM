@@ -6,3 +6,4 @@ dependencies:
 - ruby==2.4.*
 - jemalloc==4.4.*
 - htslib
+- curl==7.*

@@ -91,10 +91,10 @@ while STDIN.gets
 	next if /^#(.*)$/.match(line)
 
 	# get values
-	m	= /^([0-9XYM]+)\s+([0-9]+)\s+.+;AF=(0\.[0-9]+|0|1).+$/.match(line)
-	v_chr = m[1]
-	v_pos = m[2].to_i
-	v_af = m[3].to_f
+	m = /^(chr)?([0-9XYM]+)\s+([0-9]+)\s+.+;AF=(0\.[0-9]+|0|1).+$/.match(line)
+	v_chr = m[2]
+	v_pos = m[3].to_i
+	v_af = m[4].to_f
 	
 	
 	# find out if new chr
