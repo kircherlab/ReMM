@@ -25,7 +25,7 @@ CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['Y','X']]
 configfile: "config/features_config.json"
 configfile: "config.yml"
 
-localrules: get_feature_1KG
+#localrules: get_feature_1KG
 #configfile: "config/property_dict.json"
 
 
@@ -66,6 +66,7 @@ include: "rules/features/population.snakerule"
 
 include: "rules/features/fantom.snakerule"
 
+include: "rules/features/variants.snakerule"
 
 rule create_property_file:
     input:

@@ -191,9 +191,9 @@
             "description": "Fraction of rare and common variants in a +-500 window."
         },
     "ISCApath":  {
-            "ur":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/",
+            "url":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/",
             "file" : "ISCApath",
-            "files" : ["nstd37.GRCh38.variant_call", "nstd45.GRCh38.variant_call" , "nstd75.GRCh38.variant_call" ],
+            "files" : ["nstd37.GRCh38.variant_call", "nstd45.GRCh38.variant_call" , "nstd75.GRCh38.variant_call"],
             "type":"bed",
             "column":"4",
             "method":"upload",
@@ -201,17 +201,17 @@
         },
     "dbVARCount":  { 
             "url":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.variant_call.all.gvf.gz",
-            "extension":"bed.gz",
-            "rule":"",
-            "type":"gvf.gz",
+            "file" : "dbVARCount",
+            "files" : "all",
+            "type":"gvf",
             "column":"4",
             "method":"upload",
             "description": "Count of overlapping dbVar entries. Not benign or or likley benign."
         },
     "DGVCount": {
             "url":"http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_2020-02-25.txt",
-            "extension":"txt",
-            "rule":"",
+            "file":"DGVCount",
+            "files":"all",
             "type":"bed",
             "column":"4",
             "method":"upload",
