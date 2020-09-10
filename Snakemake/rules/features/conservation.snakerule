@@ -83,3 +83,18 @@ rule get_mamPhyloP:
         """
         curl {params.url} > {output}
         """
+
+rule get_GERPelement:
+    input:
+        "/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz"
+    output:
+        "input/features/hg38/gerpElement/gerpElement.all.bed.gz"
+    shell:
+        """
+        zcat {input} | \
+        awk -v 'OFS=\\t' '{{print "chr"$0}}' | bgzip -c > {output}
+        """
+# cut -f 1,2,76-77 | \
+# uniq | grep -v NA | \
+# awk -v 'OFS=\\t' 'BEGIN {{chr=$1;start=$2-1;end=$2;rs=$3;p=$4}} {{ if (chr==$1 && end == ($2-1) && rs==$3 && p==$4) {{end=$2;}} else {{print "chr"chr,start,end,rs,p; chr=$1;start=($2-1);end=$2;rs=$3;p=$4}} }}' | \
+# tail -n +2 | bgzp -c >

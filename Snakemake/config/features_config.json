@@ -1,7 +1,7 @@
 {
   "feature_set" :{
     "hg38": {
-      "test_feature_set": ["CpGperGC","CpGperCpG","CpGobsExp","GCContent","priPhyloP","priPhastCons","verPhyloP","verPhastCons","mamPhyloP","mamPhastCons","EncH3K27Ac","EncH3K4Me1","EncH3K4Me3","DnaseClusteredHyp","DnaseClusteredScore","Fantom5Perm","Fantom5Robust","rareVar","commonVar","fracRareCommon"]
+      "test_feature_set": ["CpGperGC","CpGperCpG","CpGobsExp","GCContent","priPhyloP","priPhastCons","verPhyloP","verPhastCons","mamPhyloP","mamPhastCons","EncH3K27Ac","EncH3K4Me1","EncH3K4Me3","DnaseClusteredHyp","DnaseClusteredScore","Fantom5Perm","Fantom5Robust","rareVar","commonVar","fracRareCommon","GerpRS","GerpRSpv"]
     }
   },
   "hg38": {
@@ -98,8 +98,22 @@
             "description": "Conservation placental mammals phastCons46way downloaded from UCSC"
         },
 
-    "GerpRS": NaN,
-    "GerpRSpv": NaN,
+    "GerpRS": {
+            "file" : "gerpElement",
+            "files" : "all",
+            "type" : "bed",
+            "column":"4",
+            "method":"upload",
+            "description": "GERP++ element score"
+    },
+    "GerpRSpv": {
+            "file" : "gerpElement",
+            "files" : "all",
+            "type" : "bed",
+            "column":"5",
+            "method":"upload",
+            "description": "GERP++ element p-value"
+  },
     "EncH3K27Ac": {
             "url":"http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k27ac/",
             "file" : "EncH3K27Ac",
@@ -199,7 +213,7 @@
             "method":"upload",
             "description": "Count of overlapping ISCA entries (nstd37_45_75). Use only pathogenic or likely pathogenic."
         },
-    "dbVARCount":  { 
+    "dbVARCount":  {
             "url":"https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.variant_call.all.gvf.gz",
             "file" : "dbVARCount",
             "files" : "all",
@@ -219,8 +233,8 @@
         }
   },
 
-    
-    
+
+
   "hg19": {
     "cpgIslandExt": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/",
       "GCContent": NaN,
