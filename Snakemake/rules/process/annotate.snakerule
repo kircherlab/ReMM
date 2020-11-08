@@ -1,0 +1,13 @@
+rule annotateJannovarVariants:
+    input:
+        f = "input/variants/hg38/SNVs.hg38.negative.vcf.gz",
+        d = "input/variants/hg38/data/hg38_refseq.ser"
+    output:
+        "input/variants/hg38/SNVs.hg38.negative.refseq.vcf.gz"
+    conda:
+        "../../envs/jannovar.yml"
+    shell:
+        """
+        jannovar annotate-vcf -d {input.d} -i {input.f} -o {output};
+        tabix {output}
+        """

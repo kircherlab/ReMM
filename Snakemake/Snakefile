@@ -1,7 +1,6 @@
 ## links for download come from https://hgdownload.soe.ucsc.edu/goldenPath/hg38/
 
-from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
-from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+
 from os.path import join
 from glob import glob
 import datetime
@@ -9,11 +8,6 @@ import ftplib
 import pandas as pd
 import fnmatch
 
-HTTP = HTTPRemoteProvider()
-# install python package ftputil
-
-FTP = FTPRemoteProvider()
-# CHROMS = ['chr'+str(s)  for s in list(range(1,25))]
 
 
 def concat(my_list, string):
@@ -24,6 +18,9 @@ CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['Y','X']]
 
 configfile: "config/features_config.json"
 configfile: "config.yml"
+
+#configfile: "config/classifier.hyperSMURF.properties"
+
 
 #localrules: get_feature_1KG
 #configfile: "config/property_dict.json"
@@ -39,7 +36,7 @@ def get_properties(d):
         dd.append(key + ' = ' + value)
     return " \n".join(dd)
 
-CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['X']]
+#CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['X']]
 
 rule getFeatureVariants:
     input:
@@ -67,6 +64,20 @@ include: "rules/features/population.snakerule"
 include: "rules/features/fantom.snakerule"
 
 include: "rules/features/variants.snakerule"
+
+#include: "rules/process/jannovar.snakerule"
+
+include: "rules/process/folds.snakerule"
+include: "rules/process/positive.snakerule"
+include: "rules/process/negative.snakerule"
+include: "rules/process/annotate.snakerule"
+include: "rules/process/combine.snakerule"
+include: "rules/model/parSMURF.snakerule"
+include: "rules/model/hyperSMURF.snakerule"
+
+include: "rules/features/numTFBSConserved.snakerule"
+
+
 
 rule create_property_file:
     input:
@@ -110,13 +121,43 @@ rule createSingleFeatureVCF:
         #zcat {output.vcf} | sort -k1,1 -k2,2n | bgzip -c > {output.vcf};
          #tabix {output.vcf};
         """
+
+rule indexSingleFeatreVCF:
+    input:
+        "output/features/single/{genomeBuild}/{feature}.vcf.gz"
+    output:
+        "output/features/single/{genomeBuild}/{feature}.vcf.gz.tbi"
+    shell:
+        """
+        tabix {input}
+        """
+
+
 rule mergeSingleFeatureVCF:
     input:
-        lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz",
+        files=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz",
+            feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name]),
+        idx=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz.tbi",
             feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
     output:
         vcf="output/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz",
+        idx="output/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz.tbi"
     shell:
         """
-        bcftools {input} | bgzip -c > {output}
+        bcftools merge {input.files} | bgzip -c > {output.vcf}
+        tabix {output.vcf}
         """
+        
+        
+rule annotateFeatures:
+    input:
+        f = "output/features/combined/hg38/featureSet.hg38.vcf.gz",
+        f_idx = "output/features/combined/hg38/featureSet.hg38.vcf.gz.tbi",
+        n = "input/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz"
+    output:
+        "input/variants/hg38/SNVs.hg38.{type}.annotated.tsv.gz"
+    shell:
+        """java -Xmx2g -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
+        """
+    
+    
