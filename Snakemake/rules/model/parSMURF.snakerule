@@ -8,9 +8,13 @@ rule generateParsmurfConfig:
         config="config/SNVs.{genomeBuild}.json"
     params:
         predictions = "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.predictions.txt",
-        name = 'SNVs.{genomeBuild}'
+        name = 'SNVs.{genomeBuild}',
+        seed = {1},
+        mode = 'cv'
     script:
         "/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/generateParsmurfConfig.py"        
+        
+        
         
 rule runParSMURF:
     input:
@@ -24,3 +28,4 @@ rule runParSMURF:
         """
         bin/parSMURF1 --cfg {input[3]}
         """
+#output/predictions/hg38/SNVs.hg38.predictions.txt

@@ -1,6 +1,6 @@
 rule getCytoband:
     output:
-        'input/folds/hg38/cytoBand.{genomeBuild}.txt.gz'
+        'input/folds/{genomeBuild}/cytoBand.{genomeBuild}.txt.gz'
     params:
         url='http://hgdownload.cse.ucsc.edu/goldenpath/{genomeBuild}/database/cytoBand.txt.gz'
     shell:

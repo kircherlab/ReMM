@@ -10,74 +10,29 @@ import fnmatch
 
 
 
-def concat(my_list, string):
-    return [x + string for x in my_list]
-
-
-CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['Y','X']]
-
-configfile: "config/features_config.json"
+configfile: "config/featuresConfig38.json"
 configfile: "config.yml"
-
-#configfile: "config/classifier.hyperSMURF.properties"
-
-
-#localrules: get_feature_1KG
-#configfile: "config/property_dict.json"
-
-
-# include: "features.snakerule"
-
-
-def get_properties(d):
-    dd = []
-    d_ = pd.Series(d)['type':].to_dict()
-    for key, value in d_.items():
-        dd.append(key + ' = ' + value)
-    return " \n".join(dd)
-
-#CHROMS = ['chr'+str(s)  for s in list(range(1,23))+['X']]
-
-rule getFeatureVariants:
-    input:
-        lambda wildcards: HTTP.remote(expand('{url}ALL.{chr}.{extension}', url = config[wildcards.genomeBuild][wildcards.feature]["url"],
-        chr = CHROMS,
-        extension = config[wildcards.genomeBuild][wildcards.feature]["extension"]))
-    output:
-        #dynamic("input/features/{genomeBuild}/{feature}/{file}.vcf.gz")
-        temp(touch("input/features/{genomeBuild}/{feature}/bla.txt"))
-    params:
-        path = "input/features/{genomeBuild}/{feature}/"
-    shell:
-        """ mv {input}   {params.path} """
-
 
 
 include: "rules/features/GCfeatures.snakerule"
-
 include: "rules/features/conservation.snakerule"
-
 include: "rules/features/encode_epigenetics.snakerule"
-
 include: "rules/features/population.snakerule"
-
 include: "rules/features/fantom.snakerule"
+#include: "rules/features/DGVCount.snakerule"
 
 include: "rules/features/variants.snakerule"
-
-#include: "rules/process/jannovar.snakerule"
-
 include: "rules/process/folds.snakerule"
 include: "rules/process/positive.snakerule"
 include: "rules/process/negative.snakerule"
 include: "rules/process/annotate.snakerule"
 include: "rules/process/combine.snakerule"
 include: "rules/model/parSMURF.snakerule"
-include: "rules/model/hyperSMURF.snakerule"
-
 include: "rules/features/numTFBSConserved.snakerule"
+include: "rules/model/parSMURFCV.snakerule"
+#include: "rules/model/parSMURFPredict.snakerule"
 
-
+include: "rules/process/dataHg19.snakerule"
 
 rule create_property_file:
     input:
@@ -107,8 +62,8 @@ rule createSingleFeatureVCF:
 			files=config[wc.genomeBuild][wc.feature]['files'],
 			extension=config[wc.genomeBuild][wc.feature]['type'])
     output:
-        vcf="output/features/single/{genomeBuild}/{feature}.vcf.gz",
-        #tbi="output/features/single/{genomeBuild}/{feature}.vcf.gz.tbi",
+        temp=temp("output/features/single/{genomeBuild}/{feature}.temp.vcf.gz"),
+        vcf="output/features/single/{genomeBuild}/{feature}.vcf.gz"
     params:
         mem="5g",
     conda:
@@ -117,9 +72,12 @@ rule createSingleFeatureVCF:
         """
         export LC_ALL=C;
         java -Xmx{params.mem} -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar \
-        vcf -p {input.config} --output {output.vcf};
-        #zcat {output.vcf} | sort -k1,1 -k2,2n | bgzip -c > {output.vcf};
-         #tabix {output.vcf};
+        vcf -p {input.config} --output {output.temp};
+        (zcat {output.temp}| grep  "#"  && zcat {output.temp}| grep  -v "#" | sort -k1,1 -k2,2n)| bgzip -c > {output.vcf}
+
+        #zcat {output.temp} | sort -k1,1 -k2,2n | bgzip -c > {output.vcf};
+        #tabix {output.vcf};
+        
         """
 
 rule indexSingleFeatreVCF:
@@ -137,8 +95,8 @@ rule mergeSingleFeatureVCF:
     input:
         files=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz",
             feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name]),
-        idx=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz.tbi",
-            feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
+      #  idx=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz.tbi",
+       #     feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
     output:
         vcf="output/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz",
         idx="output/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz.tbi"
@@ -148,7 +106,10 @@ rule mergeSingleFeatureVCF:
         tabix {output.vcf}
         """
         
-        
+  
+  
+  
+  
 rule annotateFeatures:
     input:
         f = "output/features/combined/hg38/featureSet.hg38.vcf.gz",
@@ -159,5 +120,9 @@ rule annotateFeatures:
     shell:
         """java -Xmx2g -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
         """
-    
-    
+
+      
+        
+        
+        
+        

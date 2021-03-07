@@ -1,8 +1,8 @@
 rule get_cpgIslandExt_file:
     output:
-        "input/features/hg38/cpgIslandExt/cpgIslandExt.all.bed.gz"
+        "input/features/{genome}/cpgIslandExt/cpgIslandExt.all.bed.gz"
     params:
-        url="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz"
+        url="https://hgdownload.soe.ucsc.edu/goldenPath/{genome}/database/cpgIslandExt.txt.gz"
     shell:
         """
         curl {params.url} | zcat | cut -f 2- | bgzip -c > {output}

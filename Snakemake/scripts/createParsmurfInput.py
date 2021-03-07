@@ -13,7 +13,7 @@ cytoband =str(snakemake.input.cb)
 df0 = pd.read_table(input_file,header = None)#[:1000000]
 cytoband = pd.read_table(cytoband, header =None)
 
-if 'hg38' or 'test' in input_file:
+if 'hg38' in input_file:
     df = df0.drop(3, axis = 1)
 else:
     df = df0
@@ -28,6 +28,6 @@ for i in range(len(cytoband)):
 
 df[0].to_csv(labels, sep = '\t', header = None, index = None)
 df['FOLD'].to_csv(folds, sep = '\t', header = None, index = None)
-df.iloc[:,np.r_[3:28]].to_csv(data,sep = '\t', header = None, index = None,na_rep = 0)
+df.iloc[:,np.r_[3:29]].to_csv(data,sep = '\t', header = None, index = None,na_rep = 0)
     
     

@@ -15,5 +15,5 @@ rule get_Fantom5Robust:
         url=config['hg38']['Fantom5Robust']["url"]
     shell:
         """
-        curl {params.url} > {output}
+        curl {params.url} | zcat | sort -k1,1 -k2,2n -k3,3n | bgzip -c  > {output}
         """

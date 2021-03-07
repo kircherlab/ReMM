@@ -19,6 +19,14 @@ if 'numTFBSConserved' in output_file:
     df_raw[1] = df_raw[1].astype(dtype = str, errors = 'ignore')
     CHROMS = [output_file.split('.')[-4]]
 
+    
+if 'DGVCount' in output_file:
+    df_raw =pd.read_csv(input_file,header = None, compression='gzip',sep = '\t')
+    df_raw = df_raw[[0,1,2,5]]
+    df_raw[1] = df_raw[1].astype(str)
+    CHROMS = [output_file.split('.')[-3]]
+    
+    
 else:
     df_raw =pd.read_csv(input_file,header = None, compression='gzip')[0].str.split('\t',expand =True)
 df_raw = df_raw[df_raw[1].str.isnumeric()]
@@ -56,7 +64,7 @@ for CHR in CHROMS:
     for raw in df.itertuples():
         s = raw[2]
         e = raw[3]
-        v = raw[6]
+        v = raw[-1]
         dd = intervals.query('start >={}  & end <={}'.format(s,e)).loc[:,'variants']+v+ ', '
         intervals.loc[intervals.index.isin(dd.index.tolist()), 'variants']=dd
 

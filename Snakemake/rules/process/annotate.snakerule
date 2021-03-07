@@ -11,3 +11,17 @@ rule annotateJannovarVariants:
         jannovar annotate-vcf -d {input.d} -i {input.f} -o {output};
         tabix {output}
         """
+        
+rule annotateJannovarVariantsPositive:
+    input:
+        f = "input/variants/hg38/SNVs.hg38.positive.vcf.gz",
+        d = "input/variants/hg38/data/hg38_refseq.ser"
+    output:
+        "input/variants/hg38/SNVs.hg38.positive.refseq.vcf.gz"
+  #  conda:
+   #     "../../envs/jannovar.yml"
+    shell:
+        """
+        jannovar annotate-vcf -d {input.d} -i {input.f} -o {output};
+        tabix {output}
+        """

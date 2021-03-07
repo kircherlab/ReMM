@@ -29,14 +29,14 @@ rule get_feature_EncH3K4Me3:
         """
 
 
-rule convert_bigwig_to_wig:
+rule convertBigWigToBedGraph:
     input:
         "input/features/{genomeBuild}/{file}/{file}.{files}.bigWig"
     output:
-        "input/features/{genomeBuild}/{file}/{file}.{files}.wig.gz"
+        "input/features/{genomeBuild}/{file}/{file}.{files}.bed.gz"
     shell:
         """
-    	bigWigToWig {input} >(bgzip -c > {output})
+    	bigWigToBedGraph {input} >(bgzip -c > {output})
         """
 
 rule get_DnaseClusteredHyp:

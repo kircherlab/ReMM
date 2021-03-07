@@ -6,12 +6,14 @@ __default__:
    error: 'logs/%x_%j_%N.err'
    output: 'logs/%x_%j_%N.log'
 createSingleFeatureVCF:
-   time: '24:00'
+   time: '200:00'
    mem: 10000
-   queue: medium
+   queue: long
+indexSingleFeatreVCF:
+   time: '01:00'
 mergeSingleFeatureVCF:
-   time: '12:00'
-   mem: 10000
+   time: '72:00'
+   mem: 20000
    queue: medium
 get_priPhyloP:
    time: '12:00'
@@ -65,3 +67,76 @@ convert_bigwig_to_wig:
    time: '12:00'
    mem: 10000
    queue: medium
+get_feature_Intervals:
+   time: '120:00'
+   mem: 10000
+   queue: medium   
+get_feature_Intervals_numTFBSConserved:
+   time: '120:00'
+   mem: 1000
+   queue: medium
+annotateFeatures:
+   time: '200:00'
+   mem: 10000
+   queue: long
+runParSMURF:
+   time: '12:00'
+   mem: 150000
+   queue: medium
+getReMM:
+   time: '12:00'
+   mem: 150000
+   queue: medium     
+get_feature_Intervals_DGVCount:
+   time: '12:00'
+   mem: 150000
+   queue: medium
+annotateFeaturesRandom:
+   time: '168:00'
+   mem: 10000
+   queue: medium      
+   
+runParSMURFPredict:
+   time: '12:00'
+   mem: 150000
+   queue: medium
+   
+   
+getConservation:
+   time: '120:00'
+   mem: 10000
+   queue: medium 
+   
+convertToBigWig:
+   time: '120:00'
+   mem: 170000
+   queue: medium 
+   
+createPropertyFile19:
+   time: '120:00'
+   mem: 1000
+   queue: medium 
+   
+annotateFeatures38:
+   time: '12:00'
+   mem: 150000
+   queue: medium
+annotateFeatures19:
+   time: '12:00'
+   mem: 150000
+   queue: medium
+   
+get_feature_1KG_19:
+    time: '12:00'
+    mem: 150000
+    queue: medium
+getRemmScore:
+    time: '12:00'
+    mem: 200000
+    queue: medium
+   
+   
+   
+
+   
+  

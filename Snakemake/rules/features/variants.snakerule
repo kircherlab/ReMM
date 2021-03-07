@@ -1,6 +1,8 @@
+## use script getISCApath38 to get ISCApath from the file with all variants
+
 rule get_feature_ISCApath:
     output:
-        temp("input/features/{genomeBuild}/ISCApath/ISCApath.nstd37_nstd45_nstd75.bed.gz.vartmp")
+        "input/features/{genomeBuild}/ISCApath/ISCApath.nstd37_nstd45_nstd75.bed.gz.vartmp"
     params:
         nstd75=lambda wildcards: "%s%s.GRCh38.variant_call.tsv.gz" % (config[wildcards.genomeBuild]['ISCApath']['url'], 'nstd75'),
         nstd37=lambda wildcards: "%s%s.GRCh38.variant_call.tsv.gz" % (config[wildcards.genomeBuild]['ISCApath']['url'], 'nstd37'),
@@ -9,30 +11,31 @@ rule get_feature_ISCApath:
         """       
     (curl {params.nstd75} | zcat; \
      curl {params.nstd37} | zcat; \
-     curl {params.nstd45} | zcat) | egrep -v "^Study" | egrep -v "Pathogenic|pathogenic" | grep "GRCh38" | cut -f 1,8,12,13| awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$1}}' | egrep -v "^chr\s" | sort -k 1,1 -k2,2n | bgzip -c > {output}
+     curl {params.nstd45} | zcat)  | cut -f 1,8,12,13| awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$1}}' | egrep -v "^chr\s" | sort -k 1,1 -k2,2n | bgzip -c > {output}
         """
 
         
+        
 rule get_feature_dbVARCount:
     output:
-        temp("input/features/{genomeBuild}/dbVARCount/dbVARCount.all.bed.gz.vartmp")
+        "input/features/{genomeBuild}/dbVARCount/dbVARCount.all.bed.gz.vartmp"
     params:
         url=config['hg38']['dbVARCount']['url']
     shell:
         """
         curl {params.url}| zcat  | egrep -v "#" | egrep -v "benign|Benign" | sed  -E "s/[\|\;]/\t/g" | awk -vIFS='\t' -vOFS='\t' '{{print $1,$4-1,$5,$9}}' | sort -k 1,1 -k2,2n | bgzip -c > {output}
         """
- #       
+'''     
 rule get_feature_DGVCount:
     output:
-        temp("input/features/{genomeBuild}/DGVCount/DGVCount.all.bed.gz.vartmp")
+        "input/features/{genomeBuild}/DGVCount/DGVCount.all.bed.gz.vartmp"
     params:
         url=config['hg38']['DGVCount']['url']
     shell:
         """ 
         curl {params.url}  | egrep -v "^chr" | awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$5,$6,$1}}' | sort -k 1,1 -k2,2n | awk '{{ for (i=1; i<NF;i++) {{ printf("%s\t",$i)}}; print $NF }}' | bgzip -c > {output} 
         """
-
+'''
 rule get_feature_Intervals:
     input:
         "input/features/{genomeBuild}/{feature}/{feature}.{files}.bed.gz.vartmp"

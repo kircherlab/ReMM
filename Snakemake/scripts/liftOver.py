@@ -31,18 +31,22 @@ vcf = pd.DataFrame()
 vcf[[0,2]]=var[[0,3]]
 vcf[1]=var[1]+1
 # ID 
-vcf[4]='.'
+
 # or remain 
 #vcf[4]=var[3].str.split(':', expand = True)[3]
 vcf[3]=ref_hg38
 vcf[[5,6]]='.'
+vcf[4]='.'
+
 vcf[7]=var[3].str.split(':', expand = True)[4]
 
 vcf = vcf[[0,1,2,3,4,5,6,7]]
-vcf = vcf[vcf[3]!=vcf[4]]
 
-vcf = vcf[vcf[3].str.len()==1]
 vcf = vcf[vcf[2].str.split(':',expand = True)[3].str.len()==1]
+vcf = vcf[vcf[2].str.split(':',expand = True)[2].str.len()==1]
+
+vcf[3]=vcf[2].str.split(':',expand = True)[2]
+vcf[4]=vcf[2].str.split(':',expand = True)[3]
 
 vcf.columns = ["#CHROM",'POS','ID','REF','ALT','QUAL','FILTER','INFO']
 

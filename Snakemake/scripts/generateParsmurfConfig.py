@@ -8,7 +8,11 @@ with open(snakemake.input.scaffold) as json_file:
     file['data']['labelFile'] = snakemake.input.labels
     file['data']['foldFile'] = snakemake.input.folds
     file['data']['outFile'] = snakemake.params.predictions
-
+    file['exec']['seed'] = int(list(snakemake.params.seed)[0])
+    file['exec']['mode'] =snakemake.params.mode
+    file['data']['forestDir'] = "models/"+snakemake.wildcards.genomeBuild
+    
+        
 with open(snakemake.output.config, 'w') as outfile:
     json.dump(file, outfile)
 

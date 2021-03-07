@@ -11,8 +11,7 @@ rule combineInputData:
         """
         zcat {input.p} | tail -n +2 | awk '{{$0="1\t"$0}}1'  > {output.p};
         zcat {input.n} | tail -n +2 |awk '{{$0="0\t"$0}}1'  > {output.n};
-        cat {output.p} {output.n} | bgzip -c > {output.o};
-        
+        cat {output.p} {output.n} | bgzip -c > {output.o};        
         """
 
 rule createParsmurfInput:

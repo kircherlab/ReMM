@@ -3,12 +3,12 @@ rule liftOverPositive:
         c = "input/variants/hg38/hg19ToHg38.over.chain.gz",
         o = "/fast/work/groups/ag_kircher/ReMM/ReMM/data/variants/RegulatoryMendelianMutations/GRCh37/SNVs.all.20160109.vcf.gz"        
     output:
-        t = temp("input/variants/hg38/SNVs.all.20160109.bed.gz"),
+        t = "input/variants/hg38/SNVs.all.20160109.bed.gz",
         f = "input/variants/hg38/SNVs.hg38.positive.failed.bed.gz",
         o = "input/variants/hg38/SNVs.hg38.positive.bed.gz.pos"
     shell: 
         """
-        zcat {input.o} | grep -v "^#" | awk 'BEGIN{{ OFS="\t" }}{{ print $1,$2-1,$2-1+length($4),$1":"$2":"$4":"$5":"$8 }}' | gzip -c > {output.t};
+        zcat {input.o} | grep -v "^#" | awk 'BEGIN{{ OFS="\t" }}{{ print $1,$2-1,$2,$1":"$2":"$4":"$5":"$8 }}' | gzip -c > {output.t};
         liftOver {output.t} {input.c} >( gzip -c > {output.o} ) >( gzip -c > {output.f});
         
         """
@@ -23,7 +23,7 @@ rule getPositiveVariants:
 
 rule annotateJannovarPositive:
     input:
-        f = "input/variants/hg38/SNVs.hg38.positive.vcf.gz",
+        f = "input/variants/hg38/SNVs.hg38.positive.vcf",
         d = "input/variants/hg38/data/hg38_refseq.ser"
     output:
         "input/variants/hg38/SNVs.hg38.positive.refseqannotated.vcf.gz"
@@ -31,7 +31,7 @@ rule annotateJannovarPositive:
         "../../envs/jannovar.yml"
     shell:
         """
-        jannovar annotate-vcf -d {input.d} -i {input.f} -o {output};
+        jannovar -Xmx10G annotate-vcf -d {input.d} -i {input.f} -o {output};
         tabix {output}
         """
 

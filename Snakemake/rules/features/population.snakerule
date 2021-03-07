@@ -15,6 +15,14 @@ rule get_feature_1KG:
         cat {output.bed}| bgzip -c > {output.bed_gz}
         """
 
+        
+
+#http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL.chr1.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz        
+#http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL{params.chr}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz  | \
+#        zcat  | cut -f 1-9 | \
+#        ruby scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
+#        cat {output.bed}| bgzip -c > {output.bed_gz}
+
 #rule convert_feature_1kG:
 #    input:
 #       "input/features/{genomeBuild}/1KG/1KG.{chr}.vcf.gz"
