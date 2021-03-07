@@ -1,0 +1,29 @@
+rule generateParsmurfConfigCV:
+    input:
+        data = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.data.txt",
+        labels = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.labels.txt",
+        folds = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt",
+        scaffold="utils/scaffold.json"
+    output:
+        config="config/cv/SNVs.{genomeBuild}.json_{seed}"
+    params:
+        predictions = "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.predictions.txt_{seed}",
+        name = 'SNVs.{genomeBuild}',
+        seed = '{seed}',
+        mode = 'cv'
+    script:
+        "/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/generateParsmurfConfig.py"        
+        
+rule runParSMURFCV:
+    input:
+        "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.data.txt",
+        "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.labels.txt",
+        "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt",
+        "config/cv/SNVs.{genomeBuild}.json_{seed}"
+    output:
+        "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.predictions.txt_{seed}",
+    shell:
+        """
+        bin/parSMURF1 --cfg {input[3]}
+        """
+

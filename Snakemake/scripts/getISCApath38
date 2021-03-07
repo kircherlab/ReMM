@@ -1,0 +1,26 @@
+## files beinhalten Varianten für hg18,hg19 und hg38; müssen im Ordner hg19.variants vorhanden sein
+
+files = ['all_variants_for_nstd75.csv.gz','all_variants_for_nstd37.csv.gz','all_variants_for_nstd45.csv.gz']
+
+cols = ['Chromosome','Inner Start','Inner End','Variant ID']
+
+alle = pd.DataFrame(columns = cols)
+st = 'Pathogenic|pathogenic'
+#st = 'Pathogenic'
+
+for file in files:
+    
+    df = pd.read_csv('hg19.variants/isca/'+file,compression='gzip',sep = ',')
+
+    df = df[df['Assembly Name']=='GRCh38 (hg38)'][cols]
+    print(df.shape)
+    alle = alle.append(df)
+alle = alle.sort_values(cols)
+alle = alle[cols].reset_index(drop = True)
+alle.columns = [0,1,2,3]
+alle[0]='chr'+alle[0].astype(str)
+alle[1]=alle[1].astype(int)-1
+alle[2]=alle[2].astype(int)
+
+alle.to_csv('input/features/hg38/ISCApath/ISCApath.nstd37_nstd45_nstd75.bed.gz.vartmp',sep = '\t', index = False,header = False,compression = 'gzip')
+

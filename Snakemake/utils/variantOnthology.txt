@@ -1,0 +1,20 @@
+RefSeq hg38	Type	RefSeq hg19
+'non_coding_transcript_intron_variant',	non-coding	NON_CODING_TRANSCRIPT_INTRON_VARIANT
+'intergenic_variant',	non-coding	INTERGENIC_VARIANT
+'upstream_gene_variant',	non-coding	UPSTREAM_GENE_VARIANT
+'non_coding_transcript_exon_variant',	non-coding	
+'splice_region_variant',	non-coding	INTRON_VARIANT
+'downstream_gene_variant',	non-coding	DOWNSTREAM_GENE_VARIANT
+'3_prime_UTR_exon_variant',	non-coding	THREE_PRIME_UTR_VARIANT
+'coding_transcript_intron_variant',	non-coding	INTRON_VARIANT
+'missense_variant',	coding	
+'synonymous_variant',	coding	
+'5_prime_UTR_exon_variant',	non-coding	FIVE_PRIME_UTR_VARIANT
+'5_prime_UTR_intron_variant',	non-coding	FIVE_PRIME_UTR_VARIANT
+'start_lost',	coding	
+'splice_donor_variant',	non-coding	INTRON_VARIANT
+'3_prime_UTR_intron_variant',	non-coding	THREE_PRIME_UTR_VARIANT
+'stop_lost',	coding	
+'splice_acceptor_variant',	non-coding	INTRON_VARIANT
+'stop_gained',	coding	
+'stop_retained_variant'	coding	
