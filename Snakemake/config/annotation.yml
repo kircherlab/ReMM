@@ -1,0 +1,11 @@
+annotation:
+  RegulatoryMendelianMutations:
+    GRCh38:
+      SNVs_noncoding_20160101:
+        file_type: vcf
+        file: SNVs.hg38.positive.annotated.refseq.vcf.gz
+  HumanDerived:
+    GRCh38:
+      SNVs_all_20160109:
+        file_type: vcf
+        file: SNVs.hg38.negative.annotated.refseq.filtered.vcf.gz
