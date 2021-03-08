@@ -5,12 +5,12 @@ rule generateParsmurfConfig:
         folds = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt",
         scaffold="utils/scaffold.json"
     output:
-        config="config/SNVs.{genomeBuild}.json"
+        "config/SNVs.{genomeBuild}.{mode}.json"
     params:
-        predictions = "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.predictions.txt",
+        predictions = "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.{mode}.predictions.txt",
         name = 'SNVs.{genomeBuild}',
-        seed = {1},
-        mode = 'cv'
+        seed = lambda wc: {output.split('_')[-1]} if output.split('_')[-1].isdigit() else {'1'},
+        mode = '{mode}'
     script:
         "/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/generateParsmurfConfig.py"        
         
@@ -21,9 +21,9 @@ rule runParSMURF:
         "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.data.txt",
         "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.labels.txt",
         "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt",
-        "config/SNVs.{genomeBuild}.json"
+        "config/SNVs.{genomeBuild}.{mode}.json"
     output:
-        "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.predictions.txt"
+        "output/predictions/{genomeBuild}/SNVs.{genomeBuild}.{mode}.predictions.txt"
     shell:
         """
         bin/parSMURF1 --cfg {input[3]}

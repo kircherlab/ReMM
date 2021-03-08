@@ -1,12 +1,7 @@
-## links for download come from https://hgdownload.soe.ucsc.edu/goldenPath/hg38/
-
-
 from os.path import join
 from glob import glob
 import datetime
-import ftplib
 import pandas as pd
-import fnmatch
 
 
 
@@ -16,25 +11,20 @@ configfile: "config.yml"
 
 include: "rules/features/GCfeatures.snakerule"
 include: "rules/features/conservation.snakerule"
-include: "rules/features/encode_epigenetics.snakerule"
+include: "rules/features/encodeEpigenetics.snakerule"
 include: "rules/features/population.snakerule"
 include: "rules/features/fantom.snakerule"
-#include: "rules/features/DGVCount.snakerule"
-
-include: "rules/features/variants.snakerule"
+include: "rules/process/getUtils.snakerule"
+include: "rules/features/geneticVariation.snakerule"
 include: "rules/process/folds.snakerule"
-include: "rules/process/positive.snakerule"
-include: "rules/process/negative.snakerule"
-include: "rules/process/annotate.snakerule"
-include: "rules/process/combine.snakerule"
+include: "rules/process/positiveVariants.snakerule"
+include: "rules/process/negativeVariants.snakerule"
+include: "rules/process/annotateJannovar.snakerule"
+include: "rules/process/createModelData.snakerule"
 include: "rules/model/parSMURF.snakerule"
-include: "rules/features/numTFBSConserved.snakerule"
-include: "rules/model/parSMURFCV.snakerule"
-#include: "rules/model/parSMURFPredict.snakerule"
 
-include: "rules/process/dataHg19.snakerule"
 
-rule create_property_file:
+rule createPropertyFile:
     input:
         lambda wc: expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
             file=config[wc.genomeBuild][wc.feature]['file'],
@@ -43,8 +33,8 @@ rule create_property_file:
     output:
         config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties"
     params:
-        type=lambda wc: config[wc.genomeBuild][wc.feature]['type'],
-        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column']) if config[wc.genomeBuild][wc.feature]['type'] == "bed" else "",
+        type=lambda wc: config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1],
+        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column']) if config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1] == "bed" else "",
         method=lambda wc: config[wc.genomeBuild][wc.feature]['method'],
         description=lambda wc: config[wc.genomeBuild][wc.feature]['description'],
     run:
@@ -74,10 +64,6 @@ rule createSingleFeatureVCF:
         java -Xmx{params.mem} -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar \
         vcf -p {input.config} --output {output.temp};
         (zcat {output.temp}| grep  "#"  && zcat {output.temp}| grep  -v "#" | sort -k1,1 -k2,2n)| bgzip -c > {output.vcf}
-
-        #zcat {output.temp} | sort -k1,1 -k2,2n | bgzip -c > {output.vcf};
-        #tabix {output.vcf};
-        
         """
 
 rule indexSingleFeatreVCF:
@@ -94,7 +80,7 @@ rule indexSingleFeatreVCF:
 rule mergeSingleFeatureVCF:
     input:
         files=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz",
-            feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name]),
+        feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name]),
       #  idx=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz.tbi",
        #     feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
     output:
@@ -105,9 +91,7 @@ rule mergeSingleFeatureVCF:
         bcftools merge {input.files} | bgzip -c > {output.vcf}
         tabix {output.vcf}
         """
-        
-  
-  
+                
   
   
 rule annotateFeatures:

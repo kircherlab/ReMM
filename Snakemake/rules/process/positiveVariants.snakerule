@@ -1,0 +1,45 @@
+rule liftOverPositive:
+    input:
+        c = "input/variants/hg38/hg19ToHg38.over.chain.gz",
+        o = "/fast/work/groups/ag_kircher/ReMM/ReMM/data/variants/RegulatoryMendelianMutations/GRCh37/SNVs.all.20160109.vcf.gz"        
+    output:
+        t = "input/variants/hg38/SNVs.all.20160109.bed.gz",
+        f = "input/variants/hg38/SNVs.hg38.positive.failed.bed.gz",
+        o = "input/variants/hg38/SNVs.hg38.positive.bed.gz.pos"
+    shell: 
+        """
+        zcat {input.o} | grep -v "^#" | awk 'BEGIN{{ OFS="\t" }}{{ print $1,$2-1,$2,$1":"$2":"$4":"$5":"$8 }}' | gzip -c > {output.t};
+        liftOver {output.t} {input.c} >( gzip -c > {output.o} ) >( gzip -c > {output.f});
+        
+        """
+
+rule getPositiveVariants:
+    input:
+        "input/variants/{genomeBuild}/SNVs.{genomeBuild}.positive.bed.gz.pos"
+    output:
+        "input/variants/{genomeBuild}/SNVs.{genomeBuild}.positive.vcf"
+    script:
+        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/liftOver.py"
+
+rule annotateJannovarPositive:
+    input:
+        f = "input/variants/hg38/SNVs.hg38.positive.vcf",
+        d = "input/variants/hg38/data/hg38_refseq.ser"
+    output:
+        "input/variants/hg38/SNVs.hg38.positive.refseqannotated.vcf.gz"
+    conda:
+        "../../envs/jannovar.yml"
+    shell:
+        """
+        jannovar -Xmx10G annotate-vcf -d {input.d} -i {input.f} -o {output};
+        tabix {output}
+        """
+
+rule dummy:
+    input:
+        "input/variants/hg38/SNVs.hg38.positive.vcf"
+    output:
+        "input/variants/hg38/SNVs.hg38.positive.refseq.filtered.vcf.gz"
+    shell:
+        """ bgzip < {input} > {output}
+            tabix {output}"""

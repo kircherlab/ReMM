@@ -1,0 +1,29 @@
+rule combineInputData:
+    input:
+        p = "input/variants/{genomeBuild}/SNVs.{genomeBuild}.positive.annotated.tsv.gz",
+        n = "input/variants/{genomeBuild}/SNVs.{genomeBuild}.negative.annotated.tsv.gz"
+    output:
+        o = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.combined.txt.gz",
+        p = temp("output/features/annotated/{genomeBuild}/p.txt"),
+        n = temp("output/features/annotated/{genomeBuild}/n.txt")
+        
+    shell:
+        """
+        zcat {input.p} | tail -n +2 | awk '{{$0="1\t"$0}}1'  > {output.p};
+        zcat {input.n} | tail -n +2 |awk '{{$0="0\t"$0}}1'  > {output.n};
+        cat {output.p} {output.n} | bgzip -c > {output.o};        
+        """
+
+rule createParsmurfInput:
+    input:
+        cb = "input/folds/{genomeBuild}/folds.{genomeBuild}.txt.gz",
+        f = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.combined.txt.gz"
+    output:
+        d = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.data.txt",
+        l = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.labels.txt",
+        f = "output/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt"
+    script:
+        "/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createParsmurfInput.py"
+
+   
+        

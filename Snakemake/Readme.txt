@@ -11,3 +11,16 @@ These steps are performed by number of scripts that are managed in the main work
     
 Download of data.
 Each feature is downloaded and preprocessed by a separate Snakemake rule (rules/features). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download  is managed by a config file (config/featuresConfig38.json) that contains the download links and the nessasary meta information for the processing steps.
+
+
+To run Snakemake workflow, you need to give Snakemake the name of the file you want to be calculated. E.g. to get the cross-validation ReMM scores for GRCh38, you need to run 
+
+snakemake output/predictions/hg38/SNVs.hg38.cv.predictions.txt;
+
+to get the training data:
+snakemake output/features/annotated/hg38/SNVs.hg38.data.txt;
+
+and to get the Feature VCF - a file containing feature values for all genomic positions:
+    
+snakemake output/features/combined/hg38/featureSet.hg38.vcf.gz
+    
