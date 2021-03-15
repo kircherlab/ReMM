@@ -1,3 +1,6 @@
+## this file contains snakemake rules for running the workflow for
+## computing the ReMM score for GRCh38
+
 from os.path import join
 from glob import glob
 import datetime
@@ -24,6 +27,10 @@ include: "rules/process/createModelData.snakerule"
 include: "rules/model/parSMURF.snakerule"
 
 
+## VCF files are created using a property file that contains the feature name,
+## path to the file(s), feature value column in the file, file type (bed, wig)
+## and the upload method (max for maximal value on each position from input files)
+
 rule createPropertyFile:
     input:
         lambda wc: expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
@@ -34,16 +41,19 @@ rule createPropertyFile:
         config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties"
     params:
         type=lambda wc: config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1],
-        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column']) if config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1] == "bed" else "",
+        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column'])
+        if config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1] == "bed" else "",
         method=lambda wc: config[wc.genomeBuild][wc.feature]['method'],
         description=lambda wc: config[wc.genomeBuild][wc.feature]['description'],
     run:
         files=" \n".join(["file = " + file for file in input])
         shell("""
-        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type} \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
+        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type}
+        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
         """)
 
 
+## VCF files are created
 rule createSingleFeatureVCF:
     input:
         config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties",
@@ -91,9 +101,9 @@ rule mergeSingleFeatureVCF:
         bcftools merge {input.files} | bgzip -c > {output.vcf}
         tabix {output.vcf}
         """
-                
-  
-  
+
+
+
 rule annotateFeatures:
     input:
         f = "output/features/combined/hg38/featureSet.hg38.vcf.gz",
@@ -104,9 +114,3 @@ rule annotateFeatures:
     shell:
         """java -Xmx2g -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
         """
-
-      
-        
-        
-        
-        
