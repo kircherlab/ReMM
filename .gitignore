@@ -6,13 +6,21 @@
 Snakemake/logs/
 Snakemake/input/
 Snakemake/delete/
-Snakemake/ftp.1000genomes.ebi.ac.uk/
-Snakemake/hgdownload.cse.ucsc.edu/
-Snakemake/hgdownload.soe.ucsc.edu/
 Snakemake/output/
-Snakemake/bin/
 Snakememake/.snakemake/
 Snakemake/.ipynb_checkpoints
 .bash_profile
+Snakemake/Untitled Folder/
+Snakemake/models/
+Snakemake/notebooks
+Snakemake/validation
+Snakemake/figures
+CADD_feature_comparison/
+SingleFeatureImpact/
 
 
+!Snakemake/config/
+Snakemake/config/**
+!Snakemake/config/SNVs.hg38.predict.json
+!Snakemake/config/SNVs.hg38.cv.json
+!Snakemake/config/featuresConfig38.json
