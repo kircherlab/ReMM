@@ -1,4 +1,4 @@
-rule annotateJannovarVariants:
+rule annotateJannovarNegative:
     input:
         f = "input/variants/hg38/SNVs.hg38.negative.vcf.gz",
         d = "utils/data/hg38_refseq.ser"
@@ -12,7 +12,7 @@ rule annotateJannovarVariants:
         tabix {output}
         """
         
-rule annotateJannovarVariantsPositive:
+rule annotateJannovarPositive:
     input:
         f = "input/variants/hg38/SNVs.hg38.positive.vcf.gz",
         d = "utils/data/hg38_refseq.ser"

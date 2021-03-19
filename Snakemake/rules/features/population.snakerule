@@ -1,4 +1,4 @@
-rule get_feature_1KG:
+rule get1KG:
     output:
         bed=temp("input/features/hg38/1KG/1KG.{chr}.bed"),
         bed_gz="input/features/hg38/1KG/1KG.{chr}.bed.gz"

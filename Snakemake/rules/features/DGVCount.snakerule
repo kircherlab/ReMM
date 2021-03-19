@@ -1,5 +1,5 @@
 
-rule get_feature_DGVCount:
+rule getDGVCount:
     output:
         "input/features/{genomeBuild}/DGVCount/DGVCount.all.bed.gz.dgv"
     params:
@@ -13,7 +13,7 @@ rule get_feature_DGVCount:
 #        curl {params.url}  | egrep -v "^chr" | awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$5,$6,$1}}' | sort -k 1,1 -k2,2n | awk '{{ for (i=1; i<NF;i++) {{ printf("%s\t",$i)}}; print $NF }}' | bgzip -c > {output} 
  #       """
 
-rule get_feature_Intervals_DGVCount:
+rule getDGVCountIntervals:
     input:
         "input/features/{genomeBuild}/DGVCount/DGVCount.all.bed.gz.dgv"
      

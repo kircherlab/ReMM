@@ -1,4 +1,4 @@
-rule get_feature_EncH3K27Ac:
+rule getEncH3K27Ac:
     output:
         "input/features/{genomeBuild}/EncH3K27Ac/EncH3K27Ac.{file}.bigWig"
     params:
@@ -8,7 +8,7 @@ rule get_feature_EncH3K27Ac:
         curl {params.url} > {output}
         """
 
-rule get_feature_EncH3K4Me1:
+rule getEncH3K4Me1:
     output:
         "input/features/{genomeBuild}/EncH3K4Me1/EncH3K4Me1.{file}.bigWig"
     params:
@@ -18,7 +18,7 @@ rule get_feature_EncH3K4Me1:
         curl {params.url} > {output}
         """
 
-rule get_feature_EncH3K4Me3:
+rule getEncH3K4Me3:
     output:
         "input/features/{genomeBuild}/EncH3K4Me3/EncH3K4Me3.{file}.bigWig"
     params:
@@ -28,7 +28,7 @@ rule get_feature_EncH3K4Me3:
         curl {params.url} > {output}
         """
 
-
+## ancient is there to not rerun, delete sometime 
 rule convertBigWigToBedGraph:
     input:
         "input/features/{genomeBuild}/{file}/{file}.{files}.bigWig"
@@ -39,7 +39,7 @@ rule convertBigWigToBedGraph:
     	bigWigToBedGraph {input} >(bgzip -c > {output})
         """
 
-rule get_DnaseClusteredHyp:
+rule getDnaseClusteredHyp:
     output:
         "input/features/{genomeBuild}/DnaseClusteredHyp/DnaseClusteredHyp.all.bed.gz"
     params:
@@ -49,7 +49,7 @@ rule get_DnaseClusteredHyp:
         curl {params.url} | zcat | cut -f 2- | bgzip -c > {output}
         """
 
-rule get_DnaseClusteredScore:
+rule getDnaseClusteredScore:
     output:
         "input/features/{genomeBuild}/DnaseClusteredScore/DnaseClusteredScore.all.bed.gz"
     params:

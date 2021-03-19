@@ -20,7 +20,7 @@ rule getPositiveVariants:
         "input/variants/{genomeBuild}/SNVs.{genomeBuild}.positive.vcf"
     script:
         "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/liftOver.py"
-
+'''
 rule annotateJannovarPositive:
     input:
         f = "input/variants/hg38/SNVs.hg38.positive.vcf",
@@ -34,8 +34,8 @@ rule annotateJannovarPositive:
         jannovar -Xmx10G annotate-vcf -d {input.d} -i {input.f} -o {output};
         tabix {output}
         """
-
-rule dummy:
+'''
+rule dummyChangePositiveFileName:
     input:
         "input/variants/hg38/SNVs.hg38.positive.vcf"
     output:

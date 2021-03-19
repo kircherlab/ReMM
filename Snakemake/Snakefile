@@ -23,13 +23,13 @@ include: "rules/process/annotateJannovar.snakerule"
 include: "rules/process/createModelData.snakerule"
 include: "rules/model/parSMURF.snakerule"
 
-
+## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
 rule createPropertyFile:
     input:
-        lambda wc: expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
+        lambda wc: ancient(expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
             file=config[wc.genomeBuild][wc.feature]['file'],
 			files=config[wc.genomeBuild][wc.feature]['files'],
-			extension=config[wc.genomeBuild][wc.feature]['type'])
+			extension=config[wc.genomeBuild][wc.feature]['type']))
     output:
         config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties"
     params:
@@ -43,14 +43,13 @@ rule createPropertyFile:
         echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type} \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
         """)
 
-
 rule createSingleFeatureVCF:
     input:
-        config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties",
-        files=lambda wc: expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
+        config=ancient("input/features/{genomeBuild}/PropertyFiles/{feature}.properties"),
+        files=lambda wc: ancient(expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
             file=config[wc.genomeBuild][wc.feature]['file'],
 			files=config[wc.genomeBuild][wc.feature]['files'],
-			extension=config[wc.genomeBuild][wc.feature]['type'])
+			extension=config[wc.genomeBuild][wc.feature]['type']))
     output:
         temp=temp("output/features/single/{genomeBuild}/{feature}.temp.vcf.gz"),
         vcf="output/features/single/{genomeBuild}/{feature}.vcf.gz"

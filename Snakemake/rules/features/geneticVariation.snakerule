@@ -1,6 +1,6 @@
 ## use script getISCApath38 to get ISCApath from the file with all variants
 
-rule get_feature_ISCApath:
+rule getISCApath:
     output:
         "input/features/{genomeBuild}/ISCApath/ISCApath.nstd37_nstd45_nstd75.bed.gz.vartmp"
     params:
@@ -16,7 +16,7 @@ rule get_feature_ISCApath:
 
         
         
-rule get_feature_dbVARCount:
+rule getDbVARCount:
     output:
         "input/features/{genomeBuild}/dbVARCount/dbVARCount.all.bed.gz.vartmp"
     params:
@@ -41,7 +41,7 @@ rule get_feature_DGVCount:
 
 
 
-rule get_feature_DGVCount:
+rule getDGVCount:
     output:
         "input/features/{genomeBuild}/DGVCount/DGVCount.all.bed.gz.st"
     params:
@@ -52,7 +52,7 @@ rule get_feature_DGVCount:
         """
 
 
-rule get_feature_numTFBSConserved:
+rule getNumTFBSConserved:
     output:
         "input/features/{genomeBuild}/numTFBSConserved/numTFBSConserved.all.bed.gz.st"
     params:
@@ -62,7 +62,7 @@ rule get_feature_numTFBSConserved:
         curl {params.url}  > {output}
         """
 
-rule get_Chromosomes:
+rule getChromosomes:
     input:
         "input/features/{genomeBuild}/{feature}/{file}.all.bed.gz.st"
     output:
@@ -71,7 +71,7 @@ rule get_Chromosomes:
         "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/numTFBSConserved.py"
         
         
-rule get_feature_Intervals:
+rule getIntervals:
     input:
         "input/features/{genomeBuild}/{feature}/{feature}.{files}.bed.gz.vartmp"
      

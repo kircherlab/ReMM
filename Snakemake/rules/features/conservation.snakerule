@@ -1,4 +1,4 @@
-rule get_priPhyloP:
+rule getPriPhyloP:
     output:
         "input/features/hg38/priPhyloP/priPhyloP.all.wig.gz"
     params:
@@ -21,7 +21,7 @@ rule get_priPhyloP:
           }} }}' | bgzip -c > {output}
         """
 
-rule get_priPhastCons:
+rule getPriPhastCons:
     output:
         "input/features/hg38/priPhastCons/priPhastCons.all.wig.gz"
     params:
@@ -44,7 +44,7 @@ rule get_priPhastCons:
           }} }}' | bgzip -c > {output}
         """
 
-rule get_verPhyloP:
+rule getVerPhyloP:
     output:
         "input/features/hg38/verPhyloP/verPhyloP.{chr}.wig.gz"
     params:
@@ -54,7 +54,7 @@ rule get_verPhyloP:
         curl {params.url} > {output}
         """
 
-rule get_verPhastCons:
+rule getVerPhastCons:
     output:
         "input/features/hg38/verPhastCons/verPhastCons.{chr}.wig.gz"
     params:
@@ -64,7 +64,7 @@ rule get_verPhastCons:
         curl {params.url} > {output}
         """
 
-rule get_mamPhastCons:
+rule getMamPhastCons:
     output:
         "input/features/hg38/mamPhastCons/mamPhastCons.{chr}.wig.gz"
     params:
@@ -74,7 +74,7 @@ rule get_mamPhastCons:
         curl {params.url} > {output}
         """
 
-rule get_mamPhyloP:
+rule getMamPhyloP:
     output:
         "input/features/hg38/mamPhyloP/mamPhyloP.{chr}.wig.gz"
     params:
@@ -84,7 +84,7 @@ rule get_mamPhyloP:
         curl {params.url} > {output}
         """
 
-rule get_GERPelement:
+rule getGERP:
     input:
         "/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz"
     output:

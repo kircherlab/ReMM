@@ -11,7 +11,7 @@ rule getCytoband:
     
 rule getFolds:
     input:
-        m = "input/folds/hg38/ReMM.20171122.partition.mapping.tsv.gz",
+        m = "utils/ReMM.20171122.partition.mapping.tsv.gz",
         c = "input/folds/{genomeBuild}/cytoBand.{genomeBuild}.txt.gz"
     output:
         "input/folds/{genomeBuild}/folds.{genomeBuild}.txt.gz"
