@@ -4,7 +4,7 @@ The Regulatory Mendelian Mutation (ReMM) score was created for relevance predict
 
 ## Pre-requirements
 
-###Conda
+### Conda
 We use Conda as software and dependency management tool. Conda installation guidelines can be found here:
 
 https://conda.io/projects/conda/en/latest/user-guide/install/index.html
@@ -51,6 +51,7 @@ To launch a snakemake workflow, you need to tell snakemake which file you want t
 
 ```
 snakemake output/predictions/hg38/SNVs.hg38.cv.predictions.txt
+```
 
 Using a flag -n, you can initiate a 'dry run': snakemake will check the consistency of all rules and files and show the number of steps. However, a clean dry run does not necessarily mean that no errors will occur during a normal run.
 
