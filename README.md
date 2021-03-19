@@ -55,6 +55,6 @@ snakemake output/predictions/hg38/SNVs.hg38.cv.predictions.txt
 
 Using a flag -n, you can initiate a 'dry run': snakemake will check the consistency of all rules and files and show the number of steps. However, a clean dry run does not necessarily mean that no errors will occur during a normal run.
 
-This outputs a tab-delimited file with containing two columns: first is the probability p of a variant to be pathogenic at this position, second is the probability 1 - p, so that each row sums up to 1 . ReMM score is not allele-specific so that you get only one score independent of the variant itself.
+The command outputs a tab-delimited file with containing two columns: first is the probability p of a variant to be pathogenic at this position, second is the probability 1 - p, so that each row sums up to 1 . ReMM score is not allele-specific so that you get only one score independent of the variant itself. The workflow from the download of data up to computing the scores may take several days or weeks depending on the computing power. On a XX machine with XX cores, the running time is XX hours.
 
 Snakemake folder contains graphs of the entire workflow and more detailed information on the most important steps.
