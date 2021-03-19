@@ -18,12 +18,15 @@ include: "rules/process/getUtils.snakerule"
 include: "rules/features/geneticVariation.snakerule"
 include: "rules/process/folds.snakerule"
 include: "rules/process/positiveVariants.snakerule"
-include: "rules/process/negativeVariants.snakerule"
+:include: "rules/process/negativeVariants.snakerule"
 include: "rules/process/annotateJannovar.snakerule"
 include: "rules/process/createModelData.snakerule"
 include: "rules/model/parSMURF.snakerule"
 
+<<<<<<< HEAD
 ## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
+=======
+
 rule createPropertyFile:
     input:
         lambda wc: ancient(expand("input/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
@@ -34,13 +37,15 @@ rule createPropertyFile:
         config="input/features/{genomeBuild}/PropertyFiles/{feature}.properties"
     params:
         type=lambda wc: config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1],
-        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column']) if config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1] == "bed" else "",
+        column=lambda wc: ("column = " + config[wc.genomeBuild][wc.feature]['column'])
+        if config[wc.genomeBuild][wc.feature]['type'].str.split(".")[-1] == "bed" else "",
         method=lambda wc: config[wc.genomeBuild][wc.feature]['method'],
         description=lambda wc: config[wc.genomeBuild][wc.feature]['description'],
     run:
         files=" \n".join(["file = " + file for file in input])
         shell("""
-        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type} \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
+        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type}
+        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
         """)
 
 rule createSingleFeatureVCF:
@@ -90,9 +95,9 @@ rule mergeSingleFeatureVCF:
         bcftools merge {input.files} | bgzip -c > {output.vcf}
         tabix {output.vcf}
         """
-                
-  
-  
+
+
+
 rule annotateFeatures:
     input:
         f = "output/features/combined/hg38/featureSet.hg38.vcf.gz",
@@ -103,9 +108,3 @@ rule annotateFeatures:
     shell:
         """java -Xmx2g -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
         """
-
-      
-        
-        
-        
-        
