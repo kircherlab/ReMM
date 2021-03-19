@@ -1,11 +1,7 @@
 logs
 input
 delete
-ftp.1000genomes.ebi.ac.uk
-hgdownload.cse.ucsc.edu
-hgdownload.soe.ucsc.edu
 output
-bin
 .snakemake
 .ipynb_checkpoints
 .bash_profile
@@ -14,3 +10,13 @@ untitled.txt
 bin
 parSMURF
 Untitled Folder
+validation
+notebooks
+figures
+models
+!config/
+config/**
+!config/SNVs.hg38.predict.json
+!config/SNVs.hg38.cv.json
+!config/featuresConfig38.json
+
