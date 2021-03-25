@@ -7,7 +7,7 @@ The folder Snakemake contains several subfolders:
 - rules: snakemake rules separated into subfolders according to the workflow steps
 - env: a yaml file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
 - scripts: (external) scripts used by snakemake rules
-- utils: diverse reference files and scaffolds used during the workflow. 
+- utils: diverse reference files and scaffolds used during the workflow
 - input: files that serve as input for cetain rules
 - output: computed files - output of rules 
 
