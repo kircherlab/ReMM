@@ -16,10 +16,10 @@ Some directories contain more detailed information on files contained.
 The first step of the wokflow is to download the row feature data. If you do not want to change any features and stick with the 26 fetaures (list can be found in XX), you do need to take any actions. If you want to add or remove features, you should first take look at the file config/featuresConfig38.json. Here, each feature has a entry with following specifications:
 
 ```
- "featureName": {
+ "feature name": {
             "url": link to the file that should be downloaded,
             "file" : name to give to the downloaded file,
-            "files" : if a feature consists of many files that have to be downloaded, that you have to write the names of the files in a list; if only one file will be downloaded "all",
+            "files" : if a feature consists of many files that have to be downloaded, than you have to write the names of the files in a list; if only one file will be downloaded, write "all",
             "type": type of the file  before it is converted into VCF by AttibutedDB (see Section X),
             "method": methods for processing the files by AttibutedDB (see Section X)
             "description": short description of the feature
