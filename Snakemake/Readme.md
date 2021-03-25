@@ -27,7 +27,7 @@ The first step of the wokflow is to download the row feature data. If you do not
             "description": short description of the feature
         }
 ```
-After you have prepared this, add the name of the feature in the list at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. Create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the config/featuresConfig38.json for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. 
+After you have prepared this, add the name of the feature in the list at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. For that, create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the config/featuresConfig38.json for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. 
 
 ### Converting into VCF
 
