@@ -12,6 +12,7 @@ The folder Snakemake contains several subfolders:
 
 Some directories contain more detailed information on files contained.
 
+### Adding a new feature
 
 The first step of the wokflow is to download the row feature data. If you do not want to change any features and stick with the 26 fetaures (list can be found in XX), you do need to take any actions. If you want to add or remove features, you should first take look at the file config/featuresConfig38.json. Here, each feature has a entry with following specifications:
 
@@ -25,6 +26,11 @@ The first step of the wokflow is to download the row feature data. If you do not
             "description": short description of the feature
         }
 ```
+After you have prepared this, add the name of the feature in the list at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. Create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the config/featuresConfig38.json for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. 
+
+### Converting into VCF
+
+
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
 In the following, we briefly discuss what most of the rules thus and what changes you need to do, to adapt the wokflow to your data. 
