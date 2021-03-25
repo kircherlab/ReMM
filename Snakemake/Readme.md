@@ -23,13 +23,13 @@ The first step of the wokflow is to download the raw feature data. If you do not
             "file" : name to give to the downloaded file,
             "files" : if a feature consists of many files that have to be downloaded, than you have to write the names of the files in a list; if only one file will be downloaded, write "all",
             "type": type of the file  before it is converted into VCF by AttibutedDB (see Section X),
-            "method": methods for processing the files by AttibutedDB (see Section X)
+            "method": methods for processing the files by AttibutedDB (see Section X),
             "description": short description of the feature
         }
 ```
-After you have prepared this, add the name of the feature in the list at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. For that, create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the *config/featuresConfig38.json* for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. Here, you can preprocess the data if needed or use a separate rule for that (use the same snakerule file for that). At the end, you need to output a comma-separated file, that will be used in the next step.
+After you have prepared this, add the name of the feature in the list *feature_set["hg38"]* at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. For that, create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the *config/featuresConfig38.json* for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. Here, you can preprocess the data if needed or use a separate snakemake rule for that (use the same snakerule file). At the end, you need to output a comma-separated file, that will be used in the next step.
 
-To remove a feature from computation of ReMM, you need only to remove its name from the top list in *featuresConfig38.json*. 
+To remove a feature from computation of ReMM, you need only to remove its name from the top list *feature_set["hg38"]* in *featuresConfig38.json*. Features not defined in the list, will be not further processed even if the feature is defined as shown above. 
 
 ### Converting into VCF
 After you have downloaded the raw feature and 
