@@ -3,7 +3,7 @@
 
 The folder Snakemake contains several subfolders:
 
-- config: configuration files for download and processing of annotations as well as configuration files for running parSMURF
+- config: configuration files for downloading and processing of annotations as well as configuration files for running parSMURF
 - rules: snakemake rules separated into subfolders according to the workflow steps
 - env: a yaml file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
 - scripts: (external) scripts used by snakemake rules
