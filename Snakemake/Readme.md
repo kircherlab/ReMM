@@ -15,7 +15,7 @@ Some directories contain more detailed information on files contained.
 
 ### Adding a new feature
 
-The first step of the wokflow is to download the row feature data. If you do not want to change any features and stick with the 26 fetaures (list can be found in XX), you do need to take any actions. If you want to add or remove features, you should first take look at the file config/featuresConfig38.json. Here, each feature has a entry with following specifications:
+The first step of the wokflow is to download the raw feature data. If you do not want to change any features and stick with the 26 fetaures (list can be found in XX), you do need to take any actions. If you want to add or remove features, you should first take look at the file config/featuresConfig38.json. Here, each feature has a entry with following specifications:
 
 ```
  "feature name": {
