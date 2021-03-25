@@ -24,7 +24,7 @@ The first step of the wokflow is to download the row feature data. If you do not
             "method": methods for processing the files by AttibutedDB (see Section X)
             "description": short description of the feature
         }
-
+```
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
 In the following, we briefly discuss what most of the rules thus and what changes you need to do, to adapt the wokflow to your data. 
