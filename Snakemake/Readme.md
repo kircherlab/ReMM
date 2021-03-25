@@ -1,4 +1,5 @@
-## Project structure
+## Project workflow
+### Folder structure
 
 The folder Snakemake contains several subfolders:
 
