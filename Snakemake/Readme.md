@@ -7,12 +7,23 @@ The folder Snakemake contains several subfolders:
 - env: a yaml file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
 - scripts: (external) scripts used by snakemake rules
 - utils: diverse reference files and scaffolds used during the workflow. 
+- input: files that serve as input for cetain rules
+- output: computed files - output of rules 
 
 Some directories contain more detailed information on files contained.
 
 
+The first step of the wokflow is to download the row feature data. If you do not want to change any features and stick with the 26 fetaures (list can be found in XX), you do need to take any actions. If you want to add or remove features, you should first take look at the file config/featuresConfig38.json. Here, each feature has a entry with following specifications:
 
-
+```
+ "featureName": {
+            "url": link to the file that should be downloaded,
+            "file" : name to give to the downloaded file,
+            "files" : if a feature consists of many files that have to be downloaded, that you have to write the names of the files in a list; if only one file will be downloaded "all",
+            "type": type of the file  before it is converted into VCF by AttibutedDB (see Section X),
+            "method": methods for processing the files by AttibutedDB (see Section X)
+            "description": short description of the feature
+        }
 
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
