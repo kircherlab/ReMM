@@ -8,8 +8,8 @@ The folder Snakemake contains several subfolders:
 - env: a yaml file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
 - scripts: (external) scripts used by snakemake rules
 - utils: diverse reference files and scaffolds used during the workflow
-- input: files that serve as input for cetain rules
-- output: computed files - output of rules 
+- input: files that serve as input for cetain rules (raw fetaure files, variants)
+- output: computed files - output of rules (VCF feature files, training sets, predictions)
 
 Some directories contain more detailed information on files contained.
 
