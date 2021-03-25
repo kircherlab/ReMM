@@ -27,11 +27,12 @@ The first step of the wokflow is to download the raw feature data. If you do not
             "description": short description of the feature
         }
 ```
-After you have prepared this, add the name of the feature in the list at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. For that, create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the config/featuresConfig38.json for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. 
+After you have prepared this, add the name of the feature in the list at the top of the JSON file. Next, you have to add a snakemake rule for downloading the fetaure. For that, create a new text file *featureName.snakerule* in the folder rules/features and add a rule that uses the new entry in the config/featuresConfig38.json for donwloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. Here, you can preprocess the data if needed or use a separate rule for that (use the same snakerule file for that). At the end, you need to output a comma-separated file, that will be used in the next step.
 
-To remove a feature from computation of ReMM, you need only too remove its name from the top list. 
+To remove a feature from computation of ReMM, you need only to remove its name from the top list in featuresConfig38.json. 
+
 ### Converting into VCF
-
+After you have downloaded the raw feature and 
 
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
