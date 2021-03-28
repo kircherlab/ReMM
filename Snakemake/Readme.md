@@ -11,11 +11,11 @@ The folder Snakemake contains several subfolders:
 - input: files that serve as input for  rules (raw feature files, variants)
 - output: computed files - output of rules (VCF feature files, training sets, predictions)
 
-Some directories contain more detailed information on files contained.
+Some directories contain README files with more detailed information on the content of folders.
 
 ### Adding or removing features
 
-The first step of the workflow is to download the raw feature data. If you do not want to change any features and stick with the 26 features (list can be found in XX), you do need to take any actions. If you want to add or remove features, you should first take look at the file *config/featuresConfig38.json*. Here, each feature has a entry with following specifications:
+The first step of the workflow is to download the raw feature data. If you do not want to change any features and stick with the 26 features, you do need to take any actions. If you want to add or remove features, you should first take look at the file *config/featuresConfig38.json*. Here, each feature has a entry with following specifications:
 
 ```
  "feature name": {
@@ -62,7 +62,7 @@ Next step of the workflow is to annotate the positive and negative variants with
 The positive and negative sets are first combined into one file in *combineInputData* and then processed by the rule *createParsmurfInput* to create the input for parSMURF. The input consists of three parts: features, labels and folds. Folds are needed for a special cross-validation technique that handles the locally correlated structure of variants by cross-validating on folds that contain no correlated data. The folds are created according to cytogenic bands in the scripts *createParsmurfInput.py*.
 
 ### Training and Cross-validation
-Trainign and validation are done by parSMURF. It applies the hyperSMURF method for training with unbalanced data (link). The executable of parSMURF is saved in *bin* folder. ParSMURF runs in three different modis: training, cross-validation and prediction. Which modus is to be used as well as other details are defined in the parSMURF configuration file. A scaffold of it can be found in *utils*. The rule *generateParsmurfConfig* creates a configuration file basing on the scaffold and the name of the output file that is handed over to Snakemake. The name contains the modus and a seed; if no seed is defined the default seed is *1*. For example, calling snakemake with the file name *output/predictions/hg38/SNVs.hg38.cv.predictions.txt* will 
+Training  and validation are done by parSMURF. It applies the hyperSMURF method for training with unbalanced data (link). The executable of parSMURF is saved in the *bin* folder. ParSMURF runs in three different modis: training, cross-validation and prediction (train, cv, predcit in the cofig file). Which modus is to be used as well as other details are defined in the parSMURF configuration file. A scaffold of it can be found in *utils*. The rule *generateParsmurfConfig* creates a configuration file basing on the scaffold and the name of the output file that is handed over to Snakemake. The name contains the modus and a seed; if no seed is defined the default see *1* is used. For example, calling snakemake with the file name *output/predictions/hg38/SNVs.hg38.cv.predictions.txt* will make parSMURF to run in cross-validation modus with the default seed. If you want to change the seed, you can define the file name as  *output/predictions/hg38/SNVs.hg38.cv.predictions.txt_seed*
 
 
 
