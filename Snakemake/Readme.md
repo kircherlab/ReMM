@@ -32,17 +32,17 @@ After you have prepared this, add the name of the feature in the list *feature_s
 To remove a feature from computation of ReMM, you need only to remove its name from the top list *feature_set["hg38"]* in *featuresConfig38.json*. Features not defined in the list, will be not further processed even if the feature is defined as shown above. 
 
 ### Converting into VCF
-After raw feature files are downloaded and processed, they have to be converted into VCF format. This is done by the progamm AttributeDB that need a proporty file for processing features. The file contains following information:
+After raw feature files are downloaded and processed, they have to be converted into VCF format. This is done by the progamm AttributeDB that needs a proporty file for processing features. The file contains following information:
 
 ```
 name = name of the feature 
 file = link to the file(s)
-type = type of the  
-method = upload 
-description = CpG islands. Ratio of observed (cpgNum) to expected(numC*numG/length) CpG in island downloaded from UCSC table browser 
-column = 10
+type = type of the file (the programm accepts bed and wig files) 
+method = upload or max. If a feature is defined in more that ones for one and the same position in multipple files (e.g. histone modification in different cell types), the programm will retrieve the maximum value of the feature across the filess at that position when 'max' is specified. Otherwiese use 'upload' for simple upload.
+description = short description of the feature
+column = column number where the feature values are defined, usually 4 but it can diverse
 
-
+```
 
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
