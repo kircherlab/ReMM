@@ -49,8 +49,11 @@ The property file is created by the rule *createPropertyFile* in the Snakefile. 
 The individual feature files are merged into one VCF after all features have been downloaded, processed and converted into VCF. The rule *mergeSingleFeatureVCF* in Snakemake file uses bcftools for that. It ouputs a file of 53.9Gb (for existing 26 fetaures) and creates and index file. Both are used in the next step for annotating variants.
 
 ### Variants
-#### Positive variants
-A set of 456 positive variants is available in the folder utils in *SNVs.all.20160109.vcf.gz*. These are Indels and SNP curated for ReMM GRCh37, so in the first step the positition have to be lifted over to GRCh38 which is done by the rule liftOverPositive (in rules/process) using UCSC liftOver tool. After that the SNPS are filtered and saved into a VCF file by the Script *filter.py*  applied by the rule *getPositiveSNPs*.
+#### Pathogenic variants
+The set of 456 positive variants is available in the folder *utils* under *SNVs.all.20160109.vcf.gz*. These are Indels and SNP curated for ReMM GRCh37 study, so in the first step the positition have to be lifted over to GRCh38 coordniates, which is done by the rule *liftOverPositive* (in *rules/process*) using UCSC liftOver tool. After that, the SNPS are filtered and saved into a VCF file by the Script *filter.py*  applied by the rule *getPositiveSNPs*.
+
+#### Benign variants
+A set of ca. 14 million variants can be downloaded here (LINK??). The file contains coding and non-coding variants, so we first need to annotate the positions and then filter for non-coding variants. Annotation is done by Jannovar (in rule *annotateJannovarNegative*) that needs a refseq library saved in *utils/data/hg38_refseq.ser*. The annotated file in processed by the rule  *jannovarFilter* to filter out the coding variants. The resulting file *input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz* contains around 13.8 million non-coding variants.
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
 In the following, we briefly discuss what most of the rules thus and what changes you need to do, to adapt the wokflow to your data. 
