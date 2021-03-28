@@ -13,9 +13,10 @@ The folder Snakemake contains several subfolders:
 
 Some directories contain README files with more detailed information on the content of folders.
 
-### Adding or removing features
+### Annotations
 
-The first step of the workflow is to download the raw feature data. If you do not want to change any features and stick with the 26 features, you do need to take any actions. If you want to add or remove features, you should first take look at the file *config/featuresConfig38.json*. Here, each feature has a entry with following specifications:
+Each annotation is downloaded and preprocessed by a separate Snakemake rule (*rules/features*). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download is managed by a configuration file (*config/featuresConfig38.json*) that contains the download links and the necessary meta information for the processing steps. Each feature has the following entry:
+
 
 ```
  "feature name": {
@@ -27,7 +28,7 @@ The first step of the workflow is to download the raw feature data. If you do no
             "description": short description of the feature
         }
 ```
-After you have prepared this, add the name of the feature in the list *feature_set["hg38"]* at the top of the JSON file. Next, you have to add a snakemake rule for downloading the feature. For that, create a new text file *featureName.snakerule* in the folder *rules/features* and add a rule that uses the new entry in the *config/featuresConfig38.json* for downloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. Here, you can preprocess the data if needed or use a separate snakemake rule for that (use the same snakerule file). At the end, you need to output a comma-separated file in the input/featureName folder, that will be used in the next step.
+If you want to add a feature for the calculation of the ReMM score, you have to define it as descibed above and add the name of the feature in the list *feature_set["hg38"]* at the top of the JSON file. Next, you have to add a snakemake rule for downloading the feature. For that, create a new text file *featureName.snakerule* in the folder *rules/features* and add a rule that uses the new entry in the *config/featuresConfig38.json* for downloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. Here, you can preprocess the data if needed or use a separate snakemake rule for that (use the same snakerule file). At the end, you need to output a comma-separated file in the input/featureName folder, that will be used in the next step. All folling steps do not need modifications for adding a peature. 
 
 To remove a feature from computation of ReMM, you need only to remove its name from the top list *feature_set["hg38"]* in *featuresConfig38.json*. Features not defined in the list, will be not further processed even if the feature is defined as shown above. 
 
@@ -62,10 +63,9 @@ Next step of the workflow is to annotate the positive and negative variants with
 The positive and negative sets are first combined into one file in *combineInputData* and then processed by the rule *createParsmurfInput* to create the input for parSMURF. The input consists of three parts: features, labels and folds. Folds are needed for a special cross-validation technique that handles the locally correlated structure of variants by cross-validating on folds that contain no correlated data. The folds are created according to cytogenic bands in the scripts *createParsmurfInput.py*.
 
 ### Training and Cross-validation
-Training  and validation are done by parSMURF. It applies the hyperSMURF method for training with unbalanced data (link). The executable of parSMURF is saved in the *bin* folder. ParSMURF runs in three different modis: training, cross-validation and prediction (train, cv, predcit in the cofig file). Which modus is to be used as well as other details are defined in the parSMURF configuration file. A scaffold of it can be found in *utils*. The rule *generateParsmurfConfig* creates a configuration file basing on the scaffold and the name of the output file that is handed over to Snakemake. The name contains the modus and a seed; if no seed is defined the default see *1* is used. For example, calling snakemake with the file name *output/predictions/hg38/SNVs.hg38.cv.predictions.txt* will make parSMURF to run in cross-validation modus with the default seed. If you want to change the seed, you can define the file name as  *output/predictions/hg38/SNVs.hg38.cv.predictions.txt_seed*
+Training  and validation are performed by parSMURF. It applies the hyperSMURF method for training with unbalanced data (see paper *Imbalance-Aware Machine Learning for Predicting Rare and Common Disease-Associated Non-Coding Variants*). The executable of parSMURF is saved in the *bin* folder. ParSMURF runs in three different modis: training, cross-validation and prediction (train, cv, predcit in the cofig file). Which modus is to be used as well as other details are defined in the parSMURF configuration file. A scaffold of it can be found in *utils*. The rule *generateParsmurfConfig* creates a configuration file basing on the scaffold and the name of the output file that is handed over to Snakemake. The name contains the modus and a seed; if no seed is defined the default see *1* is used. For example, calling snakemake with the file name *output/predictions/hg38/SNVs.hg38.cv.predictions.txt* will make parSMURF to run in cross-validation modus with the default seed. If you want to change the seed, you can define the file name as  *output/predictions/hg38/SNVs.hg38.cv.predictions.txt_seed*
 
-
-
+ParSMURF outputs a tab-delimited file with containing two columns: the first is the probability *p* of a variant to be pathogenic at the position, the second is the probability *1 - p*, so that each row sums up to *1*. 
 
 
 
