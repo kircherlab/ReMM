@@ -48,7 +48,9 @@ The property file is created by the rule *createPropertyFile* in the Snakefile. 
 ### Creating feature set
 The individual feature files are merged into one VCF after all features have been downloaded, processed and converted into VCF. The rule *mergeSingleFeatureVCF* in Snakemake file uses bcftools for that. It ouputs a file of 53.9Gb (for existing 26 fetaures) and creates and index file. Both are used in the next step for annotating variants.
 
-### 
+### Variants
+#### Positive variants
+A set of 456 positive variants is available in the folder utils in *SNVs.all.20160109.vcf.gz*. These are Indels and SNP curated for ReMM GRCh37, so in the first step the positition have to be lifted over to GRCh38 which is done by the rule liftOverPositive (in rules/process) using UCSC liftOver tool. After that the SNPS are filtered and saved into a VCF file by the Script *filter.py*  applied by the rule *getPositiveSNPs*.
 
 The Snakemake workflow consists of XX different rules, many of which are excecuted multiple times. 
 In the following, we briefly discuss what most of the rules thus and what changes you need to do, to adapt the wokflow to your data. 
