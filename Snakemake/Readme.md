@@ -56,7 +56,13 @@ The set of 456 positive variants is available in the folder *utils* under *SNVs.
 A set of ca. 14 million variants can be downloaded here (LINK??). The file contains coding and non-coding variants, so we first need to annotate the positions and then filter for non-coding variants. Annotation is done by Jannovar (in rule *annotateJannovarNegative*) that needs a refseq library saved in *utils/data/hg38_refseq.ser*. The annotated file in processed by the rule  *jannovarFilter* to filter out the coding variants. The resulting file *input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz* contains around 13.8 million non-coding variants.
 
 ### Variant annotation
-Next step of the workflow is to annotate the positive and negative variants with features. This is done in the rule *annotateFeatures* (Snakefile) that hands over the VCF files of positive and negative varianst together with the feature VCF file to the AttibuteDB that annotates the files. This is very time consuming and needs many hours conda
+Next step of the workflow is to annotate the positive and negative variants with features. This is done in the rule *annotateFeatures* (Snakefile) that hands over the VCF files of positive and negative varianst together with the feature VCF file to the AttibuteDB that annotates the files. This is very time consuming and needs many hours conda. The annotated variants are saved in *input/variants/*.
+
+### Training set 
+The positive and negative sets are first combined into one file in *combineInputData* and then processed by the rule *createParsmurfInput* to create the input for parSMURF. The input consists of three parts: features, labels and folds. Folds are needed for a special cross-validation technique that handles the localy correlated structure of variants by cross-validating on folds that contain no correlated data. The folds are created according to cytogenic bands in the scripts *createParsmurfInput.py*.
+
+### Training and Cross-validation
+
 
 
 
