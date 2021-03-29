@@ -72,7 +72,8 @@ Training  and validation are performed by **parSMURF**. It applies the hyperSMUR
 
 ParSMURF outputs a tab-delimited file with containing two columns. The first column is the probability *p* of a variant to be pathogenic at the position, the second is the probability *1 - p*, so that each row sums up to *1*. 
 
-
+### 8. Genome-wide ReMM score
+Not done yet
 
 ---------------------
 
