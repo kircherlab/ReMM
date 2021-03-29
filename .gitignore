@@ -35,7 +35,6 @@ Snakemake/utils/**
 !Snakemake/utils/scaffold.json
 
 
-Snakemake/**.jpg
 Snakemake/**.svg
 Snakemake/Snakefile19
 
