@@ -16,7 +16,7 @@ The folder Snakemake contains several subfolders:
 
 Some directories contain README files with more detailed information on the content of folders.
 
-### Annotations
+### 1. Annotations
 
 Each annotation is downloaded and preprocessed by a separate Snakemake rule (*rules/features*). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download is managed by a configuration file (*config/featuresConfig38.json*) that contains the download links and the necessary meta information for the processing steps. Each feature has the following entry:
 
@@ -35,7 +35,7 @@ If you want to add a feature for the calculation of the ReMM score, you have to 
 
 To remove a feature from computation of ReMM, you need only to remove its name from the top list *feature_set["hg38"]* in *featuresConfig38.json*. Features not defined in the list, will be not further processed even if the feature is defined as shown above. 
 
-### Converting into VCF
+### 2. Converting into VCF
 After raw feature files are downloaded and processed, they have to be converted into VCF format. This is done by the program AttributeDB that needs a property file for processing features. The file contains following information:
 
 ```
@@ -49,23 +49,23 @@ column = column number where the feature values are defined, usually 4 but it ca
 ```
 The property file is created by the rule *createPropertyFile* in the Snakefile. It processes the content of the feature configuration file and creates a property file  *input/hg38/PropertyFiles/featureName.properties*. The VCF files are created by the rule *createSingleFeatureVCF* and indexed by *indexSingleFeatreVCF* from Snakefile.
 
-### Creating feature set
+### 3. Creating feature set
 The individual feature files are merged into one VCF after all features have been downloaded, processed and converted into VCF. The rule *mergeSingleFeatureVCF* in Snakemake file uses bcftools for that. It outputs a file of 53.9Gb (for existing 26 features) and creates and index file. Both are used in the next step for annotating variants.
 
-### Variants
-#### Pathogenic variants
+### 4. Variants
+#### 4.1 Pathogenic variants
 The set of 456 positive variants is available in the folder *utils* under *SNVs.all.20160109.vcf.gz*. These are Indels and SNP curated for ReMM GRCh37 study, so in the first step the positions have to be lifted over to GRCh38 coordinates, which is done by the rule *liftOverPositive* (in *rules/process*) using UCSC liftOver tool. After that, the SNPS are filtered and saved into a VCF file by the Script *filter.py*  applied by the rule *getPositiveSNPs*.
 
-#### Benign variants
+#### 4.2 Benign variants
 A set of ca. 14 million variants can be downloaded here (LINK??). The file contains coding and non-coding variants, so we first need to annotate the positions and then filter for non-coding variants. Annotation is done by Jannovar (in rule *annotateJannovarNegative*) that needs a refseq library saved in *utils/data/hg38_refseq.ser*. The annotated file in processed by the rule  *jannovarFilter* to filter out the coding variants. The resulting file *input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz* contains around 13.8 million non-coding variants.
 
-### Variant annotation
+### 5. Variant annotation
 Next step of the workflow is to annotate the positive and negative variants with features. This is done in the rule *annotateFeatures* (Snakefile) that hands over the VCF files of positive and negative variants together with the feature VCF file to the AttibuteDB that annotates the files. This is very time consuming and needs many hours. The annotated variants are saved in *input/variants/*.
 
-### Training set 
+### 6. Training set 
 The positive and negative sets are first combined into one file in *combineInputData* and then processed by the rule *createParsmurfInput* to create the input for parSMURF. The input consists of three parts: features, labels and folds. Folds are needed for a special cross-validation technique that handles the locally correlated structure of variants by cross-validating on folds that contain no correlated data. The folds are created according to cytogenic bands in the scripts *createParsmurfInput.py*.
 
-### Training and Cross-validation
+### 7. Training and Cross-validation
 Training  and validation are performed by parSMURF. It applies the hyperSMURF method for training with unbalanced data (see paper *Imbalance-Aware Machine Learning for Predicting Rare and Common Disease-Associated Non-Coding Variants*). The executable of parSMURF is saved in the *bin* folder. ParSMURF runs in three different modis: training, cross-validation and prediction (train, cv, predcit in the cofig file). Which modus is to be used as well as other details are defined in the parSMURF configuration file. A scaffold of it can be found in *utils*. The rule *generateParsmurfConfig* creates a configuration file basing on the scaffold and the name of the output file that is handed over to Snakemake. The name contains the modus and a seed; if no seed is defined the default see *1* is used. For example, calling snakemake with the file name *output/predictions/hg38/SNVs.hg38.cv.predictions.txt* will make parSMURF to run in cross-validation modus with the default seed. If you want to change the seed, you can define the file name as  *output/predictions/hg38/SNVs.hg38.cv.predictions.txt_seed*
 
 ParSMURF outputs a tab-delimited file with containing two columns: the first is the probability *p* of a variant to be pathogenic at the position, the second is the probability *1 - p*, so that each row sums up to *1*. 
