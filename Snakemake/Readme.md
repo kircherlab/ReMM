@@ -26,8 +26,8 @@ Each annotation is downloaded and preprocessed by a separate Snakemake rule (*ru
             "url": link to the file that should be downloaded,
             "file" : name to give to the downloaded file,
             "files" : if feature data is spread across files that have to be downloaded, than you have to write the names of the files in a list; if only one file will be downloaded, write "all",
-            "type": type of the file  before it is converted into VCF by AttibuteDB (see Section X),
-            "method": methods for processing the files by AttibuteDB (see Section X),
+            "type": type of the file  before it is converted into VCF by AttibuteDB (see Section '2. Converting into VCF'),
+            "method": methods for processing the files by AttibuteDB (see Section '2. Converting into VCF'),
             "description": short description of the feature
         }
 ```
