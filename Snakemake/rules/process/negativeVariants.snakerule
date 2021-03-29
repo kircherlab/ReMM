@@ -10,9 +10,9 @@ rule getNegativeVariants:
 
 rule jannovarFilter:
     input:
-        i="input/variants/hg38/SNVs.hg38.negative.refseq.vcf.gz",
+        i="input/variants/hg38/SNVs.hg38.negative.refseq.vcf.gz"
     output:
-        o="input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz",
+        o="input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp"
     shell:
         """
         (echo -e "##fileformat=VCFv4.1\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO";
@@ -34,5 +34,21 @@ rule jannovarFilter:
          
         
 """
+rule dummyOnlyForTesting:
+    input:
+        "input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp"
+    output:
+        "input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz"
+    shell:
+        '''
+        zcat {input} | head -n 408 | bgzip > {output};
+        tabix {output}
+        '''
+        
     
+
+
+
+
+
 

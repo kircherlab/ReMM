@@ -1,6 +1,6 @@
 rule getChainFile:
     output:
-        "input/variants/{genomebuil}/hg19ToHg38.over.chain.gz"
+        "utils/hg19ToHg38.over.chain.gz"
     params:
         url='https://hgdownload.soe.ucsc.edu/gbdb/{genomebuil}/liftOver/hg19ToHg38.over.chain.gz'
     shell:

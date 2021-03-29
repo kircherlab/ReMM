@@ -11,7 +11,7 @@ rule annotateJannovarNegative:
         jannovar annotate-vcf -d {input.d} -i {input.f} -o {output};
         tabix {output}
         """
-        
+## not needed for the workflow        
 rule annotateJannovarPositive:
     input:
         f = "input/variants/hg38/SNVs.hg38.positive.vcf.gz",

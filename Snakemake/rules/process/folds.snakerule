@@ -1,6 +1,6 @@
 rule getCytoband:
     output:
-        'input/folds/{genomeBuild}/cytoBand.{genomeBuild}.txt.gz'
+        'utils/cytoBand.{genomeBuild}.txt.gz'
     params:
         url='http://hgdownload.cse.ucsc.edu/goldenpath/{genomeBuild}/database/cytoBand.txt.gz'
     shell:
@@ -12,8 +12,8 @@ rule getCytoband:
 rule getFolds:
     input:
         m = "utils/ReMM.20171122.partition.mapping.tsv.gz",
-        c = "input/folds/{genomeBuild}/cytoBand.{genomeBuild}.txt.gz"
+        c = "utils/cytoBand.{genomeBuild}.txt.gz"
     output:
         "input/folds/{genomeBuild}/folds.{genomeBuild}.txt.gz"
     script: 
-        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createFolds.py"
+        "../../scripts/createFolds.py"

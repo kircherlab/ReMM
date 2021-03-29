@@ -20,5 +20,5 @@ rule getDGVCountIntervals:
     output:
         "input/features/{genomeBuild}/DGVCount/DGVCount.{file}.bed.gz"
     script: 
-        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createIntervals.py"
+        "../../scripts/createIntervals.py"
     

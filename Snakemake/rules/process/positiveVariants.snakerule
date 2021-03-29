@@ -1,7 +1,7 @@
 rule liftOverPositive:
     input:
-        c = "input/variants/hg38/hg19ToHg38.over.chain.gz",
-        o = "/fast/work/groups/ag_kircher/ReMM/ReMM/data/variants/RegulatoryMendelianMutations/GRCh37/SNVs.all.20160109.vcf.gz"        
+        c = "utils/hg19ToHg38.over.chain.gz",
+        o = "utils/SNVs.all.20160109.vcf.gz"        
     output:
         t = "input/variants/hg38/SNVs.all.20160109.bed.gz",
         f = "input/variants/hg38/SNVs.hg38.positive.failed.bed.gz",
@@ -19,7 +19,7 @@ rule getPositiveVariants:
     output:
         "input/variants/{genomeBuild}/SNVs.{genomeBuild}.positive.vcf"
     script:
-        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/liftOver.py"
+        "../../scripts/filter.py"
 '''
 rule annotateJannovarPositive:
     input:

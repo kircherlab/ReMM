@@ -68,7 +68,7 @@ rule getChromosomes:
     output:
         "input/features/{genomeBuild}/{feature}/{file}.{chr}.bed.gz.vartmp"
     script: 
-        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/numTFBSConserved.py"
+        "../../scripts/numTFBSConserved.py"
         
         
 rule getIntervals:
@@ -79,6 +79,6 @@ rule getIntervals:
         "input/features/{genomeBuild}/{feature}/{feature}.{files}.var.bed.gz"
         
     script: 
-        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createIntervals.py"
+        "../../scripts/createIntervals.py"
     
     

@@ -13,7 +13,7 @@ rule generateParsmurfConfig:
         seed = {'1'},
         mode = '{mode}'
     script:
-        "/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/generateParsmurfConfig.py"        
+        "../../scripts/generateParsmurfConfig.py"        
         
         
         

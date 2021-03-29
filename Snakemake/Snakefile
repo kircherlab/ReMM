@@ -9,23 +9,25 @@ configfile: "config/featuresConfig38.json"
 configfile: "config.yml"
 
 
-include: "rules/features/GCfeatures.snakerule"
-include: "rules/features/conservation.snakerule"
-include: "rules/features/encodeEpigenetics.snakerule"
-include: "rules/features/population.snakerule"
-include: "rules/features/fantom.snakerule"
+#include: "rules/features/GCfeatures.snakerule"
+#include: "rules/features/conservation.snakerule"
+#include: "rules/features/encodeEpigenetics.snakerule"
+#include: "rules/features/population.snakerule"
+#include: "rules/features/fantom.snakerule"
 include: "rules/process/getUtils.snakerule"
-include: "rules/features/geneticVariation.snakerule"
+#include: "rules/features/geneticVariation.snakerule"
 include: "rules/process/folds.snakerule"
 include: "rules/process/positiveVariants.snakerule"
-:include: "rules/process/negativeVariants.snakerule"
+include: "rules/process/negativeVariants.snakerule"
 include: "rules/process/annotateJannovar.snakerule"
 include: "rules/process/createModelData.snakerule"
 include: "rules/model/parSMURF.snakerule"
 
-<<<<<<< HEAD
+'''
+
+
+
 ## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
-=======
 
 rule createPropertyFile:
     input:
@@ -96,7 +98,7 @@ rule mergeSingleFeatureVCF:
         tabix {output.vcf}
         """
 
-
+'''
 
 rule annotateFeatures:
     input:
