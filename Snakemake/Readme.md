@@ -83,18 +83,5 @@ Each feature is downloaded and preprocessed by a separate Snakemake rule (*rules
 
 Absolute paths:
 /fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz
-/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createIntervals.py
-/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/numTFBSConserved.py
-/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createIntervals.py
-/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/generateParsmurfConfig.py
-/fast/work/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createParsmurfInput.py
-/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createFolds.py
 /fast/groups/ag_kircher/CADD/cadd_v1.3/training_data/GRCh38/humanDerived/annotated/SNVs.vcf.gz
 /fast/work/groups/ag_kircher/ReMM/ReMM/data/variants/RegulatoryMendelianMutations/GRCh37/SNVs.all.20160109.vcf.gz
-"/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/liftOver.py
-
-in
-Snakemake/scripts/createHyperSmurfInput.py
-Snakemake/scripts/createParsmurfInput.py
-Snakemake/scripts/liftOver.py
-Snakemake/scripts/numTFBSConserved.py
