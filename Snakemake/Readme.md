@@ -1,5 +1,6 @@
 To DoS:
 - Add a ReMM environment file, create it during the workflow
+- Add a link for downloading the negative set
 
 ## Project workflow
 ### Folder structure
