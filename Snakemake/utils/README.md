@@ -8,6 +8,7 @@ The Refseq database for annotation of the benign set before filtering out coding
 Partition mapping for creation of ten folds for cross-validation
 
 #### hg38.chrom.sizes
+--add--
 
 #### scaffold.json
 Scafolld for creating parSMURF configuration  file
