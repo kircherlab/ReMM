@@ -1,5 +1,5 @@
 To DoS:
-- Add a ReMM environment file, create it during the workflow
+- Complete the ReMM environment file, create it during the workflow
 - Add a link for downloading the negative set (in 4.2 Benign variants)
 
 ## Project workflow
@@ -15,7 +15,7 @@ The folder Snakemake contains several subfolders:
 - input: files that serve as input for  rules (raw feature files, variants)
 - output: computed files - output of rules (VCF feature files, training sets, predictions)
 
-Some directories contain README files with more detailed information on the content of folders.
+Some directories contain README files with more detailed information on the content of folders. A DAG (directed acyclical graph) of the workflow (schematic representation) starting from the step *4. Variants* can be found in WorkFlowDAG.jpg. The DAG for steps 1-3 is not shown for the sake of clarity because they contain more than one hundred rule executions. 
 
 ### 1. Collecting annotations
 
