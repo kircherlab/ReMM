@@ -1,4 +1,5 @@
 ### Content of the folder
+This folder contains various files required  for the ReMM calculation that are not produced during the workflow but need to be present before the start. 
 
 #### GRCh38_RefSeq2UCSC.txt
 The Refseq database for annotation of the benign set before filtering out coding variants
