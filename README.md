@@ -30,7 +30,7 @@ cd ReMM-GRCh38
 Create a working environment and activate it
 
 ```
-conda env create -n ReMM --file env/ReMM.yaml
+conda env create -n ReMM --file envs/ReMM.yml
 conda activate ReMM
 ```
 
