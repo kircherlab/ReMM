@@ -1,3 +1,6 @@
+To DoS:
+- Add a ReMM environment file, create it during the workflow
+
 ## Project workflow
 ### Folder structure
 
