@@ -69,16 +69,7 @@ ParSMURF outputs a tab-delimited file with containing two columns: the first is 
 
 
 
-
-
-
-
-The Snakemake workflow consists of XX different rules, many of which are executed multiple times. 
-In the following, we briefly discuss what most of the rules thus and what changes you need to do, to adapt the workflow to your data. 
-
-
-Each feature is downloaded and preprocessed by a separate Snakemake rule (*rules/features*). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download  is managed by a config file (config/featuresConfig38.json) that contains the download links and the necessary meta information for the processing steps.
-
+---------------------
 
 
 Absolute paths:
