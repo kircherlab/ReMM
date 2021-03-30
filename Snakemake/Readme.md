@@ -1,6 +1,7 @@
 To DoS:
 - Complete the ReMM environment file, create it during the workflow
 - Add a link for downloading the negative set (in 4.2 Benign variants)
+- Update the rules in the cluster file
 
 ## Project workflow
 ### Folder structure
