@@ -1,6 +1,0 @@
-rule test:
-    input:
-    output:
-        touch("test.txt")
-    script: 
-        "../scripts/test.py"

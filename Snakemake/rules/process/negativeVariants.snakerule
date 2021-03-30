@@ -2,7 +2,7 @@ rule getNegativeVariants:
     input:
         "/fast/groups/ag_kircher/CADD/cadd_v1.3/training_data/GRCh38/humanDerived/annotated/SNVs.vcf.gz"
     output:
-        temp("input/variants/hg38/SNVs.hg38.negative.vcf.gz")
+        "input/variants/hg38/SNVs.hg38.negative.vcf.gz"
     shell:
         """(echo -e "##fileformat=VCFv4.3\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO";zcat {input}  | awk -v 'OFS=\t' '{{print $1="chr" $1,$2,$3,$4,$5,".","PASS","."}}') | bgzip -c > {output}
         """
@@ -34,18 +34,21 @@ rule jannovarFilter:
          
         
 """
+
 rule dummyOnlyForTesting:
     input:
         "input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp"
     output:
         "input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz"
     shell:
-        '''
-        zcat {input} | head -n 408 | bgzip > {output};
-        tabix {output}
-        '''
+        """
+        zcat {input} | head -n +13901831  | bgzip > {output};
+        tabix {output};
+        """
+
         
-    
+        
+   
 
 
 

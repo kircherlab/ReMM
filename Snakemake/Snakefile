@@ -23,9 +23,9 @@ include: "rules/process/annotateJannovar.snakerule"
 include: "rules/process/createModelData.snakerule"
 include: "rules/model/parSMURF.snakerule"
 
+
+## the following rules are commented out to draw a smaller DAG, otherwise all steps are shown 
 '''
-
-
 
 ## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
 

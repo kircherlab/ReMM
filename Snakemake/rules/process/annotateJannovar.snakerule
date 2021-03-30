@@ -8,7 +8,7 @@ rule annotateJannovarNegative:
         "../../envs/jannovar.yml"
     shell:
         """
-        jannovar annotate-vcf -d {input.d} -i {input.f} -o {output};
+        jannovar -Xmx4g annotate-vcf -d {input.d} -i {input.f} -o {output};
         tabix {output}
         """
 ## not needed for the workflow        
