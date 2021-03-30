@@ -1,6 +1,6 @@
 rule getChainFile:
     output:
-        "utils/hg19ToHg38.over.chain.gz",
+        "resources/hg19ToHg38.over.chain.gz",
     params:
         url="https://hgdownload.soe.ucsc.edu/gbdb/{genomebuil}/liftOver/hg19ToHg38.over.chain.gz",
     shell:
@@ -12,11 +12,11 @@ rule getChainFile:
 ## anpassen
 rule getRefseqFile:
     output:
-        "input/variants/{genomebuil}/data/hg38_refseq.ser",
+        "results/variants/{genomebuil}/data/hg38_refseq.ser",
     conda:
         "../../envs/jannovar.yml"
     params:
-        path="input/variants/{genomebuil}/",
+        path="results/variants/{genomebuil}/",
     shell:
         """
         java -jar jannovar-cli/target/jannovar-cli-0.33-SNAPSHOT.jar download -d hg38/refseq
