@@ -31,16 +31,22 @@ rule get_feature_ISCApath:
      curl {params.nstd45} | zcat) | egrep -v "^Study" | egrep -v "Pathogenic|pathogenic" | grep "GRCh37" | cut -f 1,8,12,13| awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$1}}' | egrep -v "^chr\s" | sort -k 1,1 -k2,2n | bgzip -c > {output}
         """
 '''
-    
+
+
 rule get_feature_dbVARCount19:
     output:
-        "input/features/{genomeBuild}/dbVARCount/dbVARCount.all.bed.gz.vartmp"
+        "results/features/{genomeBuild}/dbVARCount/dbVARCount.all.bed.gz.vartmp",
     params:
-        url=config['hg38']['dbVARCount']['url']
+        url=config["hg38"]["dbVARCount"]["url"],
     shell:
         """
-        curl {params.url}| zcat  | egrep -v "#" | egrep -v "benign|Benign" | sed  -E "s/[\|\;]/\t/g" | awk -vIFS='\t' -vOFS='\t' '{{print $1,$4-1,$5,$9}}' | sort -k 1,1 -k2,2n | bgzip -c > {output}
+        curl {params.url}| zcat  | egrep -v "#" | \
+        egrep -v "benign|Benign" | sed  -E "s/[\|\;]/\\t/g" | \
+        awk -vIFS='\\t' -vOFS='\\t' '{{print $1,$4-1,$5,$9}}' | \
+        sort -k 1,1 -k2,2n | bgzip -c > {output}
         """
+
+
 '''
 rule get_feature_DGVCount19:
     output:
@@ -52,14 +58,12 @@ rule get_feature_DGVCount19:
         curl {params.url}  | egrep -v "^chr" | awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$5,$6,$1}}' | sort -k 1,1 -k2,2n | awk '{{ for (i=1; i<NF;i++) {{ printf("%s\t",$i)}}; print $NF }}' | bgzip -c > {output} 
         """
 '''
+
+
 rule get_feature_Intervals19:
     input:
-        "input/features/{genomeBuild}/{feature}/{feature}.{files}.bed.gz.vartmp"
-     
+        "results/features/{genomeBuild}/{feature}/{feature}.{files}.bed.gz.vartmp",
     output:
-        "input/features/{genomeBuild}/{feature}/{feature}.{files}.bed.gz"
-        
-    script: 
-        "/fast/groups/ag_kircher/ReMM/MA_Lusi/Snakemake/scripts/createIntervals.py"
-    
-    
+        "results/features/{genomeBuild}/{feature}/{feature}.{files}.bed.gz",
+    script:
+        "../../scripts/createIntervals.py"

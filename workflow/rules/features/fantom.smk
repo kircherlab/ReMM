@@ -1,6 +1,6 @@
 rule get_Fantom5Perm:
     output:
-        "input/features/hg38/Fantom5Perm/Fantom5Perm.all.bed.gz"
+        "results/features/hg38/Fantom5Perm/Fantom5Perm.all.bed.gz"
     params:
         url=config['hg38']['Fantom5Perm']["url"]
     shell:
@@ -10,7 +10,7 @@ rule get_Fantom5Perm:
 
 rule get_Fantom5Robust:
     output:
-        "input/features/hg38/Fantom5Robust/Fantom5Robust.all.bed.gz"
+        "results/features/hg38/Fantom5Robust/Fantom5Robust.all.bed.gz"
     params:
         url=config['hg38']['Fantom5Robust']["url"]
     shell:

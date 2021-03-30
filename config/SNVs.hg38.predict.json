@@ -1,0 +1,42 @@
+{
+    "name": "SNVs.hg38",
+    "exec": {
+        "name": "parSMURF1",
+        "ensThrd": 1,
+        "rfThrd": 1,
+        "seed": 1,
+        "verboseLevel": 1,
+        "saveTime": true,
+        "timeFile": "results/logs/timeout.txt",
+        "printCfg": true,
+        "mode": "predict",
+        "optimizer": "no"
+    },
+    "data": {
+        "dataFile": "results/features/annotated/hg38/SNVs.hg38.data.txt",
+        "foldFile": "results/features/annotated/hg38/SNVs.hg38.folds.txt",
+        "labelFile": "results/features/annotated/hg38/SNVs.hg38.labels.txt",
+        "outFile": "results/predictions/hg38/SNVs.hg38.predictions.txt",
+        "forestDir": "results/models/hg38"
+    },
+    "params": {
+        "nParts": [
+            100
+        ],
+        "fp": [
+            2
+        ],
+        "ratio": [
+            3
+        ],
+        "k": [
+            5
+        ],
+        "nTrees": [
+            10
+        ],
+        "mtry": [
+            5
+        ]
+    }
+}

@@ -1,21 +1,28 @@
+# TODO Hard coded path
+
+
 rule getNegativeVariants:
     input:
-        "/fast/groups/ag_kircher/CADD/cadd_v1.3/training_data/GRCh38/humanDerived/annotated/SNVs.vcf.gz"
+        "/fast/groups/ag_kircher/CADD/cadd_v1.3/training_data/GRCh38/humanDerived/annotated/SNVs.vcf.gz",
     output:
-        "input/variants/hg38/SNVs.hg38.negative.vcf.gz"
+        "results/variants/hg38/SNVs.hg38.negative.vcf.gz",
     shell:
-        """(echo -e "##fileformat=VCFv4.3\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO";zcat {input}  | awk -v 'OFS=\t' '{{print $1="chr" $1,$2,$3,$4,$5,".","PASS","."}}') | bgzip -c > {output}
+        """
+        (
+            echo -e "##fileformat=VCFv4.3\\n#CHROM\\tPOS\t\ID\tREF\\tALT\tQUAL\\tFILTER\\tINFO";
+            zcat {input}  | awk -v 'OFS=\\t' '{{print $1="chr" $1,$2,$3,$4,$5,".","PASS","."}}';
+        ) | bgzip -c > {output}
         """
 
 
 rule jannovarFilter:
     input:
-        i="input/variants/hg38/SNVs.hg38.negative.refseq.vcf.gz"
+        i="results/variants/hg38/SNVs.hg38.negative.refseq.vcf.gz",
     output:
-        o="input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp"
+        o="results/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp",
     shell:
         """
-        (echo -e "##fileformat=VCFv4.1\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO";
+        (echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
         bcftools view -H \
         -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || \
          INFO/ANN~"|5_prime_UTR_intron_variant|" || \
@@ -30,28 +37,18 @@ rule jannovarFilter:
          INFO/ANN~"|splice_donor_variant|" || \
          INFO/ANN~"|splice_acceptor_variant|" || \
          INFO/ANN~"|splice_region_variant|"' {input.i})| bgzip -c > {output.o};
-         tabix {output.o}
-         
-        
-"""
+         tabix {output.o};
+        """
 
+
+# TODO what ist that for a rule? dummyOnlyForTesting
 rule dummyOnlyForTesting:
     input:
-        "input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp"
+        "results/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp",
     output:
-        "input/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz"
+        "results/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz",
     shell:
         """
         zcat {input} | head -n +13901831  | bgzip > {output};
         tabix {output};
         """
-
-        
-        
-   
-
-
-
-
-
-

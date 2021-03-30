@@ -1,11 +1,11 @@
 rule get1KG:
     output:
-        bed=temp("input/features/hg38/1KG/1KG.{chr}.bed"),
-        bed_gz="input/features/hg38/1KG/1KG.{chr}.bed.gz"
+        bed=temp("results/features/hg38/1KG/1KG.{chr}.bed"),
+        bed_gz="results/features/hg38/1KG/1KG.{chr}.bed.gz",
     params:
-        chr="{chr}"
+        chr="{chr}",
     conda:
-        "../../envs/GCContent.yml"
+        "../../envs/GCContent.yaml"
     shell:
         """
         set +o pipefail;
@@ -15,15 +15,14 @@ rule get1KG:
         cat {output.bed}| bgzip -c > {output.bed_gz}
         """
 
-        
 
-#http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL.chr1.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz        
-#http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL{params.chr}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz  | \
+# http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL.chr1.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+# http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20110521/ALL{params.chr}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz  | \
 #        zcat  | cut -f 1-9 | \
 #        ruby scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
 #        cat {output.bed}| bgzip -c > {output.bed_gz}
 
-#rule convert_feature_1kG:
+# rule convert_feature_1kG:
 #    input:
 #       "input/features/{genomeBuild}/1KG/1KG.{chr}.vcf.gz"
 #    output:

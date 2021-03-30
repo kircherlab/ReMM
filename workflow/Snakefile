@@ -4,27 +4,44 @@ import datetime
 import pandas as pd
 
 
+##### check snakemake min version #####
 
+from snakemake.utils import min_version
+
+min_version("6.0.5")
+
+
+##### load config and sample sheets #####
+
+
+configfile: "config/config.yaml"
 configfile: "config/featuresConfig38.json"
-configfile: "config.yml"
 
 
-#include: "rules/features/GCfeatures.snakerule"
-#include: "rules/features/conservation.snakerule"
-#include: "rules/features/encodeEpigenetics.snakerule"
-#include: "rules/features/population.snakerule"
-#include: "rules/features/fantom.snakerule"
-include: "rules/process/getUtils.snakerule"
-#include: "rules/features/geneticVariation.snakerule"
-include: "rules/process/folds.snakerule"
-include: "rules/process/positiveVariants.snakerule"
-include: "rules/process/negativeVariants.snakerule"
-include: "rules/process/annotateJannovar.snakerule"
-include: "rules/process/createModelData.snakerule"
-include: "rules/model/parSMURF.snakerule"
+# TODO implement validation
+# validate(config, schema="../schemas/config.schema.yaml")
+
+##### all rules #####
 
 
-## the following rules are commented out to draw a smaller DAG, otherwise all steps are shown 
+##### include files #####
+
+# include: "rules/features/GCfeatures.smk"
+# include: "rules/features/conservation.smk"
+# include: "rules/features/encodeEpigenetics.smk"
+# include: "rules/features/population.smk"
+# include: "rules/features/fantom.smk"
+include: "rules/process/getUtils.smk"
+# include: "rules/features/geneticVariation.smk"
+include: "rules/process/folds.smk"
+include: "rules/process/positiveVariants.smk"
+include: "rules/process/negativeVariants.smk"
+include: "rules/process/annotateJannovar.smk"
+include: "rules/process/createModelData.smk"
+include: "rules/model/parSMURF.smk"
+
+
+## the following rules are commented out to draw a smaller DAG, otherwise all steps are shown
 '''
 
 ## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
@@ -100,13 +117,15 @@ rule mergeSingleFeatureVCF:
 
 '''
 
+
 rule annotateFeatures:
     input:
-        f = "output/features/combined/hg38/featureSet.hg38.vcf.gz",
-        f_idx = "output/features/combined/hg38/featureSet.hg38.vcf.gz.tbi",
-        n = "input/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz"
+        f="results/features/combined/hg38/featureSet.hg38.vcf.gz",
+        f_idx="results/features/combined/hg38/featureSet.hg38.vcf.gz.tbi",
+        n="results/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz",
     output:
-        "input/variants/hg38/SNVs.hg38.{type}.annotated.tsv.gz"
+        "results/variants/hg38/SNVs.hg38.{type}.annotated.tsv.gz",
     shell:
-        """java -Xmx2g -jar bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
+        """
+        java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
         """

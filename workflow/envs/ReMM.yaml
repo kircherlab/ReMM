@@ -1,0 +1,20 @@
+---
+name: ReMM
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - snakemake=6.0.5
+  - bcftools=1.9
+  - bedtools=2.29.2
+  - ruby=2.4.5
+  - pandas=1.1.0
+  - drmaa=0.7.9
+  - numpy=1.19.5
+  - pickleshare=0.7.5
+  - pyfaidx=0.5.9.1
+  - jsonschema=3.2.0
+  - ucsc-bigwigtobedgraph=377
+  - ucsc-liftover=377
+  - jannovar-cli=0.35

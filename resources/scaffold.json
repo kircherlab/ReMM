@@ -17,14 +17,26 @@
 		"foldFile": "../exampleDataset/folds1.txt",
 		"labelFile": "../exampleDataset/labels1.txt",
 		"outFile": "predictions.txt",
-        "forestDir":"models/hg38"
+		"forestDir": "models/hg38"
 	},
 	"params": {
-		"nParts": [100],
-		"fp": [2],
-		"ratio": [3],
-		"k": [5],
-		"nTrees": [10],
-		"mtry": [5]
+		"nParts": [
+			100
+		],
+		"fp": [
+			2
+		],
+		"ratio": [
+			3
+		],
+		"k": [
+			5
+		],
+		"nTrees": [
+			10
+		],
+		"mtry": [
+			5
+		]
 	}
 }
