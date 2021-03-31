@@ -18,13 +18,14 @@ def getVariantsInput(variant_set, step):
             "results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz",
             variant_set=variant_set,
         )
-    if step == "filter":
+    if step == "bcftools":
         return output
     if "filters" in variant_set_config:
-        output = expand(
-            "results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz",
-            variant_set=variant_set,
-        )
+        if "bcftools" in variant_set_config['filters']:
+            output = expand(
+                "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
+                variant_set=variant_set,
+            )
     if step == "annotate":
         return output
 
@@ -81,7 +82,7 @@ rule variant_liftover_filter:
         """
 
 
-rule annotateJannovarNegative:
+rule variants_annotateJannovar:
     conda:
         "../envs/jannovar.yaml"
     input:
@@ -106,7 +107,7 @@ rule variants_filter_bcftools:
     input:
         lambda wc: getVariantsInput(wc.variant_set, "bcftools"),
     output:
-        "results/variants/{variant_set}/{variant_set}.jannovar.filter_bcftools.vcf.gz",
+        "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
     params:
         bcftools_filter=lambda wc: config["variants"][wc.variant_set]["filters"][
             "bcftools"
