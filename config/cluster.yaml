@@ -16,27 +16,27 @@ mergeSingleFeatureVCF:
    time: "72:00"
    mem: 20000
    queue: medium
-get_priPhyloP:
+getPriPhyloP:
    time: "12:00"
    mem: 2000
    queue: medium
-get_priPhastCons:
+getPriPhastCons:
    time: "12:00"
    mem: 2000
    queue: medium
-get_verPhyloP:
+getPerPhyloP:
    time: "12:00"
    mem: 2000
    queue: medium
-get_verPhastCons:
+getVerPhastCons:
    time: "12:00"
    mem: 2000
    queue: medium
-get_mamPhastCons:
+getMamPhastCons:
    time: "12:00"
    mem: 2000
    queue: medium
-get_mamPhyloP:
+getMamPhyloP:
    time: "12:00"
    mem: 2000
    queue: medium
