@@ -39,7 +39,7 @@ feature_sets:
       - numTFBSConserved
 variants:
   cadd_v1_3_humanDerived_hg38:
-    file: /fast/groups/ag_kircher/CADD/cadd_v1.3/training_data/GRCh38/humanDerived/annotated/SNVs.vcf.gz
+    file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
     genome_build: hg38
     jannovar: hg38_refseq
     filters:

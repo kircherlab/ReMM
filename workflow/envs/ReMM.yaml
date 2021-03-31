@@ -4,6 +4,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - python
   - bcftools
   - bedtools
   - pandas
@@ -13,3 +14,4 @@ dependencies:
   - jsonschema
   - ucsc-bigwigtobedgraph
   - ucsc-liftover
+  - click

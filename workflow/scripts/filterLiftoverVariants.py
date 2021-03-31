@@ -42,7 +42,7 @@ def cli(input_file, reference_old_file, reference_new_file, output_file):
         n = 5
         ref_int_new = reference_new[var[0][i]][var[1][i]-n:var[2][i]+n].seq
         p = int(var[3][i].split(':')[1])
-        ref_int_old = reference_old[var[0][i][3:]][p-1-n:p+n].seq
+        ref_int_old = reference_old[var[0][i]][p-1-n:p+n].seq
         diff = sum([i[0] != ' ' for i in difflib.ndiff(ref_int_new, ref_int_old)]) / 2
         diffs.append(1-diff/1001)
         ref_new.append(ref)
@@ -54,7 +54,7 @@ def cli(input_file, reference_old_file, reference_new_file, output_file):
     # ID
 
     # or remain
-    #vcf[4]=var[3].str.split(':', expand = True)[3]
+    # vcf[4]=var[3].str.split(':', expand = True)[3]
     vcf[3] = ref_new
     vcf[[5, 6]] = '.'
     vcf[4] = '.'
