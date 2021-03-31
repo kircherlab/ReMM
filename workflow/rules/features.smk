@@ -89,7 +89,7 @@ rule createSingleFeatureVCF:
         """
 
 
-rule indexSingleFeatreVCF:
+rule indexSingleFeatureVCF:
     input:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
     output:

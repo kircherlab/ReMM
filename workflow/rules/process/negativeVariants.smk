@@ -9,46 +9,7 @@ rule getNegativeVariants:
     shell:
         """
         (
-            echo -e "##fileformat=VCFv4.3\\n#CHROM\\tPOS\t\ID\tREF\\tALT\tQUAL\\tFILTER\\tINFO";
+            echo -e "##fileformat=VCFv4.3\\n#CHROM\\tPOS\\tID\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
             zcat {input}  | awk -v 'OFS=\\t' '{{print $1="chr" $1,$2,$3,$4,$5,".","PASS","."}}';
         ) | bgzip -c > {output}
-        """
-
-
-rule jannovarFilter:
-    input:
-        i="results/variants/hg38/SNVs.hg38.negative.refseq.vcf.gz",
-    output:
-        o="results/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp",
-    shell:
-        """
-        (echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
-        bcftools view -H \
-        -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || \
-         INFO/ANN~"|5_prime_UTR_intron_variant|" || \
-         INFO/ANN~"|3_prime_UTR_exon_variant|" || \
-         INFO/ANN~"|5_prime_UTR_exon_variant|" ||  \
-         INFO/ANN~"|non_coding_transcript_intron_variant|" || \
-         INFO/ANN~"|non_coding_transcript_exon_variant|" || \
-         INFO/ANN~"|coding_transcript_intron_variant|" || \
-         INFO/ANN~"|upstream_gene_variant|" || \
-         INFO/ANN~"|downstream_gene_variant|" || \
-         INFO/ANN~"|intergenic_variant|" || \
-         INFO/ANN~"|splice_donor_variant|" || \
-         INFO/ANN~"|splice_acceptor_variant|" || \
-         INFO/ANN~"|splice_region_variant|"' {input.i})| bgzip -c > {output.o};
-         tabix {output.o};
-        """
-
-
-# TODO what ist that for a rule? dummyOnlyForTesting
-rule dummyOnlyForTesting:
-    input:
-        "results/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz.temp",
-    output:
-        "results/variants/hg38/SNVs.hg38.negative.refseq.filtered.vcf.gz",
-    shell:
-        """
-        zcat {input} | head -n +13901831  | bgzip > {output};
-        tabix {output};
         """

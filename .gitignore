@@ -8,14 +8,4 @@ workflow/logs/
 results/
 
 .ipynb_checkpoints
-
-
-
-
-
-
-
-
-
-
-
+.vscode/settings.json

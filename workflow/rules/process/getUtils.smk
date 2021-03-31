@@ -1,8 +1,11 @@
 rule getChainFile:
     output:
-        "resources/hg19ToHg38.over.chain.gz",
+        "resources/{genomeBuild}/{chain}.over.chain.gz",
     params:
-        url="https://hgdownload.soe.ucsc.edu/gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz",
+        url=(
+            lambda wc: "https://hgdownload.soe.ucsc.edu/gbdb/%s/liftOver/%s.over.chain.gz"
+            % (wc.genomeBuild, wc.chain)
+        ),
     shell:
         """
         curl {params.url}  > {output}

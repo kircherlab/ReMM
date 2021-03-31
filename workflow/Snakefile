@@ -28,27 +28,41 @@ configfile: "config/featuresConfig38.json"
 
 
 include: "rules/features.smk"
+
+
+rule all_feature_sets:
+    input:
+        vcf=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+        idx=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz.tbi",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+
+
+include: "rules/variants.smk"
+
+
+def getAllVariantsInput():
+    output = []
+    for variant_set in config["variants"]:
+        output += getVariantsInput(variant_set, "annotate")
+    return output
+
+
+rule all_variants:
+    input:
+        getAllVariantsInput(),
+
+
+include: "rules/annotate.smk"
 include: "rules/process/getUtils.smk"
 include: "rules/process/folds.smk"
-include: "rules/process/positiveVariants.smk"
-include: "rules/process/negativeVariants.smk"
-include: "rules/process/annotateJannovar.smk"
 include: "rules/process/createModelData.smk"
 include: "rules/model/parSMURF.smk"
 
 
-## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
-
-
-rule annotateFeatures:
-    input:
-        f="results/features/feature_sets/{feature_set}.vcf.gz",
-        f_idx="results/features/feature_sets/{feature_set}.vcf.gz.tbi",
-        n="results/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz",
-    output:
-        "results/variants/hg38/SNVs.hg38.{type}.{feature_set}.tsv.gz",
-    shell:
-        """
-        java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \
-        --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
-        """
+# depricated worklows
+# include: "rules/process/negativeVariants.smk"
