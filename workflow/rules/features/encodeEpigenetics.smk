@@ -1,6 +1,6 @@
 rule getEncH3K27Ac:
     output:
-        "results/features/EncH3K27Ac/{genomeBuild}/EncH3K27Ac.{file}.bigWig",
+        "results/features/download/EncH3K27Ac/{genomeBuild}/EncH3K27Ac.{file}.bigWig",
     params:
         url=lambda wildcards: "%s%s.bigWig" % (
             features["EncH3K27Ac"][wildcards.genomeBuild]["url"],
@@ -14,7 +14,7 @@ rule getEncH3K27Ac:
 
 rule getEncH3K4Me1:
     output:
-        "results/features/EncH3K4Me1/{genomeBuild}/EncH3K4Me1.{file}.bigWig",
+        "results/features/download/EncH3K4Me1/{genomeBuild}/EncH3K4Me1.{file}.bigWig",
     params:
         url=lambda wildcards: "%s%s.bigWig" % (
             features["EncH3K4Me1"][wildcards.genomeBuild]["url"],
@@ -28,7 +28,7 @@ rule getEncH3K4Me1:
 
 rule getEncH3K4Me3:
     output:
-        "results/features/EncH3K4Me3/{genomeBuild}/EncH3K4Me3.{file}.bigWig",
+        "results/features/download/EncH3K4Me3/{genomeBuild}/EncH3K4Me3.{file}.bigWig",
     params:
         url=lambda wildcards: "%s%s.bigWig" % (
             features["EncH3K4Me3"][wildcards.genomeBuild]["url"],
@@ -43,9 +43,9 @@ rule getEncH3K4Me3:
 ## ancient is there to not rerun, delete sometime
 rule convertBigWigToBedGraph:
     input:
-        "results/features/{file}/{genomeBuild}/{file}.{files}.bigWig",
+        "results/features/download/{file}/{genomeBuild}/{file}.{files}.bigWig",
     output:
-        "results/features/{file}/{genomeBuild}/{file}.{files}.encode.bed.gz",
+        "results/features/download/{file}/{genomeBuild}/{file}.{files}.encode.bed.gz",
     shell:
         """
         bigWigToBedGraph {input} >(bgzip -c > {output})
@@ -54,7 +54,7 @@ rule convertBigWigToBedGraph:
 
 rule getDnaseClusteredHyp:
     output:
-        "results/features/DnaseClusteredHyp/{genomeBuild}/DnaseClusteredHyp.all.bed.gz",
+        "results/features/download/DnaseClusteredHyp/{genomeBuild}/DnaseClusteredHyp.all.bed.gz",
     params:
         url=lambda wildcards: features["DnaseClusteredHyp"][wildcards.genomeBuild][
             "url"
@@ -67,7 +67,7 @@ rule getDnaseClusteredHyp:
 
 rule getDnaseClusteredScore:
     output:
-        "results/features/DnaseClusteredScore/{genomeBuild}/DnaseClusteredScore.all.bed.gz",
+        "results/features/download/DnaseClusteredScore/{genomeBuild}/DnaseClusteredScore.all.bed.gz",
     params:
         url=lambda wc: features["DnaseClusteredScore"][wc.genomeBuild]["url"],
     shell:

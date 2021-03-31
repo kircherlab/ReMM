@@ -3,7 +3,7 @@
 
 rule getISCApath:
     output:
-        "results/features/ISCApath/{genomeBuild}/ISCApath.allContigs.bed.gz",
+        "results/features/download/ISCApath/{genomeBuild}/ISCApath.allContigs.bed.gz",
     params:
         nstd75=lambda wc: "%s%s.GRCh38.variant_call.tsv.gz" % (
             features["ISCApath"][wc.genomeBuild]["url"],
@@ -46,7 +46,7 @@ rule getDbVARCount:
     input:
         "resources/{genomeBuild}/RefSeq2UCSC.txt",
     output:
-        "results/features/dbVARCount/{genomeBuild}/dbVARCount.allContigs.bed.gz",
+        "results/features/download/dbVARCount/{genomeBuild}/dbVARCount.allContigs.bed.gz",
     params:
         url=features["dbVARCount"]["hg38"]["url"],
     shell:
@@ -61,22 +61,9 @@ rule getDbVARCount:
         """
 
 
-'''     
-rule get_feature_DGVCount:
-    output:
-        "input/features/DGVCount/{genomeBuild}/DGVCount.allContigs.bed.gz"
-    params:
-        url=config['hg38']['DGVCount']['url']
-    shell:
-        """ 
-        curl {params.url}  | egrep -v "^chr" | awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$5,$6,$1}}' | sort -k 1,1 -k2,2n | awk '{{ for (i=1; i<NF;i++) {{ printf("%s\t",$i)}}; print $NF }}' | bgzip -c > {output} 
-        """
-'''
-
-
 rule getDGVCount:
     output:
-        "results/features/DGVCount/{genomeBuild}/DGVCount.allContigs.bed.gz",
+        "results/features/download/DGVCount/{genomeBuild}/DGVCount.allContigs.bed.gz",
     params:
         url=lambda wc: features["DGVCount"][wc.genomeBuild]["url"],
     shell:
@@ -89,7 +76,7 @@ rule getDGVCount:
 
 rule getNumTFBSConserved:
     output:
-        "results/features/numTFBSConserved/{genomeBuild}/numTFBSConserved.allContigs.bed.gz",
+        "results/features/download/numTFBSConserved/{genomeBuild}/numTFBSConserved.allContigs.bed.gz",
     params:
         url=lambda wc: features["numTFBSConserved"][wc.genomeBuild]["url"],
     shell:
@@ -100,9 +87,9 @@ rule getNumTFBSConserved:
 
 rule getChromosomes:
     input:
-        "results/features/{feature}/{genomeBuild}/{feature}.allContigs.bed.gz",
+        "results/features/download/{feature}/{genomeBuild}/{feature}.allContigs.bed.gz",
     output:
-        temp("results/features/{feature}/{genomeBuild}/{feature}.split_{chr}.bed.gz"),
+        temp("results/features/download/{feature}/{genomeBuild}/{feature}.split_{chr}.bed.gz"),
     params:
         chr="{chr}",
     wildcard_constraints:
@@ -115,9 +102,9 @@ rule getChromosomes:
 
 rule getIntervals:
     input:
-        "results/features/{feature}/{genomeBuild}/{feature}.split_{chr}.bed.gz",
+        "results/features/download/{feature}/{genomeBuild}/{feature}.split_{chr}.bed.gz",
     output:
-        "results/features/{feature}/{genomeBuild}/{feature}.{chr}.bed.gz",
+        "results/features/download/{feature}/{genomeBuild}/{feature}.{chr}.bed.gz",
     wildcard_constraints:
         feature="(DGVCount)|(numTFBSConserved)|(dbVARCount)|(ISCApath)",
         chr="|".join(["(chr%s)" % str(c) for c in list(range(1, 23)) + ["Y", "X"]]),

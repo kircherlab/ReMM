@@ -24,14 +24,14 @@ rule createPropertyFile:
     input:
         lambda wc: ancient(
             expand(
-                "results/features/{file}/{{genomeBuild}}/{file}.{files}.{extension}.gz",
+                "results/features/download/{file}/{{genomeBuild}}/{file}.{files}.{extension}.gz",
                 file=features[wc.feature][wc.genomeBuild]["file"],
                 files=features[wc.feature][wc.genomeBuild]["files"],
                 extension=features[wc.feature][wc.genomeBuild]["type"],
             )
         ),
     output:
-        config="results/features_single/{feature}/{genomeBuild}/{feature}.properties",
+        config="results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties",
     params:
         file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[
             -1
@@ -56,11 +56,11 @@ rule createPropertyFile:
 rule createSingleFeatureVCF:
     input:
         config=ancient(
-            "results/features_single/{feature}/{genomeBuild}/{feature}.properties"
+            "results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties"
         ),
         files=lambda wc: ancient(
             expand(
-                "results/features/{file}/{{genomeBuild}}/{file}.{files}.{extension}.gz",
+                "results/features/download/{file}/{{genomeBuild}}/{file}.{files}.{extension}.gz",
                 file=features[wc.feature][wc.genomeBuild]["file"],
                 files=features[wc.feature][wc.genomeBuild]["files"],
                 extension=features[wc.feature][wc.genomeBuild]["type"],
@@ -68,9 +68,9 @@ rule createSingleFeatureVCF:
         ),
     output:
         temp=temp(
-            "results/features_single/{feature}/{genomeBuild}/single/{feature}.temp.vcf.gz"
+            "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.temp.vcf.gz"
         ),
-        vcf="results/features_single/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
+        vcf="results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
     params:
         mem="5g",
     conda:
@@ -91,9 +91,9 @@ rule createSingleFeatureVCF:
 
 rule indexSingleFeatreVCF:
     input:
-        "results/features_single/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
     output:
-        "results/features_single/{feature}/{genomeBuild}/single/{feature}.vcf.gz.tbi",
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz.tbi",
     shell:
         """
         tabix {input}
@@ -103,13 +103,13 @@ rule indexSingleFeatreVCF:
 rule mergeSingleFeatureVCF:
     input:
         files=lambda wc: expand(
-            "results/features_single/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
+            "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
             feature=config["feature_sets"][wc.feature_set]['features'],
             genomeBuild=config["feature_sets"][wc.feature_set]['genome_build']
         ),
     output:
-        vcf="results/feature_sets/{feature_set}.vcf.gz",
-        idx="results/feature_sets/{feature_set}.vcf.gz.tbi",
+        vcf="results/features/feature_sets/{feature_set}.vcf.gz",
+        idx="results/features/feature_sets/{feature_set}.vcf.gz.tbi",
     shell:
         """
         bcftools merge {input.files} | bgzip -c > {output.vcf};

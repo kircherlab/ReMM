@@ -1,6 +1,6 @@
 rule getPriPhyloP:
     output:
-        "results/features/priPhyloP/hg38/priPhyloP.all.wig.gz",
+        "results/features/download/priPhyloP/hg38/priPhyloP.all.wig.gz",
     params:
         url=features["priPhyloP"]["hg38"]["url"],
     shell:
@@ -24,7 +24,7 @@ rule getPriPhyloP:
 
 rule getPriPhastCons:
     output:
-        "results/features/priPhastCons/hg38/priPhastCons.all.wig.gz",
+        "results/features/download/priPhastCons/hg38/priPhastCons.all.wig.gz",
     params:
         url=features["priPhastCons"]["hg38"]["url"],
     shell:
@@ -48,7 +48,7 @@ rule getPriPhastCons:
 
 rule getVerPhyloP:
     output:
-        "results/features/verPhyloP/hg38/verPhyloP.{chr}.wig.gz",
+        "results/features/download/verPhyloP/hg38/verPhyloP.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phyloP100way.wigFix.gz" % (
             features["verPhyloP"]["hg38"]["url"],
@@ -62,7 +62,7 @@ rule getVerPhyloP:
 
 rule getVerPhastCons:
     output:
-        "results/features/verPhastCons/hg38/verPhastCons.{chr}.wig.gz",
+        "results/features/download/verPhastCons/hg38/verPhastCons.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phastCons100way.wigFix.gz" % (
             features["verPhastCons"]["hg38"]["url"],
@@ -76,7 +76,7 @@ rule getVerPhastCons:
 
 rule getMamPhastCons:
     output:
-        "results/features/mamPhastCons/hg38/mamPhastCons.{chr}.wig.gz",
+        "results/features/download/mamPhastCons/hg38/mamPhastCons.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phastCons30way.wigFix.gz" % (
             features["mamPhastCons"]["hg38"]["url"],
@@ -90,7 +90,7 @@ rule getMamPhastCons:
 
 rule getMamPhyloP:
     output:
-        "results/features/mamPhyloP/hg38/mamPhyloP.{chr}.wig.gz",
+        "results/features/download/mamPhyloP/hg38/mamPhyloP.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phyloP30way.wigFix.gz" % (
             features["mamPhyloP"]["hg38"]["url"],
@@ -109,7 +109,7 @@ rule getGERP:
     input:
         "/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz",
     output:
-        "results/features/gerpElement/hg38/gerpElement.all.bed.gz",
+        "results/features/download/gerpElement/hg38/gerpElement.all.bed.gz",
     shell:
         """
         zcat {input} | \

@@ -42,8 +42,8 @@ include: "rules/model/parSMURF.smk"
 
 rule annotateFeatures:
     input:
-        f="results/feature_sets/{feature_set}.vcf.gz",
-        f_idx="results/feature_sets/{feature_set}.vcf.gz.tbi",
+        f="results/features/feature_sets/{feature_set}.vcf.gz",
+        f_idx="results/features/feature_sets/{feature_set}.vcf.gz.tbi",
         n="results/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz",
     output:
         "results/variants/hg38/SNVs.hg38.{type}.{feature_set}.tsv.gz",

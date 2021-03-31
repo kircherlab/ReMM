@@ -1,7 +1,7 @@
 rule get1KG:
     output:
-        bed=temp("results/1KG/features/hg38/1KG.{chr}.bed"),
-        bed_gz="results/features/1KG/hg38/1KG.{chr}.bed.gz",
+        bed=temp("results/features/download/1KG/hg38/1KG.{chr}.bed"),
+        bed_gz="results/features/download/1KG/hg38/1KG.{chr}.bed.gz",
     params:
         chr="{chr}",
     conda:
