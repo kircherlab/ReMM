@@ -24,21 +24,6 @@ rule getPositiveVariants:
         "../../scripts/filter.py"
 
 
-'''
-rule annotateJannovarPositive:
-    input:
-        f = "input/variants/hg38/SNVs.hg38.positive.vcf",
-        d = "input/variants/hg38/data/hg38_refseq.ser"
-    output:
-        "input/variants/hg38/SNVs.hg38.positive.refseqannotated.vcf.gz"
-    conda:
-        "../../envs/jannovar.yml"
-    shell:
-        """
-        jannovar -Xmx10G annotate-vcf -d {input.d} -i {input.f} -o {output};
-        tabix {output};
-        """
-'''
 
 # TODO Again a dummy rule???
 

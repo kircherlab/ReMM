@@ -28,7 +28,7 @@ rule get1KG:
 #    output:
 #        "input/features/{genomeBuild}/1KG/1KG.{chr}.bed.gz"
 #    conda:
-#        "../../envs/GCContent.yml"
+#        "../../envs/GCContent.yaml"
 #    shell:
 #        """
 #        ruby scripts/rareVariantFractionInWindow.rb 500 0.005 {input} | bgzip -c > {output}
