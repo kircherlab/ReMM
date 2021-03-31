@@ -134,8 +134,8 @@ rule mergeSingleFeatureVCF:
         idx="results/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz.tbi",
     shell:
         """
-        bcftools merge {input.files} | bgzip -c > {output.vcf}
-        tabix {output.vcf}
+        bcftools merge {input.files} | bgzip -c > {output.vcf};
+        tabix {output.vcf};
         """
 
 
@@ -148,5 +148,6 @@ rule annotateFeatures:
         "results/variants/hg38/SNVs.hg38.{type}.annotated.tsv.gz",
     shell:
         """
-        java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
+        java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \
+        --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
         """
