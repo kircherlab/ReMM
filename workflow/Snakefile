@@ -26,13 +26,7 @@ configfile: "config/featuresConfig38.json"
 
 ##### include files #####
 
-
-include: "rules/features/GCfeatures.smk"
-include: "rules/features/conservation.smk"
-include: "rules/features/encodeEpigenetics.smk"
-include: "rules/features/population.smk"
-include: "rules/features/fantom.smk"
-include: "rules/features/geneticVariation.smk"
+include: "rules/features.smk"
 include: "rules/process/getUtils.smk"
 include: "rules/process/folds.smk"
 include: "rules/process/positiveVariants.smk"
@@ -95,7 +89,7 @@ rule createSingleFeatureVCF:
     params:
         mem="5g",
     conda:
-        "envs/jdk11.yml"
+        "envs/jdk11.yaml"
     shell:
         """
         export LC_ALL=C;
