@@ -17,7 +17,7 @@ rule get_GCContent:
     params:
         width=lambda wc: config[wc.genomeBuild]["GCContent"]["window_size"],
     conda:
-        "../../envs/GCContent.yaml"
+        "../../envs/ruby.yaml"
     shell:
         """
         ruby scripts/getGCContentGenomeWide.rb {input} {params.width} | \

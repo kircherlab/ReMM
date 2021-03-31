@@ -5,13 +5,13 @@ rule get1KG:
     params:
         chr="{chr}",
     conda:
-        "../../envs/GCContent.yaml"
+        "../../envs/ruby.yaml"
     shell:
         """
         set +o pipefail;
         curl -s --connect-timeout 540 --retry 20 --retry-all-errors http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls/ALL.{params.chr}.freebayes.20200518.snps_indels.NYhc.GRCh38.vcf.gz | \
         zcat  | cut -f 1-9 | \
-        ruby scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
+        ruby workflow/scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
         cat {output.bed}| bgzip -c > {output.bed_gz}
         """
 
