@@ -26,6 +26,7 @@ configfile: "config/featuresConfig38.json"
 
 ##### include files #####
 
+
 include: "rules/features.smk"
 include: "rules/process/getUtils.smk"
 include: "rules/process/folds.smk"
@@ -52,10 +53,10 @@ rule createPropertyFile:
     output:
         config="results/features/{genomeBuild}/PropertyFiles/{feature}.properties",
     params:
-        type=lambda wc: config[wc.genomeBuild][wc.feature]["type"].str.split(".")[-1],
+        file_type=lambda wc: config[wc.genomeBuild][wc.feature]["type"].split(".")[-1],
         column=(
             lambda wc: "column=" + config[wc.genomeBuild][wc.feature]["column"]
-            if config[wc.genomeBuild][wc.feature]["type"].str.split(".")[-1] == "bed"
+            if config[wc.genomeBuild][wc.feature]["type"].split(".")[-1] == "bed"
             else ""
         ),
         method=lambda wc: config[wc.genomeBuild][wc.feature]["method"],
@@ -64,7 +65,7 @@ rule createPropertyFile:
         files = " \n".join(["file = " + file for file in input])
         shell(
             """
-        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.type}
+        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
         \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
         """
         )
