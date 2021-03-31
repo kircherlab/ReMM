@@ -1,8 +1,8 @@
 rule getPriPhyloP:
     output:
-        "results/features/hg38/priPhyloP/priPhyloP.all.wig.gz",
+        "results/features/priPhyloP/hg38/priPhyloP.all.wig.gz",
     params:
-        url=config["hg38"]["priPhyloP"]["url"],
+        url=features["priPhyloP"]["hg38"]["url"],
     shell:
         """
         curl {params.url} | zcat | \
@@ -24,9 +24,9 @@ rule getPriPhyloP:
 
 rule getPriPhastCons:
     output:
-        "results/features/hg38/priPhastCons/priPhastCons.all.wig.gz",
+        "results/features/priPhastCons/hg38/priPhastCons.all.wig.gz",
     params:
-        url=config["hg38"]["priPhastCons"]["url"],
+        url=features["priPhastCons"]["hg38"]["url"],
     shell:
         """
         curl {params.url} | zcat | \
@@ -48,10 +48,10 @@ rule getPriPhastCons:
 
 rule getVerPhyloP:
     output:
-        "results/features/hg38/verPhyloP/verPhyloP.{chr}.wig.gz",
+        "results/features/verPhyloP/hg38/verPhyloP.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phyloP100way.wigFix.gz" % (
-            config["hg38"]["verPhyloP"]["url"],
+            features["verPhyloP"]["hg38"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -62,10 +62,10 @@ rule getVerPhyloP:
 
 rule getVerPhastCons:
     output:
-        "results/features/hg38/verPhastCons/verPhastCons.{chr}.wig.gz",
+        "results/features/verPhastCons/hg38/verPhastCons.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phastCons100way.wigFix.gz" % (
-            config["hg38"]["verPhastCons"]["url"],
+            features["verPhastCons"]["hg38"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -76,10 +76,10 @@ rule getVerPhastCons:
 
 rule getMamPhastCons:
     output:
-        "results/features/hg38/mamPhastCons/mamPhastCons.{chr}.wig.gz",
+        "results/features/mamPhastCons/hg38/mamPhastCons.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phastCons30way.wigFix.gz" % (
-            config["hg38"]["mamPhastCons"]["url"],
+            features["mamPhastCons"]["hg38"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -90,10 +90,10 @@ rule getMamPhastCons:
 
 rule getMamPhyloP:
     output:
-        "results/features/hg38/mamPhyloP/mamPhyloP.{chr}.wig.gz",
+        "results/features/mamPhyloP/hg38/mamPhyloP.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phyloP30way.wigFix.gz" % (
-            config["hg38"]["mamPhyloP"]["url"],
+            features["mamPhyloP"]["hg38"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -109,7 +109,7 @@ rule getGERP:
     input:
         "/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz",
     output:
-        "results/features/hg38/gerpElement/gerpElement.all.bed.gz",
+        "results/features/gerpElement/hg38/gerpElement.all.bed.gz",
     shell:
         """
         zcat {input} | \

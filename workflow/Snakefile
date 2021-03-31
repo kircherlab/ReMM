@@ -40,107 +40,13 @@ include: "rules/model/parSMURF.smk"
 ## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
 
 
-rule createPropertyFile:
-    input:
-        lambda wc: ancient(
-            expand(
-                "results/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
-                file=config[wc.genomeBuild][wc.feature]["file"],
-                files=config[wc.genomeBuild][wc.feature]["files"],
-                extension=config[wc.genomeBuild][wc.feature]["type"],
-            )
-        ),
-    output:
-        config="results/features/{genomeBuild}/PropertyFiles/{feature}.properties",
-    params:
-        file_type=lambda wc: config[wc.genomeBuild][wc.feature]["type"].split(".")[-1],
-        column=(
-            lambda wc: "column=" + config[wc.genomeBuild][wc.feature]["column"]
-            if config[wc.genomeBuild][wc.feature]["type"].split(".")[-1] == "bed"
-            else ""
-        ),
-        method=lambda wc: config[wc.genomeBuild][wc.feature]["method"],
-        description=lambda wc: config[wc.genomeBuild][wc.feature]["description"],
-    run:
-        files = " \n".join(["file = " + file for file in input])
-        shell(
-            """
-        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
-        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
-        """
-        )
-
-
-rule createSingleFeatureVCF:
-    input:
-        config=ancient(
-            "results/features/{genomeBuild}/PropertyFiles/{feature}.properties"
-        ),
-        files=lambda wc: ancient(
-            expand(
-                "results/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
-                file=config[wc.genomeBuild][wc.feature]["file"],
-                files=config[wc.genomeBuild][wc.feature]["files"],
-                extension=config[wc.genomeBuild][wc.feature]["type"],
-            )
-        ),
-    output:
-        temp=temp("results/features/single/{genomeBuild}/{feature}.temp.vcf.gz"),
-        vcf="results/features/single/{genomeBuild}/{feature}.vcf.gz",
-    params:
-        mem="5g",
-    conda:
-        "envs/jdk11.yaml"
-    shell:
-        """
-        export LC_ALL=C;
-        java -Xmx{params.mem} -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar \
-        vcf -p {input.config} --output {output.temp};
-        (
-            zcat {output.temp}| grep  "#";
-            zcat {output.temp} | \
-            grep  -v "#" | \
-            sort -k1,1 -k2,2n
-        ) | bgzip -c > {output.vcf}
-        """
-
-
-rule indexSingleFeatreVCF:
-    input:
-        "results/features/single/{genomeBuild}/{feature}.vcf.gz",
-    output:
-        "results/features/single/{genomeBuild}/{feature}.vcf.gz.tbi",
-    shell:
-        """
-        tabix {input}
-        """
-
-
-rule mergeSingleFeatureVCF:
-    input:
-        files=lambda wc: expand(
-            "results/features/single/{{genomeBuild}}/{feature}.vcf.gz",
-            feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name],
-        ),
-    #  idx=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz.tbi",
-    #     feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
-    output:
-        vcf="results/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz",
-        idx="results/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz.tbi",
-    shell:
-        """
-        bcftools merge {input.files} | bgzip -c > {output.vcf};
-        tabix {output.vcf};
-        """
-
-
 rule annotateFeatures:
     input:
-        f="results/features/combined/hg38/featureSet.hg38.vcf.gz",
-        f_idx="results/features/combined/hg38/featureSet.hg38.vcf.gz.tbi",
+        f="results/feature_sets/{feature_set}.vcf.gz",
+        f_idx="results/feature_sets/{feature_set}.vcf.gz.tbi",
         n="results/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz",
     output:
-        "results/variants/hg38/SNVs.hg38.{type}.annotated.tsv.gz",
+        "results/variants/hg38/SNVs.hg38.{type}.{feature_set}.tsv.gz",
     shell:
         """
         java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \

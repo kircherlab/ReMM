@@ -7,3 +7,33 @@ global_files:
     hg19:
       reference: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa"
       genome: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa.genome"
+feature_sets:
+  remm_v1_3_hg38:
+    genome_build: hg38
+    features:
+      - CpGperGC
+      - CpGperCpG
+      - CpGobsExp
+      - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac
+      - EncH3K4Me1
+      - EncH3K4Me3
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount
+      - ISCApath
+      - DGVCount
+      - numTFBSConserved

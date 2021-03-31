@@ -1,9 +1,9 @@
 rule getEncH3K27Ac:
     output:
-        "results/features/{genomeBuild}/EncH3K27Ac/EncH3K27Ac.{file}.bigWig",
+        "results/features/EncH3K27Ac/{genomeBuild}/EncH3K27Ac.{file}.bigWig",
     params:
         url=lambda wildcards: "%s%s.bigWig" % (
-            config[wildcards.genomeBuild]["EncH3K27Ac"]["url"],
+            features["EncH3K27Ac"][wildcards.genomeBuild]["url"],
             wildcards.file,
         ),
     shell:
@@ -14,10 +14,10 @@ rule getEncH3K27Ac:
 
 rule getEncH3K4Me1:
     output:
-        "results/features/{genomeBuild}/EncH3K4Me1/EncH3K4Me1.{file}.bigWig",
+        "results/features/EncH3K4Me1/{genomeBuild}/EncH3K4Me1.{file}.bigWig",
     params:
         url=lambda wildcards: "%s%s.bigWig" % (
-            config[wildcards.genomeBuild]["EncH3K4Me1"]["url"],
+            features["EncH3K4Me1"][wildcards.genomeBuild]["url"],
             wildcards.file,
         ),
     shell:
@@ -28,10 +28,10 @@ rule getEncH3K4Me1:
 
 rule getEncH3K4Me3:
     output:
-        "results/features/{genomeBuild}/EncH3K4Me3/EncH3K4Me3.{file}.bigWig",
+        "results/features/EncH3K4Me3/{genomeBuild}/EncH3K4Me3.{file}.bigWig",
     params:
         url=lambda wildcards: "%s%s.bigWig" % (
-            config[wildcards.genomeBuild]["EncH3K4Me3"]["url"],
+            features["EncH3K4Me3"][wildcards.genomeBuild]["url"],
             wildcards.file,
         ),
     shell:
@@ -43,9 +43,9 @@ rule getEncH3K4Me3:
 ## ancient is there to not rerun, delete sometime
 rule convertBigWigToBedGraph:
     input:
-        "results/features/{genomeBuild}/{file}/{file}.{files}.bigWig",
+        "results/features/{file}/{genomeBuild}/{file}.{files}.bigWig",
     output:
-        "results/features/{genomeBuild}/{file}/{file}.{files}.encode.bed.gz",
+        "results/features/{file}/{genomeBuild}/{file}.{files}.encode.bed.gz",
     shell:
         """
         bigWigToBedGraph {input} >(bgzip -c > {output})
@@ -54,9 +54,9 @@ rule convertBigWigToBedGraph:
 
 rule getDnaseClusteredHyp:
     output:
-        "results/features/{genomeBuild}/DnaseClusteredHyp/DnaseClusteredHyp.all.bed.gz",
+        "results/features/DnaseClusteredHyp/{genomeBuild}/DnaseClusteredHyp.all.bed.gz",
     params:
-        url=lambda wildcards: config[wildcards.genomeBuild]["DnaseClusteredHyp"][
+        url=lambda wildcards: features["DnaseClusteredHyp"][wildcards.genomeBuild][
             "url"
         ],
     shell:
@@ -67,11 +67,9 @@ rule getDnaseClusteredHyp:
 
 rule getDnaseClusteredScore:
     output:
-        "results/features/{genomeBuild}/DnaseClusteredScore/DnaseClusteredScore.all.bed.gz",
+        "results/features/DnaseClusteredScore/{genomeBuild}/DnaseClusteredScore.all.bed.gz",
     params:
-        url=lambda wildcards: config[wildcards.genomeBuild]["DnaseClusteredScore"][
-            "url"
-        ],
+        url=lambda wc: features["DnaseClusteredScore"][wc.genomeBuild]["url"],
     shell:
         """
         curl {params.url} | zcat | cut -f 2- | bgzip -c > {output}
