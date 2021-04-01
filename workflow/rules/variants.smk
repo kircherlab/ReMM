@@ -107,13 +107,14 @@ rule variants_filter_bcftools:
     input:
         lambda wc: getVariantsInput(wc.variant_set, "bcftools"),
     output:
-        "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
+        vcf="results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
+        idx="results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz.tbi",
     params:
         bcftools_filter=lambda wc: config["variants"][wc.variant_set]["filters"][
             "bcftools"
         ]["filter"],
     shell:
         """
-        bcftools view {params.bcftools_filter} {input})| bgzip -c > {output};
-        tabix {output.o};
+        bcftools view {params.bcftools_filter} {input})| bgzip -c > {output.tbi};
+        tabix {output.idx};
         """
