@@ -21,15 +21,49 @@ configfile: "config/featuresConfig38.json"
 # TODO implement validation
 # validate(config, schema="../schemas/config.schema.yaml")
 
-##### all rules #####
-
-
 ##### include files #####
 
 
+# Workflow features
 include: "rules/features.smk"
+# Workflow variants
+include: "rules/variants.smk"
+# Workflow annotate
+include: "rules/annotate.smk"
+# Workflow training
+include: "rules/training.smk"
 
 
+# Workflow predict
+
+# Workflow replace
+
+# old rules
+
+
+include: "rules/process/getUtils.smk"
+include: "rules/process/folds.smk"
+include: "rules/process/createModelData.smk"
+include: "rules/model/parSMURF.smk"
+
+
+##### all rules #####
+
+
+rule all:
+    input:
+        getAllVariantsInput(),
+        vcf=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+        idx=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz.tbi",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+
+
+# workflow features
 rule all_feature_sets:
     input:
         vcf=expand(
@@ -42,9 +76,7 @@ rule all_feature_sets:
         ),
 
 
-include: "rules/variants.smk"
-
-
+# Workflow variants
 def getAllVariantsInput():
     output = []
     for variant_set in config["variants"]:
@@ -55,14 +87,3 @@ def getAllVariantsInput():
 rule all_variants:
     input:
         getAllVariantsInput(),
-
-
-include: "rules/annotate.smk"
-include: "rules/process/getUtils.smk"
-include: "rules/process/folds.smk"
-include: "rules/process/createModelData.smk"
-include: "rules/model/parSMURF.smk"
-
-
-# depricated worklows
-# include: "rules/process/negativeVariants.smk"
