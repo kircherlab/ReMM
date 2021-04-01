@@ -20,6 +20,6 @@ rule get_GCContent:
         "../../envs/ruby.yaml"
     shell:
         """
-        ruby scripts/getGCContentGenomeWide.rb {input} {params.width} | \
+        ruby workflow/scripts/getGCContentGenomeWide.rb {input} {params.width} | \
         bgzip -c > {output}
         """
