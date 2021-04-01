@@ -115,6 +115,6 @@ rule variants_filter_bcftools:
         ]["filter"],
     shell:
         """
-        bcftools view {params.bcftools_filter} {input})| bgzip -c > {output.tbi};
+        bcftools view {params.bcftools_filter} {input})| bgzip -c > {output.vcf};
         tabix {output.idx};
         """
