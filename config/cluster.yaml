@@ -16,27 +16,27 @@ mergeSingleFeatureVCF:
   time: "72:00"
   mem: 20000
   queue: medium
-getPriPhyloP:
+features_PriPhyloP_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
-getPriPhastCons:
+features_PriPhastCons_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
-getPerPhyloP:
+features_VerPhyloP_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
-getVerPhastCons:
+features_VerPhastCons_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
-getMamPhastCons:
+features_MamPhastCons_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
-getMamPhyloP:
+features_MamPhyloP_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
@@ -44,11 +44,7 @@ get_GCContent:
   time: "12:00"
   mem: 10000
   queue: medium
-get_feature_1KG:
-  time: "12:00"
-  mem: 10000
-  queue: medium
-convert_feature_1kG:
+features_1KG_hg38_download_process:
   time: "12:00"
   mem: 10000
   queue: medium
