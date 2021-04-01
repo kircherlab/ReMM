@@ -8,6 +8,35 @@ global_files:
       reference: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa"
       genome: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa.genome"
 feature_sets:
+  test_hg38:
+    genome_build: hg38
+    features:
+      - CpGperGC
+      - CpGperCpG
+      - CpGobsExp
+      - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac
+      - EncH3K4Me1
+      - EncH3K4Me3
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount
+      - ISCApath
+      - DGVCount
+      - numTFBSConserved
   remm_v1_3_hg38:
     genome_build: hg38
     features:
@@ -49,3 +78,19 @@ variants:
     file: resources/variants/SNVs.all.20160109.vcf.gz
     liftover: hg19ToHg38
     genome_build: hg19
+training:
+  remm_v1_3_parsmurf_hg38:
+    positives: remm_snvs_20160109_liftover
+    negatives: cadd_v1_3_humanDerived_hg38
+    feature_set: remm_v1_3_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+  remm_v1_3_parsmurf_hg38_test:
+    positives: remm_snvs_20160109_liftover
+    negatives: cadd_v1_3_humanDerived_hg38
+    feature_set: test_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+    

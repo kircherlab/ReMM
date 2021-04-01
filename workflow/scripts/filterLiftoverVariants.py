@@ -72,11 +72,11 @@ def cli(input_file, reference_old_file, reference_new_file, output_file):
     vcf.columns = ["#CHROM", 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
 
     out_file = open(output_file, 'a')
-    out_file.write('##fileformat=VCFv4.1')
+    out_file.write('##fileformat=VCFv4.1\n')
 
     vcf = vcf.T.reset_index().T
 
-    vcf.to_csv(out_file, sep='\t', index=None)
+    vcf.to_csv(out_file, sep='\t', index=None, header=False)
 
     out_file.close()
 

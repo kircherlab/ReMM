@@ -76,11 +76,11 @@ variants_annotateJannovar:
   time: "01:00"
   mem: 10000
   queue: medium
-annotateFeatures:
+annotate_features:
   time: "200:00"
   mem: 10000
   queue: long
-runParSMURF:
+training_parSMURF_run:
   time: "12:00"
   mem: 150000
   queue: medium

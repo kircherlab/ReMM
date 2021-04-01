@@ -1,30 +1,34 @@
 # input variants are different for each process step becaus ethey are flexible.
 # this trys to collect the correct input. The following steps are possible only in that order:
 # liftover > jannovar > bcftools > annotate
-def getVariantsInput(variant_set, step):
+def getVariantsInput(variant_set, step, idx=False):
     variant_set_config = config["variants"][variant_set]
     output = variant_set_config["file"]
+    add = ".tbi" if idx else ""
     if step == "liftover":
         return output
     if "liftover" in variant_set_config:
         output = expand(
-            "results/variants/{variant_set}/liftover/{variant_set}.vcf.gz",
+            "results/variants/{variant_set}/liftover/{variant_set}.vcf.gz{add}",
             variant_set=variant_set,
+            add=add,
         )
     if step == "jannovar":
         return output
     if "jannovar" in variant_set_config:
         output = expand(
-            "results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz",
+            "results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz{add}",
             variant_set=variant_set,
+            add=add,
         )
     if step == "bcftools":
         return output
     if "filters" in variant_set_config:
-        if "bcftools" in variant_set_config['filters']:
+        if "bcftools" in variant_set_config["filters"]:
             output = expand(
-                "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
+                "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz{add}",
                 variant_set=variant_set,
+                add=add,
             )
     if step == "annotate":
         return output
@@ -71,14 +75,16 @@ rule variant_liftover_filter:
             else "hg19"
         ]["reference"],
     output:
-        "results/variants/{variant_set}/liftover/{variant_set}.vcf.gz",
+        vcf="results/variants/{variant_set}/liftover/{variant_set}.vcf.gz",
+        idx="results/variants/{variant_set}/liftover/{variant_set}.vcf.gz.tbi",
     shell:
         """
         python workflow/scripts/filterLiftoverVariants.py \
         --input {input.variants} \
         --reference-old {input.ref_old} \
         --reference-new {input.ref_new} \
-        --output >(bgzip -c > {output})
+        --output >(bgzip -c > {output.vcf});
+        tabix {output.vcf};
         """
 
 
@@ -115,6 +121,9 @@ rule variants_filter_bcftools:
         ]["filter"],
     shell:
         """
-        bcftools view {params.bcftools_filter} {input} | bgzip -c > {output.vcf};
+        (
+            echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
+            bcftools view -H {params.bcftools_filter} {input};
+        ) | bgzip -c > {output.vcf};
         tabix {output.vcf};
         """

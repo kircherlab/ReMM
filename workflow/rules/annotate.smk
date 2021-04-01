@@ -1,12 +1,13 @@
 
 
-rule annotateFeatures:
+rule annotate_features:
     conda:
         "../envs/jdk11.yaml"
     input:
         feature_set="results/features/feature_sets/{feature_set}.vcf.gz",
         feature_set_idx="results/features/feature_sets/{feature_set}.vcf.gz.tbi",
         variants_file=lambda wc: getVariantsInput(wc.variant_set, "annotate"),
+        variants_file_idx=lambda wc: getVariantsInput(wc.variant_set, "annotate",idx=True),
     output:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.tsv.gz",
     shell:

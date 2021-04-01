@@ -1,3 +1,13 @@
+rule getCytoband:
+    output:
+        "resources/{genomeBuild}/cytoBand.txt.gz",
+    params:
+        url="http://hgdownload.cse.ucsc.edu/goldenpath/{genomeBuild}/database/cytoBand.txt.gz",
+    shell:
+        """
+        curl {params.url}  > {output}
+        """
+
 rule getChainFile:
     output:
         "resources/{genomeBuild}/{chain}.over.chain.gz",

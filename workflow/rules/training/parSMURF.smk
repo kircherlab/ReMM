@@ -1,7 +1,15 @@
 rule training_parSMURF_combineInputData:
     input:
-        positives="results/annotation/{variant_set_positive}/{variant_set_positive}.{feature_set}.tsv.gz",
-        negatives="results/annotation/{variant_set_negative}/{variant_set_negative}.{feature_set}.tsv.gz",
+        positives=lambda wc: expand(
+            "results/annotation/{variant_set_positive}/{variant_set_positive}.{feature_set}.tsv.gz",
+            variant_set_positive=config["training"][wc.training_run]["positives"],
+            feature_set=config["training"][wc.training_run]["feature_set"],
+        ),
+        negatives=lambda wc: expand(
+            "results/annotation/{variant_set_negative}/{variant_set_negative}.{feature_set}.tsv.gz",
+            variant_set_negative=config["training"][wc.training_run]["negatives"],
+            feature_set=config["training"][wc.training_run]["feature_set"],
+        ),
     output:
         "results/training/{training_run}/input/parsmurf.combined.txt.gz",
     shell:
@@ -16,7 +24,7 @@ rule training_parSMURF_combineInputData:
 
 rule training_parSMURF_createParsmurfInput:
     input:
-        cb="results/folds/{genomeBuild}/folds.{genomeBuild}.txt.gz",
+        cb=lambda wc: getTrainingRunFolds(wc.training_run),
         f="results/training/{training_run}/input/parsmurf.combined.txt.gz",
     output:
         d="results/training/{training_run}/input/parsmurf.data.txt",
@@ -28,32 +36,30 @@ rule training_parSMURF_createParsmurfInput:
 
 rule training_parSMURF_generateConfig:
     input:
-        data="results/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.data.txt",
-        labels=(
-            "results/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.labels.txt"
-        ),
-        folds="results/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt",
+        data="results/training/{training_run}/input/parsmurf.data.txt",
+        labels="results/training/{training_run}/input/parsmurf.labels.txt",
+        folds="results/training/{training_run}/input/parsmurf.folds.txt",
         scaffold="resources/scaffold.json",
     output:
-        config="config/SNVs.{genomeBuild}.{mode}.json",
+        config="results/training/{training_run}/input/parsmurf.config.json",
     params:
-        predictions="results/predictions/{genomeBuild}/SNVs.{genomeBuild}.{mode}.predictions.txt",
-        name="SNVs.{genomeBuild}",
-        #seed = lambda wc: {output.split('_')[-1]} if output.split('_')[-1].isdigit() else {'1'},
+        predictions="results/training/{training_run}/predictions/predictions.txt",
+        name="{training_run}",
         seed={"1"},
-        mode="{mode}",
+        mode=lambda wc: config["training"][wc.training_run]["config"]["mode"],
     script:
         "../../scripts/generateParsmurfConfig.py"
 
 
-rule runParSMURF:
+rule training_parSMURF_run:
     input:
-        "results/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.data.txt",
-        "results/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.labels.txt",
-        "results/features/annotated/{genomeBuild}/SNVs.{genomeBuild}.folds.txt",
-        "config/SNVs.{genomeBuild}.{mode}.json",
+        data="results/training/{training_run}/input/parsmurf.data.txt",
+        labels="results/training/{training_run}/input/parsmurf.labels.txt",
+        folds="results/training/{training_run}/input/parsmurf.folds.txt",
+        config="results/training/{training_run}/input/parsmurf.config.json",
     output:
-        "results/predictions/{genomeBuild}/SNVs.{genomeBuild}.{mode}.predictions.txt",
+        "results/training/{training_run}/predictions/predictions.txt",
     shell:
         """
-        workflow/bin/parSMURF1 --cfg {input[3]}
+        workflow/bin/parSMURF1 --cfg {input.config}
+        """

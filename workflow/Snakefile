@@ -42,13 +42,16 @@ include: "rules/training.smk"
 
 
 include: "rules/process/getUtils.smk"
-include: "rules/process/folds.smk"
 include: "rules/process/createModelData.smk"
 include: "rules/model/parSMURF.smk"
 
 
 ##### all rules #####
-
+def getAllVariantsInput():
+    output = []
+    for variant_set in config["variants"]:
+        output += getVariantsInput(variant_set, "annotate")
+    return output
 
 rule all:
     input:
@@ -77,12 +80,6 @@ rule all_feature_sets:
 
 
 # Workflow variants
-def getAllVariantsInput():
-    output = []
-    for variant_set in config["variants"]:
-        output += getVariantsInput(variant_set, "annotate")
-    return output
-
 
 rule all_variants:
     input:
