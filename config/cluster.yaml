@@ -80,7 +80,15 @@ annotate_features:
   time: "200:00"
   mem: 10000
   queue: long
-training_parSMURF_run:
+annotate_sort_features:
+  time: "01:00"
+  mem: 10000
+  queue: medium
+training_parSMURF_train:
+  time: "01:00"
+  mem: 100000
+  queue: medium
+training_parSMURF_cv:
   time: "4:00"
   mem: 150000
   queue: medium
@@ -129,7 +137,7 @@ training_parSMURF_createParsmurfInput:
   time: "00:30"
   mem: 10000
   queue: medium
-getRemmScore:
-  time: "12:00"
-  mem: 200000
+predict_getNotNRegions:
+  time: "01:00"
+  mem: 10000
   queue: medium

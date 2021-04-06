@@ -32,6 +32,8 @@ include: "rules/variants.smk"
 include: "rules/annotate.smk"
 # Workflow training
 include: "rules/training.smk"
+# Workflow training
+include: "rules/predict.smk"
 
 
 # Workflow predict
