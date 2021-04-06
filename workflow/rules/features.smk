@@ -107,6 +107,11 @@ rule mergeSingleFeatureVCF:
             feature=config["feature_sets"][wc.feature_set]['features'],
             genomeBuild=config["feature_sets"][wc.feature_set]['genome_build']
         ),
+        idx=lambda wc: expand(
+            "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz.tbi",
+            feature=config["feature_sets"][wc.feature_set]['features'],
+            genomeBuild=config["feature_sets"][wc.feature_set]['genome_build']
+        ),
     output:
         vcf="results/features/feature_sets/{feature_set}.vcf.gz",
         idx="results/features/feature_sets/{feature_set}.vcf.gz.tbi",

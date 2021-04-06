@@ -1,19 +1,11 @@
-# training workflow
+############################
+#### training workflow  ####
+############################
 
-## check if positie/negatve and feature set have the same genome build
+# get the genome buld of training (not specified by training but variant set and feature set config)
+def getTrainingRunGenomeBuild(training_run):
+    conf = config["training"][training_run]
 
-
-def getVariantSetGenomeBuild(variant_set):
-    variantSet_conf = config["variants"][variant_set]
-    genomeBuild = variantSet_conf["genome_build"]
-    switcher = {"hg38": "hg19", "hg19": "hg38"}
-    if "liftover" in variantSet_conf:
-        return switcher[genomeBuild]
-    else:
-        return genomeBuild
-
-
-for training_run, conf in config["training"].items():
     genomeBuild_positives = getVariantSetGenomeBuild(conf["positives"])
     genomeBuild_negatives = getVariantSetGenomeBuild(conf["negatives"])
     genomeBuild_feature_set = config["feature_sets"][conf["feature_set"]][
@@ -33,6 +25,13 @@ for training_run, conf in config["training"].items():
                 genomeBuild_feature_set,
             )
         )
+    else:
+        return genomeBuild_positives
+
+
+# check if positie/negatve and feature set have the same genome build
+for training_run in config["training"].keys():
+    getTrainingRunGenomeBuild(training_run)
 
 
 rule getFolds:
@@ -46,10 +45,7 @@ rule getFolds:
 
 
 def getTrainingRunFolds(training_run):
-    genomeBuild = getVariantSetGenomeBuild(
-        config["training"][training_run]["positives"]
-    )
-    return "resources/%s/cytoBand.txt.gz" % genomeBuild
+    return "resources/%s/folds.txt.gz" % getTrainingRunGenomeBuild(training_run)
 
 
 include: "training/parSMURF.smk"

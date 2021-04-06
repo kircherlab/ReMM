@@ -10,7 +10,7 @@ with open(snakemake.input.scaffold) as json_file:
     file['data']['outFile'] = snakemake.params.predictions
     file['exec']['seed'] = int(list(snakemake.params.seed)[0])
     file['exec']['mode'] =snakemake.params.mode
-    file['data']['forestDir'] = "models/"+snakemake.wildcards.genomeBuild
+    file['data']['forestDir'] = "models/"+snakemake.params.genomeBuild
     
         
 with open(snakemake.output.config, 'w') as outfile:

@@ -45,6 +45,7 @@ rule training_parSMURF_generateConfig:
     params:
         predictions="results/training/{training_run}/predictions/predictions.txt",
         name="{training_run}",
+        genomeBuild=lambda wc: getTrainingRunGenomeBuild(wc.training_run),
         seed={"1"},
         mode=lambda wc: config["training"][wc.training_run]["config"]["mode"],
     script:

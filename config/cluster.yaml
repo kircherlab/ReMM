@@ -10,7 +10,7 @@ createSingleFeatureVCF:
   time: "200:00"
   mem: 10000
   queue: long
-indexSingleFeatreVCF:
+indexSingleFeatureVCF:
   time: "01:00"
 mergeSingleFeatureVCF:
   time: "72:00"
@@ -45,7 +45,7 @@ get_GCContent:
   mem: 10000
   queue: medium
 features_1KG_hg38_download_process:
-  time: "12:00"
+  time: "36:00"
   mem: 10000
   queue: medium
 get_feature_EncH3K4Me3:
@@ -81,7 +81,7 @@ annotate_features:
   mem: 10000
   queue: long
 training_parSMURF_run:
-  time: "12:00"
+  time: "4:00"
   mem: 150000
   queue: medium
 getReMM:
@@ -125,10 +125,9 @@ annotateFeatures19:
   time: "12:00"
   mem: 150000
   queue: medium
-
-get_feature_1KG_19:
-  time: "12:00"
-  mem: 150000
+training_parSMURF_createParsmurfInput:
+  time: "00:30"
+  mem: 10000
   queue: medium
 getRemmScore:
   time: "12:00"
