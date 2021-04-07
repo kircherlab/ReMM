@@ -32,8 +32,8 @@ include: "rules/variants.smk"
 include: "rules/annotate.smk"
 # Workflow training
 include: "rules/training.smk"
-# Workflow training
-include: "rules/predict.smk"
+# Workflow scores
+include: "rules/scores.smk"
 
 
 # Workflow predict
@@ -45,7 +45,6 @@ include: "rules/predict.smk"
 
 include: "rules/process/getUtils.smk"
 include: "rules/process/createModelData.smk"
-include: "rules/model/parSMURF.smk"
 
 
 ##### all rules #####

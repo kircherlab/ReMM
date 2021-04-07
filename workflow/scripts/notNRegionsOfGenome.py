@@ -1,5 +1,6 @@
 import numpy as np
 from pyfaidx import Fasta
+import pandas as pd
 import click
 
 # options

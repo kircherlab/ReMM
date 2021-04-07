@@ -35,7 +35,7 @@ rule training_parSMURF_generateConfig:
     params:
         predictions="results/training/{training_run}/predictions/predictions.txt",
         name="{training_run}",
-        models="results/training/{training_run}/predictions",
+        models="results/training/{training_run}/predictions/models",
         seed={"1"},
         mode=lambda wc: wc.mode,
     script:

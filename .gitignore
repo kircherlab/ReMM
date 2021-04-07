@@ -15,3 +15,4 @@ resources/hg19/hg19ToHg38.over.chain.gz
 resources/hg38/cytoBand.txt.gz
 resources/hg38/RefSeq2UCSC.txt
 resources/hg38/folds.txt.gz
+resources/hg38/notNRegions.bed

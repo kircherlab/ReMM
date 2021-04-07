@@ -137,7 +137,7 @@ training_parSMURF_createParsmurfInput:
   time: "00:30"
   mem: 10000
   queue: medium
-predict_getNotNRegions:
+scores_getNotNRegions:
   time: "01:00"
   mem: 10000
   queue: medium
