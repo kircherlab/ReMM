@@ -100,7 +100,7 @@ rule getChromosomes:
         """
 
 
-rule getIntervals:
+rule features_getIntervals:
     input:
         "results/features/download/{feature}/{genomeBuild}/{feature}.split_{chr}.bed.gz",
     output:

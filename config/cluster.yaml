@@ -6,16 +6,15 @@ __default__:
   queue: debug
   error: "logs/%x_%j_%N.err"
   output: "logs/%x_%j_%N.log"
-createSingleFeatureVCF:
-  time: "200:00"
+################
+### features ###
+################
+# interval features
+features_getIntervals:
+  time: "120:00"
   mem: 10000
-  queue: long
-indexSingleFeatureVCF:
-  time: "01:00"
-mergeSingleFeatureVCF:
-  time: "72:00"
-  mem: 20000
   queue: medium
+# conservation
 features_PriPhyloP_hg38_download_process:
   time: "12:00"
   mem: 2000
@@ -40,14 +39,17 @@ features_MamPhyloP_hg38_download_process:
   time: "12:00"
   mem: 2000
   queue: medium
+# GC content
 get_GCContent:
   time: "12:00"
   mem: 10000
   queue: medium
+# population
 features_1KG_hg38_download_process:
   time: "36:00"
   mem: 10000
   queue: medium
+# epigenetics
 get_feature_EncH3K4Me3:
   time: "12:00"
   mem: 10000
@@ -64,13 +66,16 @@ convert_bigwig_to_wig:
   time: "12:00"
   mem: 10000
   queue: medium
-get_feature_Intervals:
-  time: "120:00"
+# singe_vcf
+createSingleFeatureVCF:
+  time: "200:00"
   mem: 10000
-  queue: medium
-get_feature_Intervals_numTFBSConserved:
-  time: "120:00"
-  mem: 1000
+  queue: long
+indexSingleFeatureVCF:
+  time: "01:00"
+mergeSingleFeatureVCF:
+  time: "72:00"
+  mem: 20000
   queue: medium
 variants_annotateJannovar:
   time: "01:00"

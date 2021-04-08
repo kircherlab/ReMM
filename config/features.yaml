@@ -621,7 +621,7 @@ ISCApath:
 dbVARCount:
   description: Count of overlapping dbVar entries. Not benign or or likley benign.
   hg38:
-    url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.variant_call.clinical.pathogenic_or_likely_pathogenic.gvf.gz
+    url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/archive/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.2020_12_11.variant_call.clinical.pathogenic_or_likely_pathogenic.gvf.gz
     file: dbVARCount
     files:
       - chr1

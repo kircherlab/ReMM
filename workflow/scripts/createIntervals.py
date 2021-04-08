@@ -8,7 +8,7 @@ output_file = str(snakemake.output)
 
 all_intervals = pd.DataFrame()
 
-df_raw =pd.read_csv(input_file,header = None,sep = '\t',compression='gzip').head(2000)
+df_raw =pd.read_csv(input_file,header = None,sep = '\t',compression='gzip')
 df_raw[1] = df_raw[1].astype(dtype = str, errors = 'ignore')
 
 for CHR in df_raw[0].unique():
