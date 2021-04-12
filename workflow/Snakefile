@@ -85,3 +85,9 @@ rule all_feature_sets:
 rule all_variants:
     input:
         getAllVariantsInput(),
+
+# Workflow variants
+
+# rule all_scores:
+#     input:
+#         getAllVariantsInput(),

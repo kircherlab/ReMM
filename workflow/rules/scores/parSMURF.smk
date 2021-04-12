@@ -38,6 +38,10 @@ rule scores_parSMURF_test:
     input:
         data="results/scores/{score_name}/input/parsmurf/parsmurf.data.{split}.txt",
         config="results/scores/{score_name}/input/model/parsmurf.config.{split}.json",
+        models=(
+            lambda wc: "results/training/%s/predictions/models/0.out.forest"
+            % config["scores"][wc.score_name]["training"]
+        ),
     output:
         "results/scores/{score_name}/predictions/parsmurf/predictions_{split}.txt",
     shell:
@@ -57,7 +61,7 @@ rule scores_parSMURF_combine:
     shell:
         """
         paste \
-        <(zcat {input.positions | egrep -v "^CHR\sPOSITION\sID" | cut -f 1,2}) \
+        <(zcat {input.positions} | egrep -v "^CHR\sPOSITION\sID" | cut -f 1,2) \
         <(cat {input.predictions} | cut -f 1) | \
         bgzip -c > {output}
         """

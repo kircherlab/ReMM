@@ -11,9 +11,7 @@ rule annotate_features:
             wc.variant_set, "annotate", idx=True
         ),
     output:
-        temp(
-            "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz"
-        ),
+            "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
     shell:
         """
         java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \

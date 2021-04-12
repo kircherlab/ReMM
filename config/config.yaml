@@ -96,4 +96,6 @@ training:
 scores:
   remm_v1_3_parsmurf_hg38_score_test:
     training: remm_v1_3_parsmurf_hg38_test
+  remm_v1_3_parsmurf_hg38_score:
+    training: remm_v1_3_parsmurf_hg38
     

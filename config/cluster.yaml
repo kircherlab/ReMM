@@ -87,7 +87,7 @@ annotate_features:
   queue: long
 annotate_sort_features:
   time: "01:00"
-  mem: 10000
+  mem: 80000
   queue: medium
 training_parSMURF_train:
   time: "01:00"
@@ -125,6 +125,15 @@ convertToBigWig:
   mem: 170000
   queue: medium
 
+########################
+###     SCORES       ###
+########################
+scores_extract_features:
+  time: '06:00'
+  mem: 40000
+  queue: medium
+
+  
 createPropertyFile19:
   time: "120:00"
   mem: 1000
