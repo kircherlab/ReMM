@@ -61,7 +61,7 @@ def cli(folds_file, positives_file, negatives_file, output_data_file, output_fol
     cols = list(df.columns)
     for remove in ["CHR", "POSITION", "ID", "FOLD", "LABEL"]:
         cols.remove(remove)
-    df[output_data_file].to_csv(data, sep='\t', header=None, index=None, na_rep=0)
+    df[cols].to_csv(output_data_file, sep='\t', header=None, index=None, na_rep=0)
 
 
 if __name__ == '__main__':

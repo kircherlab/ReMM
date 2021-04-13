@@ -81,22 +81,7 @@ variants_annotateJannovar:
   time: "01:00"
   mem: 10000
   queue: medium
-annotate_features:
-  time: "200:00"
-  mem: 10000
-  queue: long
-annotate_sort_features:
-  time: "01:00"
-  mem: 80000
-  queue: medium
-training_parSMURF_train:
-  time: "01:00"
-  mem: 100000
-  queue: medium
-training_parSMURF_cv:
-  time: "4:00"
-  mem: 150000
-  queue: medium
+
 getReMM:
   time: "12:00"
   mem: 150000
@@ -124,16 +109,48 @@ convertToBigWig:
   time: "120:00"
   mem: 170000
   queue: medium
-
+########################
+###    ANNOTATION    ###
+########################
+annotate_features:
+  time: "200:00"
+  mem: 10000
+  queue: long
+annotate_sort_features:
+  time: "01:00"
+  mem: 80000
+  queue: medium
+########################
+###     TRAINING     ###
+########################
+training_parSMURF_train:
+  time: "01:00"
+  mem: 100000
+  queue: medium
+training_parSMURF_cv:
+  time: "04:00"
+  mem: 150000
+  queue: medium
+training_parSMURF_combine:
+  time: "01:00"
+  mem: 10000
+  queue: medium
 ########################
 ###     SCORES       ###
 ########################
 scores_extract_features:
-  time: '06:00'
+  time: "06:00"
   mem: 40000
   queue: medium
+scores_parSMURF_test:
+  time: "00:20"
+  mem: 40000
+  queue: medium
+  threads: 30
+scores_combineScores:
+  time: "24:00"
+  mem: 20000
 
-  
 createPropertyFile19:
   time: "120:00"
   mem: 1000

@@ -1,3 +1,5 @@
+def getFeaturesOfFeatuteSet(feature_set):
+    return config["feature_sets"][feature_set]["features"]
 
 
 rule annotate_features:
@@ -11,7 +13,7 @@ rule annotate_features:
             wc.variant_set, "annotate", idx=True
         ),
     output:
-            "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
+        "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
     shell:
         """
         java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \
@@ -25,11 +27,10 @@ rule annotate_sort_features:
     output:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
     params:
-        features=lambda wc: " ".join(["--feature %s" % f for f in wc.feature_set]),
+        features=lambda wc: " ".join(
+            ["--feature %s" % f for f in getFeaturesOfFeatuteSet(wc.feature_set)]
+        ),
     shell:
         """
         python workflow/scripts/sortAnnotationFile.py --input {input} --output {output} {params.features}
         """
-
-# max: 3040064828
-# lusi: 3034557141

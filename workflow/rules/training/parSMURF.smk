@@ -2,16 +2,8 @@
 rule training_parSMURF_createParsmurfInput:
     input:
         cb=lambda wc: getTrainingRunFolds(wc.training_run),
-        positives=lambda wc: expand(
-            "results/annotation/{variant_set_positive}/{variant_set_positive}.{feature_set}.sorted.tsv.gz",
-            variant_set_positive=config["training"][wc.training_run]["positives"],
-            feature_set=config["training"][wc.training_run]["feature_set"],
-        ),
-        negatives=lambda wc: expand(
-            "results/annotation/{variant_set_negative}/{variant_set_negative}.{feature_set}.sorted.tsv.gz",
-            variant_set_negative=config["training"][wc.training_run]["negatives"],
-            feature_set=config["training"][wc.training_run]["feature_set"],
-        ),
+        positives=lambda wc: getTrainingPositives(wc.training_run),
+        negatives=lambda wc: getTrainingNegatives(wc.training_run),
     output:
         data="results/training/{training_run}/input/parsmurf.data.txt",
         labels="results/training/{training_run}/input/parsmurf.labels.txt",
@@ -33,7 +25,9 @@ rule training_parSMURF_generateConfig:
     output:
         config="results/training/{training_run}/input/parsmurf.config.{mode}.json",
     params:
-        predictions="results/training/{training_run}/predictions/predictions.txt",
+        predictions=(
+            "results/training/{training_run}/predictions/parsmurf/predictions.txt"
+        ),
         name="{training_run}",
         models="results/training/{training_run}/predictions/models",
         seed={"1"},
@@ -49,10 +43,29 @@ rule training_parSMURF_cv:
         folds="results/training/{training_run}/input/parsmurf.folds.txt",
         config="results/training/{training_run}/input/parsmurf.config.cv.json",
     output:
-        "results/training/{training_run}/predictions/predictions.txt",
+        "results/training/{training_run}/predictions/parsmurf/predictions.txt",
     shell:
         """
         workflow/bin/parSMURF1 --cfg {input.config}
+        """
+
+
+rule training_parSMURF_combine:
+    input:
+        predictions=(
+            "results/training/{training_run}/predictions/parsmurf/predictions.txt"
+        ),
+        positives=lambda wc: getTrainingPositives(wc.training_run),
+        negatives=lambda wc: getTrainingNegatives(wc.training_run),
+    output:
+        "results/training/{training_run}/predictions/predictions.tsv.gz",
+    shell:
+        """
+        paste \
+        <(zcat {input.positives} {input.negatives} | egrep -v "^CHR\sPOSITION\sID" | cut -f 1,2) \
+        <(cat {input.predictions} | cut -f 1 ) | \
+        sort -k 1,1 -k2,2n | \
+        bgzip -c > {output}
         """
 
 

@@ -34,6 +34,22 @@ for training_run in config["training"].keys():
     getTrainingRunGenomeBuild(training_run)
 
 
+def getTrainingData(training_run, label):
+    return expand(
+        "results/annotation/{variant_set_positive}/{variant_set_positive}.{feature_set}.sorted.tsv.gz",
+        variant_set_positive=config["training"][training_run][label],
+        feature_set=config["training"][training_run]["feature_set"],
+    )
+
+
+def getTrainingPositives(training_run):
+    return getTrainingData(training_run, "positives")
+
+
+def getTrainingNegatives(training_run):
+    return getTrainingData(training_run, "negatives")
+
+
 rule getFolds:
     input:
         m="resources/ReMM.20171122.partition.mapping.tsv.gz",
