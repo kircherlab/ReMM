@@ -18,7 +18,7 @@ rule training_parSMURF_createParsmurfInput:
         folds="results/training/{training_run}/input/parsmurf.folds.txt",
     shell:
         """
-        workflow/scripts/createParsmurfInput.py \
+        python workflow/scripts/createParsmurfInput.py \
         --folds {input.cb} --positives {input.positives} --negatives {input.negatives} \
         --output-folds {output.folds} --output-data {output.data} --output-labels {output.labels}
         """
