@@ -6,7 +6,7 @@
 def getFeaturesOfScore(score_name):
     training = config["scores"][score_name]["training"]
     feature_set = config["training"][training]["feature_set"]
-    return config["feature_sets"][feature_set]["features"]
+    return getFeaturesOfFeatuteSet(feature_set)
 
 
 rule scores_getNotNRegions:
@@ -84,9 +84,6 @@ include: "scores/parSMURF.smk"
 
 
 def aggregate_PredictedScoresPerInterval(wc):
-    print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOWWWWWW")
-    print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOWWWWWW")
-    print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOWWWWWW")
     checkpoint_output = checkpoints.scores_split_notN_regions.get(**wc).output[0]
     return expand(
         "results/scores/{score_name}/predictions/split/predictions_{split}.tsv.gz",
@@ -105,3 +102,16 @@ rule scores_combineScores:
         export LC_ALL=C;
         zcat {input} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction};
         """
+
+
+# rule scores_replaceScores:
+#     input:
+#         biased_score="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
+#         predictions="results/training/{training_run}/predictions/predictions.tsv.gz",
+#     output:
+#         score="results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz",
+#     shell:
+#         """
+#         export LC_ALL=C;
+#         zcat {input} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction};
+#         """

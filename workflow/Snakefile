@@ -54,6 +54,7 @@ def getAllVariantsInput():
         output += getVariantsInput(variant_set, "annotate")
     return output
 
+
 rule all:
     input:
         getAllVariantsInput(),
@@ -82,12 +83,13 @@ rule all_feature_sets:
 
 # Workflow variants
 
+
 rule all_variants:
     input:
         getAllVariantsInput(),
 
-# Workflow variants
 
+# Workflow variants
 # rule all_scores:
 #     input:
 #         getAllVariantsInput(),
