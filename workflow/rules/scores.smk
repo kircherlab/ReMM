@@ -104,14 +104,31 @@ rule scores_combineScores:
         """
 
 
-# rule scores_replaceScores:
-#     input:
-#         biased_score="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
-#         predictions="results/training/{training_run}/predictions/predictions.tsv.gz",
-#     output:
-#         score="results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz",
-#     shell:
-#         """
-#         export LC_ALL=C;
-#         zcat {input} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction};
-#         """
+rule scores_replaceScores:
+    input:
+        biased_score="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
+        predictions=lambda wc: expand("results/training/{training_run}/predictions/predictions.tsv.gz",
+            training_run=config["scores"][wc.score_name]["training"]
+        ),
+    output:
+        score="results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz",
+    params:
+        comments=lambda wc: " ".join(["--comment '%s'" % i for i in config["scores"][wc.score_name]['comments']])
+    shell:
+        """
+        zcat {input.biased_score} | \
+        python workflow/scripts/replaceScores.py \
+        --replace-score-file {input.predictions} \
+        {params.comments} \
+        | bgzip -c > {output.score};
+        """
+
+rule scores_indexScore:
+    input:
+        "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz",
+    output:
+        "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz.tbi",
+    shell:
+        """
+        tabix -s 1 -b 2 -e 2 -c "#" {input}
+        """

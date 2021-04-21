@@ -90,6 +90,8 @@ rule all_variants:
 
 
 # Workflow variants
-# rule all_scores:
-#     input:
-#         getAllVariantsInput(),
+rule all_scores:
+    input:
+        expand("results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz{idx}",
+        score_name=list(config['scores'].keys()),
+        idx=["",".tbi"]),

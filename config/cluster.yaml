@@ -148,8 +148,19 @@ scores_parSMURF_test:
   queue: medium
   threads: 30
 scores_combineScores:
-  time: "24:00"
-  mem: 20000
+  time: "48:00"
+  mem: 40000
+  queue: medium
+  threads: 5
+scores_replaceScores:
+  time: "48:00"
+  mem: 40000
+  queue: medium
+  threads: 5
+scores_indexScore:
+  time: "01:00"
+  queue: medium
+  threads: 5
 
 createPropertyFile19:
   time: "120:00"

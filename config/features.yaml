@@ -393,11 +393,13 @@ Fantom5Perm:
   hg38:
     url: https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts3.bed.gz?download=1
     file: Fantom5Perm
-    files: all
+    files:
+      - fwd
+      - rev
     id: ""
     type: bed
     column: 5
-    method: upload
+    method: upload-max
 Fantom5Robust:
   description: robust enhancers by the Andersson et al. paper.
   hg19:
@@ -409,11 +411,13 @@ Fantom5Robust:
   hg38:
     url: https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts11_ctssMaxTpm1.bed.gz?download=1
     file: Fantom5Robust
-    files: all
+    files:
+      - fwd
+      - rev
     id: ""
     type: bed
     column: 5
-    method: upload
+    method: upload-max
 numTFBSConserved:
   description: Number of overlapping transcription factor binding sites conserved
     in the human/mouse/rat alignment. A binding site is considered to be conserved

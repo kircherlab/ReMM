@@ -86,16 +86,18 @@ training:
     implementation: parSMURF
     config:
       mode: cv
-  remm_v1_3_parsmurf_hg38_test:
-    positives: remm_snvs_20160109_liftover
-    negatives: cadd_v1_3_humanDerived_hg38
-    feature_set: test_hg38
-    implementation: parSMURF
-    config:
-      mode: cv
+  # remm_v1_3_parsmurf_hg38_test:
+  #   positives: remm_snvs_20160109_liftover
+  #   negatives: cadd_v1_3_humanDerived_hg38
+  #   feature_set: test_hg38
+  #   implementation: parSMURF
+  #   config:
+  #     mode: cv
 scores:
-  remm_v1_3_parsmurf_hg38_score_test:
-    training: remm_v1_3_parsmurf_hg38_test
-  remm_v1_3_parsmurf_hg38_score:
+  # remm_v1_3_parsmurf_hg38_score_test:
+  #   training: remm_v1_3_parsmurf_hg38_test
+  remm_v0_3_1_parsmurf_hg38_score:
     training: remm_v1_3_parsmurf_hg38
+    comments:
+      - ReMM score version 0.3.1_hg38
     
