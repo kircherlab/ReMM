@@ -30,25 +30,43 @@ def cli(replace_file, comments):
     # header
     print("#CHR\tPOS\tPROBABILITY")
 
+
+    def getNextReplaceLine(replace_lines, i=-1):
+        replace_end = False
+        
+        replace_split = None
+        if (i+1 < len(replace_lines)):
+            i += 1
+            replace_line = replace_lines[i].strip()
+            replace_split = replace_line.split("\t")
+        else:
+            replace_end = True
+        return i, replace_line, replace_split, replace_end
+
     with gzip.open(replace_file, 'rt') as replace_f:
         replace_lines = replace_f.readlines()
-        i = 0
-        replace_line = replace_lines[i].strip()
-        replace_split = replace_line.split("\t")
+
+        i, replace_line, replace_split, replace_end = getNextReplaceLine(replace_lines)
+
         replace_end = False 
         for genome_line in sys.stdin:
             genome_split = genome_line.strip().split("\t")
             contig = genome_split[0]
             position = int(genome_split[1])
             
-            if not replace_end and contig == replace_split[0] and position == int(replace_split[1]):
-                print(replace_line)
-                i += 1
-                if (i < len(replace_lines)):
-                    replace_line = replace_lines[i].strip()
-                    replace_split = replace_line.split("\t")
+            if not replace_end:
+
+                # iterate until genome line is or can be equal
+                while (contig == replace_split[0] and position > int(replace_split[1])):
+                    print(replace_line)
+                    i, replace_line, replace_split, replace_end = getNextReplaceLine(replace_lines, i)
+                
+                # print out replace line if == oherwise genome_line
+                if contig == replace_split[0] and position == int(replace_split[1]):
+                    print(replace_line)
+                    i, replace_line, replace_split, replace_end = getNextReplaceLine(replace_lines, i)
                 else:
-                    replace_end = True
+                    print(genome_line.strip())
             else:
                 print(genome_line.strip())
 
