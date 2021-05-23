@@ -1,5 +1,6 @@
 ---
 global_files:
+  wrapper_directory: /data/users/schubacm_c/work/projects/snakemake_wrappers
   genome_builds:
     hg38:
       reference: "/fast/projects/cubit/current/static_data/reference/GRCh38/hs38/hs38.fa"

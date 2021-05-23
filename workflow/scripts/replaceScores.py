@@ -33,7 +33,7 @@ def cli(replace_file, comments):
 
     def getNextReplaceLine(replace_lines, i=-1):
         replace_end = False
-        
+        replace_line = None
         replace_split = None
         if (i+1 < len(replace_lines)):
             i += 1

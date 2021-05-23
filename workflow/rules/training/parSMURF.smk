@@ -68,6 +68,30 @@ rule training_parSMURF_combine:
         bgzip -c > {output}
         """
 
+rule training_parSMURF_combine_labels:
+    input:
+        predictions=(
+            "results/training/{training_run}/predictions/parsmurf/predictions.txt"
+        ),
+        positives=lambda wc: getTrainingPositives(wc.training_run),
+        negatives=lambda wc: getTrainingNegatives(wc.training_run),
+    output:
+        "results/training/{training_run}/predictions/predictions_with_labels.tsv.gz",
+    shell:
+        """
+        (
+            echo -e "CHROM\\tPOS\\tLABEL\\tSCORE";
+            paste \
+            <(
+                zcat {input.positives} | egrep -v "^CHR\sPOSITION\sID" | awk -v 'OFS=\\t' '{{print $1,$2,1}}';
+                zcat {input.negatives} | egrep -v "^CHR\sPOSITION\sID" | awk -v 'OFS=\\t' '{{print $1,$2,0}}';
+            ) \
+            <(cat {input.predictions} | cut -f 1 ) | \
+            sort -k 1,1 -k2,2n;
+        ) | \
+        bgzip -c > {output}
+        """
+
 
 rule training_parSMURF_train:
     input:
