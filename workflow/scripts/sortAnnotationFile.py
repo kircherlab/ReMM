@@ -2,7 +2,7 @@ import pandas as pd
 import numpy  as np
 import click
 
-
+# TODO add default value for feature
 # options
 @click.command()
 @click.option('--input',

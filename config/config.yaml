@@ -79,6 +79,10 @@ variants:
     file: resources/variants/SNVs.all.20160109.vcf.gz
     liftover: hg19ToHg38
     genome_build: hg19
+  remm_snvs_2019_liftover:
+    file: resources/variants/variants.all.2019.vcf.gz
+    liftover: hg19ToHg38
+    genome_build: hg19
 training:
   remm_v1_3_parsmurf_hg38:
     positives: remm_snvs_20160109_liftover

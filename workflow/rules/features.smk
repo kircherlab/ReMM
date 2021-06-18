@@ -52,6 +52,7 @@ rule createPropertyFile:
         """
         )
 
+# create single VCF file of features
 
 rule createSingleFeatureVCF:
     input:
@@ -99,6 +100,19 @@ rule indexSingleFeatureVCF:
         tabix {input}
         """
 
+# Average feature of defined position
+
+rule features_average:
+    input:
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
+    output:
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
+    shell:
+        """
+        zcat {input} | egrep -v "#" | awk -F'=' '{{ sum+=$2 }} END {{ print sum / NR }}' |  gzip -c > {output}
+        """
+
+# Create a fetaure set defined in config file
 
 rule mergeSingleFeatureVCF:
     input:

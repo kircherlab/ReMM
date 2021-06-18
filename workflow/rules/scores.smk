@@ -64,7 +64,7 @@ rule scores_extract_features:
         --regions {input.regions}
         """
 
-
+# TODO add default value for feature
 rule scores_sort_features:
     input:
         "results/scores/{score_name}/input/annotation/{split}.unsorted.tsv.gz",

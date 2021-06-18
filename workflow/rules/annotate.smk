@@ -20,7 +20,7 @@ rule annotate_features:
         --annotation-vcf {input.feature_set} --file {input.variants_file} | bgzip -c > {output}
         """
 
-
+# TODO add default value for feature
 rule annotate_sort_features:
     input:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
