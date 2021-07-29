@@ -17,8 +17,12 @@ min_version("6.0.5")
 configfile: "config/config.yaml"
 configfile: "config/featuresConfig38.json"
 
+
 def getWrapper(wrapper):
-    return "file:%s/%s/wrapper.py" % (config["global_files"]["wrapper_directory"], wrapper)
+    return "file://%s/%s/wrapper.py" % (
+        config["global_files"]["wrapper_directory"],
+        wrapper,
+    )
 
 
 # TODO implement validation
@@ -74,6 +78,15 @@ rule all:
 
 
 # workflow features
+# TODO replace hg38 with both genome builds but add hg19 features before in config
+rule all_feature_average:
+    input:
+        expand(
+            "results/features/single_vcf/{feature}/hg38/single/{feature}.avg.tsv.gz",
+            feature=features.keys(),
+        ),
+
+
 rule all_feature_sets:
     input:
         vcf=expand(
@@ -87,16 +100,53 @@ rule all_feature_sets:
 
 
 # Workflow variants
-
-
 rule all_variants:
     input:
         getAllVariantsInput(),
 
 
+# Workflow annotate
+def getAllAnnotations():
+    output = []
+    for training in config["training"].values():
+        output += [
+            "results/annotation/%s/%s.%s.sorted.tsv.gz"
+            % (
+                training["positives"],
+                training["positives"],
+                training["feature_set"],
+            )
+        ]
+        output += [
+            "results/annotation/%s/%s.%s.sorted.tsv.gz"
+            % (
+                training["negatives"],
+                training["negatives"],
+                training["feature_set"],
+            )
+        ]
+    return output
+
+
+rule all_annotation:
+    input:
+        getAllAnnotations(),
+
+
+# Workflow evaluate
+rule all_evaluate:
+    input:
+        expand(
+            "results/evaluation/{training_run}/metrics/auc.tsv.gz",
+            training_run=list(config["training"].keys()),
+        ),
+
+
 # Workflow variants
 rule all_scores:
     input:
-        expand("results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz{idx}",
-        score_name=list(config['scores'].keys()),
-        idx=["",".tbi"]),
+        expand(
+            "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz{idx}",
+            score_name=list(config["scores"].keys()),
+            idx=["", ".tbi"],
+        ),

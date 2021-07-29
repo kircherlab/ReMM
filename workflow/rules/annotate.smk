@@ -2,6 +2,10 @@ def getFeaturesOfFeatuteSet(feature_set):
     return config["feature_sets"][feature_set]["features"]
 
 
+def getFeatureDefaultValue(feature, genome_build):
+    return features[feature][genome_build]["default_value"]
+
+
 rule annotate_features:
     conda:
         "../envs/jdk11.yaml"
@@ -20,6 +24,7 @@ rule annotate_features:
         --annotation-vcf {input.feature_set} --file {input.variants_file} | bgzip -c > {output}
         """
 
+
 # TODO add default value for feature
 rule annotate_sort_features:
     input:
@@ -28,7 +33,16 @@ rule annotate_sort_features:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
     params:
         features=lambda wc: " ".join(
-            ["--feature %s" % f for f in getFeaturesOfFeatuteSet(wc.feature_set)]
+            [
+                "--feature %s %f"
+                % (
+                    feature,
+                    getFeatureDefaultValue(
+                        feature, getVariantSetGenomeBuild(wc.variant_set)
+                    ),
+                )
+                for feature in getFeaturesOfFeatuteSet(wc.feature_set)
+            ]
         ),
     shell:
         """

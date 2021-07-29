@@ -3,4 +3,5 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - jannovar-cli==0.35
+  - jannovar-cli==0.36
+  - htslib

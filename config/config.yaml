@@ -75,7 +75,18 @@ variants:
     filters:
       bcftools:
         filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  cadd_v1_3_humanDerived_hg38_copy:
+    file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
+    genome_build: hg38
+    jannovar: hg38_refseq
+    filters:
+      bcftools:
+        filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
   remm_snvs_20160109_liftover:
+    file: resources/variants/SNVs.all.20160109.vcf.gz
+    liftover: hg19ToHg38
+    genome_build: hg19
+  remm_snvs_20160109_liftover_copy:
     file: resources/variants/SNVs.all.20160109.vcf.gz
     liftover: hg19ToHg38
     genome_build: hg19
@@ -84,25 +95,34 @@ variants:
     liftover: hg19ToHg38
     genome_build: hg19
 training:
-  remm_v1_3_parsmurf_hg38:
-    positives: remm_snvs_20160109_liftover
-    negatives: cadd_v1_3_humanDerived_hg38
+  # remm_v1_3_parsmurf_hg38:
+  #   positives: remm_snvs_20160109_liftover
+  #   negatives: cadd_v1_3_humanDerived_hg38
+  #   feature_set: remm_v1_3_hg38
+  #   implementation: parSMURF
+  #   config:
+  #     mode: cv
+  remm_v1_3_parsmurf_hg38_test_feature_mean:
+    positives: remm_snvs_20160109_liftover_copy
+    negatives: cadd_v1_3_humanDerived_hg38_copy
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
     config:
       mode: cv
-  # remm_v1_3_parsmurf_hg38_test:
-  #   positives: remm_snvs_20160109_liftover
-  #   negatives: cadd_v1_3_humanDerived_hg38
-  #   feature_set: test_hg38
-  #   implementation: parSMURF
-  #   config:
-  #     mode: cv
+  remm_v1_4_parsmurf_hg38_test:
+    positives: remm_snvs_2019_liftover
+    negatives: cadd_v1_3_humanDerived_hg38_copy
+    feature_set: remm_v1_3_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
 scores:
-  # remm_v1_3_parsmurf_hg38_score_test:
-  #   training: remm_v1_3_parsmurf_hg38_test
-  remm_v0_3_1_parsmurf_hg38_score:
-    training: remm_v1_3_parsmurf_hg38
+  remm_v0_4_parsmurf_hg38_score:
+    training: remm_v1_4_parsmurf_hg38_test
     comments:
-      - ReMM score version 0.3.1_hg38
+      - ReMM score version v0.4.0.hg38
+  # remm_v0_3_1_parsmurf_hg38_score:
+  #   training: remm_v1_3_parsmurf_hg38
+  #   comments:
+  #     - ReMM score version 0.3.1_hg38
     

@@ -64,6 +64,7 @@ rule scores_extract_features:
         --regions {input.regions}
         """
 
+
 # TODO add default value for feature
 rule scores_sort_features:
     input:
@@ -72,7 +73,16 @@ rule scores_sort_features:
         "results/scores/{score_name}/input/annotation/{split}.sorted.tsv.gz",
     params:
         features=lambda wc: " ".join(
-            ["--feature %s" % f for f in getFeaturesOfScore(wc.score_name)]
+            [
+                "--feature %s %f"
+                % (
+                    feature,
+                    getFeatureDefaultValue(
+                        feature, config["scores"][wc.score_name]["genome_build"]
+                    ),
+                )
+                for feature in getFeaturesOfScore(wc.feature_set)
+            ]
         ),
     shell:
         """
@@ -107,13 +117,16 @@ rule scores_combineScores:
 rule scores_replaceScores:
     input:
         biased_score="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
-        predictions=lambda wc: expand("results/training/{training_run}/predictions/predictions.tsv.gz",
-            training_run=config["scores"][wc.score_name]["training"]
+        predictions=lambda wc: expand(
+            "results/training/{training_run}/predictions/predictions.tsv.gz",
+            training_run=config["scores"][wc.score_name]["training"],
         ),
     output:
         score="results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz",
     params:
-        comments=lambda wc: " ".join(["--comment '%s'" % i for i in config["scores"][wc.score_name]['comments']])
+        comments=lambda wc: " ".join(
+            ["--comment '%s'" % i for i in config["scores"][wc.score_name]["comments"]]
+        ),
     shell:
         """
         zcat {input.biased_score} | \
@@ -122,6 +135,7 @@ rule scores_replaceScores:
         {params.comments} \
         | bgzip -c > {output.score};
         """
+
 
 rule scores_indexScore:
     input:

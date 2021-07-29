@@ -14,7 +14,16 @@ additionalProperties:
       type: string
     hg19:
       type: object
+      # properties:
+      #   default_value: number
+      # required:
+      #   - default_value
     hg38:
       type: object
+      # properties:
+      #   default_value: number
+      # required:
+      #   - default_value
+
   required:
     - description

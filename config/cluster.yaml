@@ -9,7 +9,6 @@ __default__:
 ################
 ### features ###
 ################
-# interval features
 features_getIntervals:
   time: "120:00"
   mem: 10000
@@ -81,7 +80,12 @@ variants_annotateJannovar:
   time: "01:00"
   mem: 10000
   queue: medium
-
+# Average
+# interval features
+features_average:
+  time: "01:00"
+  mem: 2000
+  queue: medium
 getReMM:
   time: "12:00"
   mem: 150000
