@@ -5,6 +5,7 @@ HTTP = HTTPRemoteProvider()
 
 rule features_1KG_hg38_download_process:
     output:
+        vcf=temp("results/features/download/1KG/hg38/1KG.{chr}.vcf.gz"),
         bed=temp("results/features/download/1KG/hg38/1KG.{chr}.bed"),
         bed_gz="results/features/download/1KG/hg38/1KG.{chr}.bed.gz",
     params:
@@ -13,9 +14,8 @@ rule features_1KG_hg38_download_process:
         "../../envs/ruby.yaml"
     shell:
         """
-        curl -s --connect-timeout 540 --retry 20 --retry-all-errors {params.url} | \
-        zcat | cut -f 1-9 | \
-        ruby workflow/scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
+        curl -s --connect-timeout 540 --retry 20 --retry-all-errors {params.url} > {output.vcf};
+        zcat {output.vcf} | cut -f 1-9 | ruby workflow/scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
         cat {output.bed} | bgzip -c > {output.bed_gz};
         """
 
