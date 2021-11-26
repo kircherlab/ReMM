@@ -63,16 +63,17 @@ def getAllVariantsInput():
         output += getVariantsInput(variant_set, "annotate")
     return output
 
+
 def getAllFeatures(genomeBuild):
     featureList = []
-    for feature,build in features.items():
+    for feature, build in features.items():
         if genomeBuild in build:
             featureList += [feature]
-    return(expand(
-            "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
-            feature=featureList,
-            genomeBuild=genomeBuild,
-        ))
+    return expand(
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
+        feature=featureList,
+        genomeBuild=genomeBuild,
+    )
 
 
 rule all:
@@ -92,7 +93,7 @@ rule all:
 rule all_feature_average:
     input:
         getAllFeatures("hg19"),
-        getAllFeatures("hg38")
+        # getAllFeatures("hg38")
 
 
 rule all_feature_sets:

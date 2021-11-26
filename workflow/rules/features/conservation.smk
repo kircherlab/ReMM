@@ -8,6 +8,7 @@ rule convertToBigWig_hg19:
         bigWigToBedGraph {input} utils/{wildcards.genomeBuild}.chrom.sizes {output}
         """
 
+
 rule features_PriPhyloP_hg19_download_process:
     output:
         "results/features/download/priPhyloP/hg19/priPhyloP.{chr}.wig.gz",
@@ -20,6 +21,7 @@ rule features_PriPhyloP_hg19_download_process:
         """
         curl {params.url} > {output}
         """
+
 
 rule features_PriPhyloP_hg38_download_process:
     output:
@@ -125,8 +127,8 @@ rule features_MamPhyloP_hg38_download_process:
         """
 
 
-
 # TODO hard coded path!
+
 
 rule features_GERP_hg38_process:
     input:

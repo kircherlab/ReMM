@@ -48,7 +48,7 @@ get_GCContent:
   mem: 10000
   queue: medium
 # population
-features_1KG_hg38_download_process:
+features_1KG_hg38_process:
   time: "36:00"
   mem: 10000
   queue: medium
