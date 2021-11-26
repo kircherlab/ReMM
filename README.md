@@ -54,3 +54,8 @@ snakemake output/predictions/hg38/SNVs.hg38.cv.predictions.txt
 ```
 
 To execute any step separately (see Readme in the `workflow` folder for details on workflow steps), you need to look up the name of the desired output file in the scripts and call Snakemake with the exact name. Using a flag -n, you can initiate a 'dry run': Snakemake will check the consistency of all rules and files and show the number of steps. However, a clean dry run does not necessarily mean that no errors will occur during a normal run. ReMM score is not allele-specific so that you get only one score independent of the variant itself. The workflow from the download of data up to computing the scores may take several days or weeks depending on the computing power and internet connection.
+
+
+### The config files
+
+The main config file can be found in `config/config.yaml`. Here most of the configuration magic happens. There is a second config file `config/features.yaml` where all features are listed (with additional description). Also runtimes of rules are documented here: `config/cluster.yaml`.

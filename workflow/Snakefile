@@ -1,3 +1,4 @@
+from snakemake.utils import validate
 from os.path import join
 from glob import glob
 import datetime
@@ -8,14 +9,15 @@ import pandas as pd
 
 from snakemake.utils import min_version
 
-min_version("6.0.5")
+min_version("6.10.0")
 
 
 ##### load config and sample sheets #####
 
-
 configfile: "config/config.yaml"
 configfile: "config/featuresConfig38.json"
+
+validate(config, schema="schemas/config.schema.yaml")
 
 
 def getWrapper(wrapper):
