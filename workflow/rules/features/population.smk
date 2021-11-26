@@ -1,3 +1,8 @@
+import os
+from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+
+HTTP = HTTPRemoteProvider()
+
 rule features_1KG_hg38_download_process:
     output:
         bed=temp("results/features/download/1KG/hg38/1KG.{chr}.bed"),
@@ -9,9 +14,9 @@ rule features_1KG_hg38_download_process:
     shell:
         """
         curl -s --connect-timeout 540 --retry 20 --retry-all-errors {params.url} | \
-        zcat  | cut -f 1-9 | \
+        zcat | cut -f 1-9 | \
         ruby workflow/scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
-        cat output.bed | bgzip -c > {output.bed_gz};
+        cat {output.bed} | bgzip -c > {output.bed_gz};
         """
 
 

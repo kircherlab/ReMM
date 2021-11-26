@@ -14,6 +14,10 @@ features_getIntervals:
   mem: 10000
   queue: medium
 # conservation
+features_PriPhyloP_hg19_download_process:
+  time: "12:00"
+  mem: 2000
+  queue: medium
 features_PriPhyloP_hg38_download_process:
   time: "12:00"
   mem: 2000

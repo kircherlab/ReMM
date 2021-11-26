@@ -1,3 +1,26 @@
+rule convertToBigWig_hg19:
+    input:
+        "results/features/download/{feature}/hg19/{chr}.{extension}.wigFix.gz",
+    output:
+        "results/features/download/{feature}/hg19/{chr}.{extension}.bw.gz",
+    shell:
+        """
+        bigWigToBedGraph {input} utils/{wildcards.genomeBuild}.chrom.sizes {output}
+        """
+
+rule features_PriPhyloP_hg19_download_process:
+    output:
+        "results/features/download/priPhyloP/hg19/priPhyloP.{chr}.wig.gz",
+    params:
+        url=lambda wildcards: "%s%s.phyloP46way.primate.wigFix.gz" % (
+            features["verPhyloP"]["hg38"]["url"],
+            wildcards.chr,
+        ),
+    shell:
+        """
+        curl {params.url} > {output}
+        """
+
 rule features_PriPhyloP_hg38_download_process:
     output:
         "results/features/download/priPhyloP/hg38/priPhyloP.all.wig.gz",

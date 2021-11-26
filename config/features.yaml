@@ -1,8 +1,8 @@
 ---
 GCContent:
   description: GC-content in a range of +-75
-  hg38:
-    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
+  hg19:
+    url: ""
     file: GCContent
     files: all
     id: ""
@@ -10,9 +10,29 @@ GCContent:
     type: bed
     method: upload
     column: 4
-    default_value: 0.408699 
+    default_value: 0.0
+  hg38:
+    url: ""
+    file: GCContent
+    files: all
+    id: ""
+    window_size: 75
+    type: bed
+    method: upload
+    column: 4
+    default_value: 0.408699
 CpGperGC:
   description: CpG islands. Percentage of island that is C or G. Downloaded from UCSC table browser
+  hg19:
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/cpgIslandExt.txt.gz
+    file: cpgIslandExt
+    files: all
+    id: ""
+    window_size: 75
+    type: bed
+    method: upload
+    column: 9
+    default_value: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -43,7 +63,16 @@ CpGperCpG:
     column: 8
     default_value: 18.7278
 CpGobsExp:
-  description: "TODO"
+  description: CpG islands. Ratio of observed (cpgNum) to expected(numC*numG/length) CpG in island downloaded from UCSC table browser
+  hg19:
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/cpgIslandExt.txt.gz
+    file: cpgIslandExt
+    files: all
+    id: ""
+    type: bed
+    column: 10
+    method: upload
+    default_value: 0.874696
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -52,7 +81,6 @@ CpGobsExp:
     type: bed
     column: 10
     method: upload
-    description: CpG islands. Ratio of observed (cpgNum) to expected(numC*numG/length) CpG in island downloaded from UCSC table browser
     default_value: 0.874696
 priPhyloP:
   description: Conservation primate phyloP46way downloaded from USCS
@@ -84,7 +112,7 @@ priPhyloP:
       - chr22
       - chrX
       - chrY
-    type: bw
+    type: wig
     method: upload
     description: phyloP46way.primate
     default_value: 0.0
@@ -243,9 +271,9 @@ mamPhastCons:
     default_value: 0.128491
 GerpRS:
   description: GERP++ element score
-  hg19:
-    url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
-    default_value: 0.0
+  # hg19:
+  #   url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
+  #   default_value: 0.0
   hg38:
     url: ""
     file: gerpElement
@@ -257,9 +285,9 @@ GerpRS:
     default_value: 1441.64
 GerpRSpv:
   description: GERP++ element p-value
-  hg19:
-    url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
-    default_value: 0.0
+  # hg19:
+  #   url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
+  #   default_value: 0.0
   hg38:
     url: ""
     file: gerpElement
@@ -282,7 +310,9 @@ EncH3K27Ac:
       - wgEncodeBroadHistoneK562H3k27acStdSig
       - wgEncodeBroadHistoneNhekH3k27acStdSig
       - wgEncodeBroadHistoneNhlfH3k27acStdSig
-    type: bigWig
+    id: ".encode"
+    type: encode.bed
+    column: 4
     method: upload-max
     default_value: 0.0
   hg38:
@@ -314,7 +344,9 @@ EncH3K4Me1:
       - wgEncodeBroadHistoneK562H3k4me1StdSig
       - wgEncodeBroadHistoneNhekH3k4me1StdSig
       - wgEncodeBroadHistoneNhlfH3k4me1StdSig
-    type: bigWig
+    id: ".encode"
+    type: encode.bed
+    column: 4
     method: upload-max
     default_value: 0.0
   hg38:
@@ -346,9 +378,10 @@ EncH3K4Me3:
       - wgEncodeBroadHistoneK562H3k4me3StdSig
       - wgEncodeBroadHistoneNhekH3k4me3StdSig
       - wgEncodeBroadHistoneNhlfH3k4me3StdSig
-    type: bigWig
+    id: ".encode"
+    type: encode.bed
+    column: 4
     method: upload-max
-    description: Maximum ENCODE H3K4 trimethylation level
     default_value: 0.0
   hg38:
     url: http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me3/
@@ -412,6 +445,7 @@ Fantom5Perm:
     file: Fantom5Perm
     files: all
     type: bed
+    column: 5
     method: upload
   hg38:
     url: https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts3.bed.gz?download=1
@@ -431,6 +465,7 @@ Fantom5Robust:
     file: Fantom5Robust
     files: all
     type: bed
+    column: 5
     method: upload
     default_value: 0.0
   hg38:

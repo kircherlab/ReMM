@@ -1,4 +1,19 @@
-rule get_Fantom5Perm:
+import os
+from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+
+HTTP = HTTPRemoteProvider()
+
+rule get_Fantom5Perm_hg19:
+    input:
+        HTTP.remote(features['Fantom5Perm']['hg19']["url"], keep_local=False)
+    output:
+        "results/features/download/Fantom5Perm/hg19/Fantom5Perm.all.bed.gz"
+    shell:
+        """
+        cat {input} | tail -n +2 | sort -k1,1 -k2,2n -k3,3n | bgzip -c > {output}
+        """
+
+rule get_Fantom5Perm_hg38:
     output:
         "results/features/download/Fantom5Perm/hg38/Fantom5Perm.all.bed.gz"
     params:
@@ -8,7 +23,17 @@ rule get_Fantom5Perm:
         curl {params.url} > {output}
         """
 
-rule get_Fantom5Robust:
+rule get_Fantom5Robust_hg19:
+    input:
+        HTTP.remote(features['Fantom5Robust']['hg19']["url"], keep_local=False)
+    output:
+        "results/features/download/Fantom5Robust/hg19/Fantom5Robust.all.bed.gz"
+    shell:
+        """
+        cat {input} | tail -n +2 | sort -k1,1 -k2,2n -k3,3n | bgzip -c > {output}
+        """
+
+rule get_Fantom5Robust_hg38:
     output:
         "results/features/download/Fantom5Robust/hg38/Fantom5Robust.all.bed.gz"
     params:

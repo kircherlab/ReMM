@@ -19,7 +19,7 @@ configfile: "config/featuresConfig38.json"
 
 
 def getWrapper(wrapper):
-    return "file://%s/%s/wrapper.py" % (
+    return "file:%s/%s/wrapper.py" % (
         config["global_files"]["wrapper_directory"],
         wrapper,
     )
@@ -63,6 +63,17 @@ def getAllVariantsInput():
         output += getVariantsInput(variant_set, "annotate")
     return output
 
+def getAllFeatures(genomeBuild):
+    featureList = []
+    for feature,build in features.items():
+        if genomeBuild in build:
+            featureList += [feature]
+    return(expand(
+            "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
+            feature=featureList,
+            genomeBuild=genomeBuild,
+        ))
+
 
 rule all:
     input:
@@ -78,13 +89,10 @@ rule all:
 
 
 # workflow features
-# TODO replace hg38 with both genome builds but add hg19 features before in config
 rule all_feature_average:
     input:
-        expand(
-            "results/features/single_vcf/{feature}/hg38/single/{feature}.avg.tsv.gz",
-            feature=features.keys(),
-        ),
+        getAllFeatures("hg19"),
+        getAllFeatures("hg38")
 
 
 rule all_feature_sets:
@@ -138,6 +146,10 @@ rule all_evaluate:
     input:
         expand(
             "results/evaluation/{training_run}/metrics/auc.tsv.gz",
+            training_run=list(config["training"].keys()),
+        ),
+        expand(
+            "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
             training_run=list(config["training"].keys()),
         ),
 
