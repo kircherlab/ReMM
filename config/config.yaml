@@ -38,6 +38,10 @@ feature_sets:
       - ISCApath
       - DGVCount
       - numTFBSConserved
+    validation: 
+      - "chr5:23464245-23570833"
+      - "chr11:5145969-5306568"
+      - "chr14:100652295-100776239"
   remm_v1_3_hg38:
     genome_build: hg38
     features:
@@ -67,6 +71,10 @@ feature_sets:
       - ISCApath
       - DGVCount
       - numTFBSConserved
+    validation: 
+      - "chr5:23464245-23570833"
+      - "chr11:5145969-5306568"
+      - "chr14:100652295-100776239"
   remm_v1_4_hg19:
     genome_build: hg19
     features:
@@ -74,6 +82,10 @@ feature_sets:
       - CpGperCpG
       - CpGobsExp
       - GCContent
+    validation:
+      - "chr5:23464354-23570942"
+      - "chr11:5167199-5327798"
+      - "chr14:101118632-101242576"
 variants:
   cadd_v1_3_humanDerived_hg38:
     file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
