@@ -1,7 +1,7 @@
 """
 ReMM score workflow
 
-This workflow is for generating the ReMM score is consists om multiple sub workflows. For generating the WG score file the main modules are:
+This workflow is for generating the ReMM score is consists on multiple sub workflows. For generating the WG score file the main modules are:
     - Feature generation (features.smk)
     - Variant processing (variants.smk)
     - Annotation of variants (annotate.smk)
