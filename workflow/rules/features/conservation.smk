@@ -14,7 +14,7 @@ rule features_PriPhyloP_hg19_download_process:
         "results/features/download/priPhyloP/hg19/priPhyloP.{chr}.wig.gz",
     params:
         url=lambda wildcards: "%s%s.phyloP46way.primate.wigFix.gz" % (
-            features["verPhyloP"]["hg38"]["url"],
+            features["priPhyloP"]["hg19"]["url"],
             wildcards.chr,
         ),
     shell:

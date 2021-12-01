@@ -15,9 +15,8 @@ min_version("6.10.0")
 ##### load config and sample sheets #####
 
 configfile: "config/config.yaml"
-configfile: "config/featuresConfig38.json"
-
 validate(config, schema="schemas/config.schema.yaml")
+configfile: "config/featuresConfig38.json"
 
 
 def getWrapper(wrapper):
