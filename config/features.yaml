@@ -10,7 +10,7 @@ GCContent:
     type: bed
     method: upload
     column: 4
-    default_value: 0.0
+    default_value: 0.409034
   hg38:
     url: ""
     file: GCContent
@@ -32,7 +32,7 @@ CpGperGC:
     type: bed
     method: upload
     column: 9
-    default_value: 0.0
+    default_value: 65.085
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -52,7 +52,7 @@ CpGperCpG:
     type: bed
     method: upload
     column: 8
-    default_value: 0.0
+    default_value: 18.2498
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -72,7 +72,7 @@ CpGobsExp:
     type: bed
     column: 10
     method: upload
-    default_value: 0.874696
+    default_value: 0.874298
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -115,7 +115,7 @@ priPhyloP:
     type: wig
     method: upload
     description: phyloP46way.primate
-    default_value: 0.0
+    default_value: 0.0451375
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP17way/hg38.phyloP17way.wigFix.gz
     file: priPhyloP
@@ -126,6 +126,38 @@ priPhyloP:
     default_value: 0.0977878
 priPhastCons:
   description: Conservation primates phastCons46way downloaded from UCSC
+  hg19:
+    url: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/primates/
+    file: priPhastCons
+    files:
+      - chr1
+      - chr2
+      - chr3
+      - chr4
+      - chr5
+      - chr6
+      - chr7
+      - chr8
+      - chr9
+      - chr10
+      - chr11
+      - chr12
+      - chr13
+      - chr14
+      - chr15
+      - chr16
+      - chr17
+      - chr18
+      - chr19
+      - chr20
+      - chr21
+      - chr22
+      - chrX
+      - chrY
+    type: wig
+    method: upload
+    description: phastCons46way.primate
+    default_value: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons17way/hg38.phastCons17way.wigFix.gz
     file: priPhastCons
@@ -135,6 +167,38 @@ priPhastCons:
     default_value: 0.151415
 verPhyloP:
   description: Conservation vertebrate phyloP100way downloaded from UCSC
+  hg19:
+    url: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/vertebrate/
+    file: verPhyloP
+    files:
+      - chr1
+      - chr2
+      - chr3
+      - chr4
+      - chr5
+      - chr6
+      - chr7
+      - chr8
+      - chr9
+      - chr10
+      - chr11
+      - chr12
+      - chr13
+      - chr14
+      - chr15
+      - chr16
+      - chr17
+      - chr18
+      - chr19
+      - chr20
+      - chr21
+      - chr22
+      - chrX
+      - chrY
+    type: wig
+    method: upload
+    description: phyloP46way
+    default_value: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.100way.phyloP100way/
     file: verPhyloP
@@ -169,6 +233,38 @@ verPhyloP:
     default_value: 0.0954381
 verPhastCons:
   description: Conservation vertebrate phastCons100way downloaded from UCSC
+  hg19:
+    url: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/vertebrate/
+    file: verPhastCons
+    files:
+      - chr1
+      - chr2
+      - chr3
+      - chr4
+      - chr5
+      - chr6
+      - chr7
+      - chr8
+      - chr9
+      - chr10
+      - chr11
+      - chr12
+      - chr13
+      - chr14
+      - chr15
+      - chr16
+      - chr17
+      - chr18
+      - chr19
+      - chr20
+      - chr21
+      - chr22
+      - chrX
+      - chrY
+    type: wig
+    method: upload
+    description: phyloP46way
+    default_value: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.100way.phastCons/
     file: verPhastCons
@@ -203,6 +299,38 @@ verPhastCons:
     default_value: 0.0980657
 mamPhyloP:
   description: Conservation placental mammals phyloP46way downloaded from USCS
+  hg19:
+    url: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phyloP46way/placentalMammals/
+    file: mamPhyloP
+    files:
+      - chr1
+      - chr2
+      - chr3
+      - chr4
+      - chr5
+      - chr6
+      - chr7
+      - chr8
+      - chr9
+      - chr10
+      - chr11
+      - chr12
+      - chr13
+      - chr14
+      - chr15
+      - chr16
+      - chr17
+      - chr18
+      - chr19
+      - chr20
+      - chr21
+      - chr22
+      - chrX
+      - chrY
+    type: wig
+    method: upload
+    description: verPhastCons.placental
+    default_value: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP30way/hg38.30way.phyloP/
     file: mamPhyloP
@@ -237,6 +365,38 @@ mamPhyloP:
     default_value: 0.100913
 mamPhastCons:
   description: Conservation placental mammals phastCons46way downloaded from UCSC
+  hg19:
+    url: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals/
+    file: mamPhastCons
+    files:
+      - chr1
+      - chr2
+      - chr3
+      - chr4
+      - chr5
+      - chr6
+      - chr7
+      - chr8
+      - chr9
+      - chr10
+      - chr11
+      - chr12
+      - chr13
+      - chr14
+      - chr15
+      - chr16
+      - chr17
+      - chr18
+      - chr19
+      - chr20
+      - chr21
+      - chr22
+      - chrX
+      - chrY
+    type: wig
+    method: upload
+    description: mamPhastCons.placental
+    default_value: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons30way/hg38.30way.phastCons/
     file: mamPhastCons
