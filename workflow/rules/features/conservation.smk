@@ -13,7 +13,8 @@ rule features_PriPhyloP_hg19_download_process:
     output:
         "results/features/download/priPhyloP/hg19/priPhyloP.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phyloP46way.primate.wigFix.gz" % (
+        url=lambda wildcards: "%s%s.phyloP46way.primate.wigFix.gz"
+        % (
             features["priPhyloP"]["hg19"]["url"],
             wildcards.chr,
         ),
@@ -47,6 +48,21 @@ rule features_PriPhyloP_hg38_download_process:
         """
 
 
+rule features_PriPhastCons_hg19_download_process:
+    output:
+        "results/features/download/priPhastCons/hg19/priPhastCons.{chr}.wig.gz",
+    params:
+        url=lambda wildcards: "%s%s.phastCons46way.primate.wigFix.gz"
+        % (
+            features["priPhastCons"]["hg19"]["url"],
+            wildcards.chr,
+        ),
+    shell:
+        """
+        curl {params.url} > {output}
+        """
+
+
 rule features_PriPhastCons_hg38_download_process:
     output:
         "results/features/download/priPhastCons/hg38/priPhastCons.all.wig.gz",
@@ -75,8 +91,24 @@ rule features_VerPhyloP_hg38_download_process:
     output:
         "results/features/download/verPhyloP/hg38/verPhyloP.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phyloP100way.wigFix.gz" % (
+        url=lambda wildcards: "%s%s.phyloP100way.wigFix.gz"
+        % (
             features["verPhyloP"]["hg38"]["url"],
+            wildcards.chr,
+        ),
+    shell:
+        """
+        curl {params.url} > {output}
+        """
+
+
+rule features_VerPhyloP_hg19_download_process:
+    output:
+        "results/features/download/verPhyloP/hg19/verPhyloP.{chr}.wig.gz",
+    params:
+        url=lambda wildcards: "%s%s.phastCons46way.wigFix.gz"
+        % (
+            features["verPhyloP"]["hg19"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -89,8 +121,24 @@ rule features_VerPhastCons_hg38_download_process:
     output:
         "results/features/download/verPhastCons/hg38/verPhastCons.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phastCons100way.wigFix.gz" % (
+        url=lambda wildcards: "%s%s.phastCons100way.wigFix.gz"
+        % (
             features["verPhastCons"]["hg38"]["url"],
+            wildcards.chr,
+        ),
+    shell:
+        """
+        curl {params.url} > {output}
+        """
+
+
+rule features_VerPhastCons_hg19_download_process:
+    output:
+        "results/features/download/verPhastCons/hg19/verPhastCons.{chr}.wig.gz",
+    params:
+        url=lambda wildcards: "%s%s.phastCons46way.wigFix.gz"
+        % (
+            features["verPhastCons"]["hg19"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -103,8 +151,24 @@ rule features_MamPhastCons_hg38_download_process:
     output:
         "results/features/download/mamPhastCons/hg38/mamPhastCons.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phastCons30way.wigFix.gz" % (
+        url=lambda wildcards: "%s%s.phastCons30way.wigFix.gz"
+        % (
             features["mamPhastCons"]["hg38"]["url"],
+            wildcards.chr,
+        ),
+    shell:
+        """
+        curl {params.url} > {output}
+        """
+
+
+rule features_MamPhastCons_hg19_download_process:
+    output:
+        "results/features/download/mamPhastCons/hg19/mamPhastCons.{chr}.wig.gz",
+    params:
+        url=lambda wildcards: "%s%s.phastCons46way.placental.wigFix.gz"
+        % (
+            features["mamPhastCons"]["hg19"]["url"],
             wildcards.chr,
         ),
     shell:
@@ -117,8 +181,23 @@ rule features_MamPhyloP_hg38_download_process:
     output:
         "results/features/download/mamPhyloP/hg38/mamPhyloP.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phyloP30way.wigFix.gz" % (
+        url=lambda wildcards: "%s%s.phyloP30way.wigFix.gz"
+        % (
             features["mamPhyloP"]["hg38"]["url"],
+            wildcards.chr,
+        ),
+    shell:
+        """
+        curl {params.url} > {output}
+        """
+
+rule features_MamPhyloP_hg19_download_process:
+    output:
+        "results/features/download/mamPhyloP/hg19/mamPhyloP.{chr}.wig.gz",
+    params:
+        url=lambda wildcards: "%s%s.phastCons46way.placental.wigFix.gz"
+        % (
+            features["mamPhyloP"]["hg19"]["url"],
             wildcards.chr,
         ),
     shell:
