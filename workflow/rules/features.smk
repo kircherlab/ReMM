@@ -19,6 +19,15 @@ include: "features/population.smk"
 include: "features/fantom.smk"
 include: "features/geneticVariation.smk"
 
+def getDefinedFeatures(genomeBuild):
+    """
+    Get a list of features for a genome build that are defined in the feature config file as well as in the config file.
+    """
+    featureList = []
+    for feature, build in features.items():
+        if genomeBuild in build:
+            featureList += [feature]
+    return(featureList)
 
 rule createPropertyFile:
     input:

@@ -1,3 +1,21 @@
+"""
+ReMM score workflow
+
+This workflow is for generating the ReMM score is consists om multiple modules. For generating the WG score file the main modules are:
+    - Feature generation (features.smk)
+    - Variant processing (variants.smk)
+    - Annotation of variants (annotate.smk)
+    - Training of variants (training.smk)
+    - Whole genome scores (scores.smk)
+
+There are additional modules:
+    - Evaluation of classifiers or predictions (evaluation.smk)
+
+
+The workflow is completely configured via the config file (config/config.yaml).
+"""
+
+#### imports ####
 from snakemake.utils import validate
 from os.path import join
 from glob import glob
@@ -14,22 +32,28 @@ min_version("6.10.0")
 
 ##### load config and sample sheets #####
 
+
 configfile: "config/config.yaml"
+
+
 validate(config, schema="schemas/config.schema.yaml")
+
+
+# FIXME: Why this is necessary? Maybe can be removed!
 configfile: "config/featuresConfig38.json"
 
 
 def getWrapper(wrapper):
+    """
+    Get directory for snakemake wrappers.
+    """
     return "file:%s/%s/wrapper.py" % (
         config["global_files"]["wrapper_directory"],
         wrapper,
     )
 
 
-# TODO implement validation
-# validate(config, schema="../schemas/config.schema.yaml")
-
-##### include files #####
+##### include workflow files #####
 
 
 # Workflow features
@@ -57,26 +81,21 @@ include: "rules/process/getUtils.smk"
 include: "rules/process/createModelData.smk"
 
 
-##### all rules #####
+##### all rules to generate files #####
+
+
 def getAllVariantsInput():
+    """
+    Getter for all variants.
+    """
     output = []
     for variant_set in config["variants"]:
         output += getVariantsInput(variant_set, "annotate")
     return output
 
 
-def getAllFeatures(genomeBuild):
-    featureList = []
-    for feature, build in features.items():
-        if genomeBuild in build:
-            featureList += [feature]
-    return expand(
-        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
-        feature=featureList,
-        genomeBuild=genomeBuild,
-    )
-
-
+# ALL rule. Generates variants and feature sets.
+# TODO Add all configs to all rule
 rule all:
     input:
         getAllVariantsInput(),
@@ -90,13 +109,30 @@ rule all:
         ),
 
 
-# workflow features
+### All rules for workflow features ###
+
+
+def getAllAverageFilesForFeatures(genomeBuild):
+    """
+    Get a list of features for a genome build that are defined in the feature config file as well as in the config file.
+    Use them to to return the average feature path.
+    """
+    featureList = getDefinedFeatures(genomeBuild)
+    return expand(
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
+        feature=featureList,
+        genomeBuild=genomeBuild,
+    )
+
+
+# all rule for average features
 rule all_feature_average:
     input:
-        getAllFeatures("hg19"),
-        # getAllFeatures("hg38")
+        getAllAverageFilesForFeatures("hg19"),
+        # getAllAverageFilesForFeatures("hg38")
 
 
+# all rule for generating feature sets
 rule all_feature_sets:
     input:
         vcf=expand(
@@ -109,14 +145,21 @@ rule all_feature_sets:
         ),
 
 
-# Workflow variants
+### All rules for workflow variants ###
+
+
+# all rule to return all variant files
 rule all_variants:
     input:
         getAllVariantsInput(),
 
 
-# Workflow annotate
+### All rules for workflow annotate ###
 def getAllAnnotations():
+    """
+    Get all positive and negatuve training annotations
+    TODO: Update for other annotations like benchmark sets
+    """
     output = []
     for training in config["training"].values():
         output += [
@@ -138,12 +181,16 @@ def getAllAnnotations():
     return output
 
 
+# all rule to return all annotated variants
 rule all_annotation:
     input:
         getAllAnnotations(),
 
 
-# Workflow evaluate
+### All rules for workflow evaluate ###
+
+
+# all rule to return all evaluation files (auc and PR ROC curves)
 rule all_evaluate:
     input:
         expand(
@@ -156,7 +203,10 @@ rule all_evaluate:
         ),
 
 
-# Workflow variants
+### All rules for workflow variants ###
+
+
+# all rule to return unbiased score files
 rule all_scores:
     input:
         expand(
