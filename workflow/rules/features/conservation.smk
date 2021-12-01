@@ -106,7 +106,7 @@ rule features_VerPhyloP_hg19_download_process:
     output:
         "results/features/download/verPhyloP/hg19/verPhyloP.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phastCons46way.wigFix.gz"
+        url=lambda wildcards: "%s%s.phyloP46way.wigFix.gz"
         % (
             features["verPhyloP"]["hg19"]["url"],
             wildcards.chr,

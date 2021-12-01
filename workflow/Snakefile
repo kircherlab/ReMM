@@ -1,18 +1,18 @@
 """
 ReMM score workflow
 
-This workflow is for generating the ReMM score is consists om multiple modules. For generating the WG score file the main modules are:
+This workflow is for generating the ReMM score is consists om multiple sub workflows. For generating the WG score file the main modules are:
     - Feature generation (features.smk)
     - Variant processing (variants.smk)
     - Annotation of variants (annotate.smk)
     - Training of variants (training.smk)
     - Whole genome scores (scores.smk)
 
-There are additional modules:
+There are additional workflows:
     - Evaluation of classifiers or predictions (evaluation.smk)
 
 
-The workflow is completely configured via the config file (config/config.yaml).
+The workflow is completly configured via the config file (config/config.yaml).
 """
 
 #### imports ####

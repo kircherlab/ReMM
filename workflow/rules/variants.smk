@@ -1,8 +1,9 @@
-
-
-
-# getter of genomeBuild taking liftover into account
+#### Variants subworkflow ####
+ 
 def getVariantSetGenomeBuild(variant_set):
+    """
+    Getter of genomeBuild taking liftover into account.
+    """
     variantSet_conf = config["variants"][variant_set]
     genomeBuild = variantSet_conf["genome_build"]
     switcher = {"hg38": "hg19", "hg19": "hg38"}
@@ -11,10 +12,13 @@ def getVariantSetGenomeBuild(variant_set):
     else:
         return genomeBuild
 
-# input variants are different for each process step becaus ethey are flexible.
-# this trys to collect the correct input. The following steps are possible only in that order:
-# liftover > jannovar > bcftools > annotate
+
 def getVariantsInput(variant_set, step, idx=False):
+    """
+    input variants are different for each process step becaus ethey are flexible.
+    this trys to collect the correct input. The following steps are possible only in that order:
+    liftover > jannovar > bcftools > annotate
+    """
     variant_set_config = config["variants"][variant_set]
     output = variant_set_config["file"]
     add = ".tbi" if idx else ""
