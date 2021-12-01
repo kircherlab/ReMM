@@ -1,11 +1,32 @@
-def getFeaturesOfFeatuteSet(feature_set):
+##################################
+#### annotation sub workflow  ####
+##################################
+
+
+"""
+Results will be saved in results/annotation/<variant_set>
+
+Annotates variants from the variants subwokflow with features from a feature set.
+It replaces the NaN value with the default value given in the config.
+Output is a TSV file with headers.
+"""
+
+
+def getFeaturesOfFeatureSet(feature_set):
+    """
+    Return the features of a feature set
+    """
     return config["feature_sets"][feature_set]["features"]
 
 
 def getFeatureDefaultValue(feature, genome_build):
+    """
+    return the default value of a feature (and its genome build)
+    """
     return features[feature][genome_build]["default_value"]
 
 
+# annotate variants with features
 rule annotate_features:
     conda:
         "../envs/jdk11.yaml"
@@ -25,7 +46,7 @@ rule annotate_features:
         """
 
 
-# TODO add default value for feature
+# Sort features and replace NaN value with default of feature defined in config
 rule annotate_sort_features:
     input:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
@@ -41,7 +62,7 @@ rule annotate_sort_features:
                         feature, getVariantSetGenomeBuild(wc.variant_set)
                     ),
                 )
-                for feature in getFeaturesOfFeatuteSet(wc.feature_set)
+                for feature in getFeaturesOfFeatureSet(wc.feature_set)
             ]
         ),
     shell:

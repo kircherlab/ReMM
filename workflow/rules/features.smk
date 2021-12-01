@@ -4,6 +4,8 @@
 
 """
 Results will be saved in results/features/
+where single features are under results/features/single_vcf/<feature_name> 
+and feature sets under results/features/feature_sets/<feature_set_name>
 """
 
 from snakemake.utils import validate
@@ -111,6 +113,7 @@ rule features_createSingleFeatureVCF:
             sort -k1,1 -k2,2n
         ) | bgzip -c > {output.vcf}
         """
+
 
 # index single feature vcf
 rule features_indexSingleFeatureVCF:
