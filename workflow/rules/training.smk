@@ -1,9 +1,17 @@
-############################
-#### training workflow  ####
-############################
+################################
+#### training sub workflow  ####
+################################
 
-# get the genome buld of training (not specified by training but variant set and feature set config)
+
+"""
+Results will be saved in results/training/<training_run>
+"""
+
+
 def getTrainingRunGenomeBuild(training_run):
+    """
+    Get the genome buld of training (not specified by training but variant set and feature set config)
+    """
     conf = config["training"][training_run]
 
     genomeBuild_positives = getVariantSetGenomeBuild(conf["positives"])

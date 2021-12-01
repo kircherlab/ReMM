@@ -1,3 +1,11 @@
+##############################
+#### Features subworkflow ####
+##############################
+
+"""
+Results will be saved in results/features/
+"""
+
 from snakemake.utils import validate
 import yaml
 
@@ -11,13 +19,8 @@ with open("config/features.yaml", "r") as file:
 
 validate(features, schema="../schemas/features.schema.yaml")
 
+# getter functions
 
-include: "features/GCfeatures.smk"
-include: "features/conservation.smk"
-include: "features/encodeEpigenetics.smk"
-include: "features/population.smk"
-include: "features/fantom.smk"
-include: "features/geneticVariation.smk"
 
 def getDefinedFeatures(genomeBuild):
     """
@@ -27,9 +30,22 @@ def getDefinedFeatures(genomeBuild):
     for feature, build in features.items():
         if genomeBuild in build:
             featureList += [feature]
-    return(featureList)
+    return featureList
 
-rule createPropertyFile:
+
+# include multiple subwokflows for feature groups
+
+
+include: "features/GCfeatures.smk"
+include: "features/conservation.smk"
+include: "features/encodeEpigenetics.smk"
+include: "features/population.smk"
+include: "features/fantom.smk"
+include: "features/geneticVariation.smk"
+
+
+# create a property file (before generating a sigle vcf file)
+rule features_createPropertyFile:
     input:
         lambda wc: ancient(
             expand(
@@ -42,9 +58,7 @@ rule createPropertyFile:
     output:
         config="results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties",
     params:
-        file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[
-            -1
-        ],
+        file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[-1],
         column=(
             lambda wc: "column=%d" % features[wc.feature][wc.genomeBuild]["column"]
             if features[wc.feature][wc.genomeBuild]["type"].split(".")[-1] == "bed"
@@ -61,9 +75,9 @@ rule createPropertyFile:
         """
         )
 
-# create single VCF file of features
 
-rule createSingleFeatureVCF:
+# create single VCF file of features
+rule features_createSingleFeatureVCF:
     input:
         config=ancient(
             "results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties"
@@ -98,8 +112,8 @@ rule createSingleFeatureVCF:
         ) | bgzip -c > {output.vcf}
         """
 
-
-rule indexSingleFeatureVCF:
+# index single feature vcf
+rule features_indexSingleFeatureVCF:
     input:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
     output:
@@ -109,8 +123,8 @@ rule indexSingleFeatureVCF:
         tabix {input}
         """
 
-# Average feature of defined position
 
+# Average feature of defined position
 rule features_average:
     input:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
@@ -121,19 +135,19 @@ rule features_average:
         zcat {input} | egrep -v "#" | awk -F'=' '{{ sum+=$2 }} END {{ print sum / NR }}' |  gzip -c > {output}
         """
 
-# Create a fetaure set defined in config file
 
-rule mergeSingleFeatureVCF:
+# Create a feature set defined in config file
+rule features_mergeSingleFeatureVCF:
     input:
         files=lambda wc: expand(
             "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
-            feature=config["feature_sets"][wc.feature_set]['features'],
-            genomeBuild=config["feature_sets"][wc.feature_set]['genome_build']
+            feature=config["feature_sets"][wc.feature_set]["features"],
+            genomeBuild=config["feature_sets"][wc.feature_set]["genome_build"],
         ),
         idx=lambda wc: expand(
             "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz.tbi",
-            feature=config["feature_sets"][wc.feature_set]['features'],
-            genomeBuild=config["feature_sets"][wc.feature_set]['genome_build']
+            feature=config["feature_sets"][wc.feature_set]["features"],
+            genomeBuild=config["feature_sets"][wc.feature_set]["genome_build"],
         ),
     output:
         vcf="results/features/feature_sets/{feature_set}.vcf.gz",

@@ -1,4 +1,8 @@
 #### Variants subworkflow ####
+
+"""
+Results will be saved in results/variants/
+"""
  
 def getVariantSetGenomeBuild(variant_set):
     """
@@ -53,6 +57,7 @@ def getVariantsInput(variant_set, step, idx=False):
     raise Exception("Unknown variant processing step %s" % step)
 
 
+# liftover variants
 rule variants_liftover:
     conda:
         "../envs/ReMM.yaml"
@@ -76,7 +81,8 @@ rule variants_liftover:
         """
 
 
-rule variant_liftover_filter:
+# filter lifover variants. check if reference is still the same
+rule variants_liftover_filter:
     conda:
         "../envs/ReMM.yaml"
     input:
@@ -105,6 +111,7 @@ rule variant_liftover_filter:
         """
 
 
+# annotate variants with jannovar
 rule variants_annotateJannovar:
     conda:
         "../envs/jannovar.yaml"
@@ -124,6 +131,7 @@ rule variants_annotateJannovar:
         """
 
 
+# filter variants with a bcftools filter command set in the config file
 rule variants_filter_bcftools:
     conda:
         "../envs/ReMM.yaml"
