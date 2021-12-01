@@ -195,7 +195,7 @@ rule features_MamPhyloP_hg19_download_process:
     output:
         "results/features/download/mamPhyloP/hg19/mamPhyloP.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phastCons46way.placental.wigFix.gz"
+        url=lambda wildcards: "%s%s.phyloP46way.placental.wigFix.gz"
         % (
             features["mamPhyloP"]["hg19"]["url"],
             wildcards.chr,
