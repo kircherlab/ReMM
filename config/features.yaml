@@ -431,9 +431,9 @@ mamPhastCons:
     default_value: 0.128491
 GerpRS:
   description: GERP++ element score
-  # hg19:
-  #   url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
-  #   default_value: 0.0
+  #hg19:
+  #  url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
+  #  default_value: 0.0
   hg38:
     url: ""
     file: gerpElement

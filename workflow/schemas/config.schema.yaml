@@ -154,6 +154,10 @@ properties:
         - training
         - comments
       additionalProperties: False
+  correlation:
+    description: correlation of features and scores
+    additionalProperties:
+      type: object
 required:
     - global_files
 additionalProperties: False
