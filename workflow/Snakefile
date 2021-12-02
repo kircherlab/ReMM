@@ -58,6 +58,8 @@ def getWrapper(wrapper):
 
 # Workflow features
 include: "rules/features.smk"
+# Workflow variant generation
+include: "rules/variant_generation.smk"
 # Workflow variants
 include: "rules/variants.smk"
 # Workflow annotate

@@ -61,6 +61,21 @@ properties:
         - genome_build
         - features
       additionalProperties: False
+  variant_generation:
+    description: variant generation workflow.
+    type: object
+    additionalProprties:
+      type: object
+      properties:
+        type:
+          enum:
+            - random
+            - regions
+        properties:
+          type: object
+      required:
+        - type
+        - properties
   variants:
     description: Variant workflow. Input file and possible filters.
     type: object
@@ -68,30 +83,38 @@ properties:
       description: name of the variant set
       type: object
       properties:
-        file:
-          type: string
+        type:
+          enum:
+            - file
+            - generation
+        properties:
+          type: object
         genome_build:
           enum:
             - hg38
             - hg19
-        liftover:
-          enum:
-            - hg19ToHg38
-            - hg38ToHg19
-        jannovar:
-          type: string
-        filters:
+        processing:
           type: object
           properties:
-            bcftools:
+            liftover:
+              enum:
+                - hg19ToHg38
+                - hg38ToHg19
+            jannovar:
+              type: string
+            filters:
               type: object
               properties:
-                filter:
-                  tyoe: string
-              required:
-                - filter
+                bcftools:
+                  type: object
+                  properties:
+                    filter:
+                      tyoe: string
+                  required:
+                    - filter
       required:
-        - file
+        - type
+        - properties
         - genome_build
       additionalProperties: False
   training:

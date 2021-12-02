@@ -3,7 +3,8 @@
 """
 Results will be saved in results/variants/
 """
- 
+
+
 def getVariantSetGenomeBuild(variant_set):
     """
     Getter of genomeBuild taking liftover into account.
@@ -11,7 +12,7 @@ def getVariantSetGenomeBuild(variant_set):
     variantSet_conf = config["variants"][variant_set]
     genomeBuild = variantSet_conf["genome_build"]
     switcher = {"hg38": "hg19", "hg19": "hg38"}
-    if "liftover" in variantSet_conf:
+    if "liftover" in variantSet_conf["processing"]:
         return switcher[genomeBuild]
     else:
         return genomeBuild
@@ -24,33 +25,44 @@ def getVariantsInput(variant_set, step, idx=False):
     liftover > jannovar > bcftools > annotate
     """
     variant_set_config = config["variants"][variant_set]
-    output = variant_set_config["file"]
+    if variant_set_config["type"] == "file":
+        output = variant_set_config["properties"]["file"]
+    elif variant_set_config["type"] == "generation":
+        output = "results/variant_generation/%s/%s/%s.vcf.gz{add}" % (
+            variant_set_config["properties"]["name"],
+            variant_set_config["genome_build"],
+            variant_set_config["properties"]["name"],
+        )
+    else:
+        raise Exception("Unknown variant type %s" % variant_set_config["type"])
     add = ".tbi" if idx else ""
     if step == "liftover":
         return output
-    if "liftover" in variant_set_config:
-        output = expand(
-            "results/variants/{variant_set}/liftover/{variant_set}.vcf.gz{add}",
-            variant_set=variant_set,
-            add=add,
-        )
-    if step == "jannovar":
-        return output
-    if "jannovar" in variant_set_config:
-        output = expand(
-            "results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz{add}",
-            variant_set=variant_set,
-            add=add,
-        )
-    if step == "bcftools":
-        return output
-    if "filters" in variant_set_config:
-        if "bcftools" in variant_set_config["filters"]:
+    if "processing" in variant_set_config:
+        variant_set_config_processing = variant_set_config["processing"]
+        if "liftover" in variant_set_config_processing:
             output = expand(
-                "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz{add}",
+                "results/variants/{variant_set}/liftover/{variant_set}.vcf.gz{add}",
                 variant_set=variant_set,
                 add=add,
             )
+        if step == "jannovar":
+            return output
+        if "jannovar" in variant_set_config_processing:
+            output = expand(
+                "results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz{add}",
+                variant_set=variant_set,
+                add=add,
+            )
+        if step == "bcftools":
+            return output
+        if "filters" in variant_set_config_processing:
+            if "bcftools" in variant_set_config_processing["filters"]:
+                output = expand(
+                    "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz{add}",
+                    variant_set=variant_set,
+                    add=add,
+                )
     if step == "annotate":
         return output
 

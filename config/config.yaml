@@ -74,33 +74,106 @@ feature_sets:
       - CpGperCpG
       - CpGobsExp
       - GCContent
+variant_generation:
+  random_120K:
+    type: random
+    properties:
+      n: 120000
+      seed: 42
+  region_HBB:
+    type: regions
+    properties:
+      file: resources/regions/HBB_hg38.bed.gz
+  region_PRDM9:
+    type: regions
+    properties:
+      file: resources/regions/PRDM9_hg38.bed.gz
+  region_DLK1:
+    type: regions
+    properties:
+      file: resources/regions/DKL1_hg38.bed.gz
 variants:
   cadd_v1_3_humanDerived_hg38:
-    file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
     genome_build: hg38
-    jannovar: hg38_refseq
-    filters:
-      bcftools:
-        filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+    processing:
+      jannovar: hg38_refseq
+      filters:
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
   cadd_v1_4_humanDerived_hg38:
-    file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
     genome_build: hg38
-    jannovar: hg38_refseq
-    filters:
-      bcftools:
-        filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+    processing:
+      jannovar: hg38_refseq
+      filters:
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
   remm_snvs_20160109_liftover:
-    file: resources/variants/SNVs.all.20160109.vcf.gz
-    liftover: hg19ToHg38
+    type: file
+    properties:
+      file: resources/variants/SNVs.all.20160109.vcf.gz
     genome_build: hg19
+    processing:
+      liftover: hg19ToHg38
   remm_snvs_20160109_liftover_global_means:
-    file: resources/variants/SNVs.all.20160109.vcf.gz
-    liftover: hg19ToHg38
+    type: file
+    properties:
+      file: resources/variants/SNVs.all.20160109.vcf.gz
     genome_build: hg19
+    processing:
+      liftover: hg19ToHg38
   remm_snvs_2019_liftover_global_means:
-    file: resources/variants/variants.all.2019.vcf.gz
-    liftover: hg19ToHg38
+    type: file
+    properties:
+      file: resources/variants/variants.all.2019.vcf.gz
     genome_build: hg19
+    processing:
+      liftover: hg19ToHg38
+  validation_variants_random_120K_hg19:
+    type: generation
+    properties:
+      name: random_120K
+    genome_build: hg19
+  validation_variants_random_120K_hg38:
+    type: generation
+    properties:
+      name: random_120K
+    genome_build: hg38
+  validation_variants_HBB_hg19:
+    type: generation
+    properties:
+      name: region_HBB
+    genome_build: hg19
+  validation_variants_HBB_hg38:
+    type: generation
+    properties:
+      name: region_HBB
+    genome_build: hg38
+  validation_variants_PRDM9_hg19:
+    type: generation
+    properties:
+      name: region_PRDM9
+    genome_build: hg19
+  validation_variants_PRDM9_hg38:
+    type: generation
+    properties:
+      name: region_PRDM9
+    genome_build: hg38
+  validation_variants_DKL1_hg19:
+    type: generation
+    properties:
+      name: region_DKL1
+    genome_build: hg19
+  validation_variants_DKL1_hg38:
+    type: generation
+    properties:
+      name: region_DKL1
+    genome_build: hg38
 training:
   # remm_v1_3_parsmurf_hg38:
   #   positives: remm_snvs_20160109_liftover
