@@ -87,7 +87,7 @@ rule variants_liftover:
         liftover_config=lambda wc: expand(
             "resources/{genomeBuild}/{liftover}.over.chain.gz",
             genomeBuild=config["variants"][wc.variant_set]["genome_build"],
-            liftover=config["variants"][wc.variant_set]["liftover"],
+            liftover=config["variants"][wc.variant_set]["processing"]["liftover"],
         ),
         variants=lambda wc: getVariantsInput(wc.variant_set, "liftover"),
     output:

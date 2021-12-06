@@ -251,7 +251,7 @@ training:
     config:
       mode: cv
   remm_v1_3_parsmurf_hg38_global_mean_additional_positives:
-    positives: remm_snvs_20160109_liftover_global_means
+    positives: remm_snvs_2019_liftover_global_means
     negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
