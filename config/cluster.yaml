@@ -72,7 +72,7 @@ convert_bigwig_to_wig:
 # singe_vcf
 features_createSingleFeatureVCF:
   time: "200:00"
-  mem: 10000
+  mem: 15000
   queue: long
 features_indexSingleFeatureVCF:
   time: "01:00"

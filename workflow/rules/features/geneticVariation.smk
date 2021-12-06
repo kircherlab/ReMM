@@ -5,17 +5,20 @@ rule getISCApath:
     output:
         "results/features/download/ISCApath/{genomeBuild}/ISCApath.allContigs.bed.gz",
     params:
-        nstd75=lambda wc: "%s%s.GRCh38.variant_call.tsv.gz" % (
+        nstd75=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
             features["ISCApath"][wc.genomeBuild]["url"],
             "nstd75",
+            "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38"
         ),
-        nstd37=lambda wc: "%s%s.GRCh38.variant_call.tsv.gz" % (
+        nstd37=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
             features["ISCApath"][wc.genomeBuild]["url"],
             "nstd37",
+            "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38"
         ),
-        nstd45=lambda wc: "%s%s.GRCh38.variant_call.tsv.gz" % (
+        nstd45=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
             features["ISCApath"][wc.genomeBuild]["url"],
             "nstd45",
+            "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38",
         ),
     shell:
         """       
@@ -30,12 +33,43 @@ rule getISCApath:
         bgzip -c > {output}
         """
 
+rule ISCApath_20211103:
+    output:
+        "results/features/download/ISCApath_20211103/{genomeBuild}/ISCApath_20211103.allContigs.bed.gz",
+    params:
+        nstd75=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
+            features["ISCApath"][wc.genomeBuild]["url"],
+            "nstd75",
+            "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38"
+        ),
+        nstd37=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
+            features["ISCApath"][wc.genomeBuild]["url"],
+            "nstd102",
+            "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38"
+        ),
+        nstd45=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
+            features["ISCApath"][wc.genomeBuild]["url"],
+            "nstd45",
+            "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38",
+        ),
+    shell:
+        """       
+        (
+            curl {params.nstd75} | zcat; \
+            curl {params.nstd37} | zcat; \
+            curl {params.nstd45} | zcat
+        )  | cut -f 1,8,12,13 | \
+        awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$1}}' | \
+        egrep -v "^chr\s" | \
+        sort -k1,1 -k2,2n | \
+        bgzip -c > {output}
+        """
 
 rule downloadRefSeq2UCSC:
     output:
-        "resources/hg38/RefSeq2UCSC.txt",
+        "resources/{genomeBuild}/RefSeq2UCSC.txt",
     params:
-        url="https://raw.githubusercontent.com/dpryan79/ChromosomeMappings/master/GRCh38_RefSeq2UCSC.txt",
+        url=lambda wc: "https://raw.githubusercontent.com/dpryan79/ChromosomeMappings/master/GRCh38_RefSeq2UCSC.txt" if wc.genomeBuild == "hg38" else "https://raw.githubusercontent.com/dpryan79/ChromosomeMappings/master/GRCh37_NCBI2UCSC.txt",
     shell:
         """
         curl {params.url} | sed 's/\\r//' > {output}
@@ -46,9 +80,11 @@ rule getDbVARCount:
     input:
         "resources/{genomeBuild}/RefSeq2UCSC.txt",
     output:
-        "results/features/download/dbVARCount/{genomeBuild}/dbVARCount.allContigs.bed.gz",
+        "results/features/download/{dbVARCount}/{genomeBuild}/{dbVARCount}.allContigs.bed.gz",
     params:
-        url=features["dbVARCount"]["hg38"]["url"],
+        url=lambda wc: features[wc.dbVARCount][wc.genomeBuild]["url"],
+    wildcard_constraints:
+        dbVARCount="dbVARCount.*"
     shell:
         """
         join -t $'\\t' <(cat {input} | sort -k1,1) \
@@ -63,9 +99,11 @@ rule getDbVARCount:
 
 rule getDGVCount:
     output:
-        "results/features/download/DGVCount/{genomeBuild}/DGVCount.allContigs.bed.gz",
+        "results/features/download/{DGVCount}/{genomeBuild}/{DGVCount}.allContigs.bed.gz",
     params:
-        url=lambda wc: features["DGVCount"][wc.genomeBuild]["url"],
+        url=lambda wc: features[wc.DGVCount][wc.genomeBuild]["url"],
+    wildcard_constraints:
+        DGVCount="DGVCount.*"
     shell:
         """ 
         curl {params.url}   | \
@@ -84,6 +122,15 @@ rule getNumTFBSConserved:
         curl {params.url}  > {output}
         """
 
+rule getEncRegTfbsClustered:
+    output:
+        "results/features/download/encRegTfbsClustered/{genomeBuild}/encRegTfbsClustered.allContigs.bed.gz",
+    params:
+        url=lambda wc: features["encRegTfbsClustered"][wc.genomeBuild]["url"],
+    shell:
+        """
+        curl {params.url}  > {output}
+        """
 
 rule getChromosomes:
     input:
@@ -106,7 +153,7 @@ rule features_getIntervals:
     output:
         "results/features/download/{feature}/{genomeBuild}/{feature}.{chr}.bed.gz",
     wildcard_constraints:
-        feature="(DGVCount)|(numTFBSConserved)|(dbVARCount)|(ISCApath)",
+        feature="(DGVCount.*)|(numTFBSConserved)|(dbVARCount.*)|(ISCApath.*)|(encRegTfbsClustered)",
         chr="|".join(["(chr%s)" % str(c) for c in list(range(1, 23)) + ["Y", "X"]]),
     script:
         "../../scripts/createIntervals.py"

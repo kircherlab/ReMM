@@ -74,6 +74,57 @@ feature_sets:
       - CpGperCpG
       - CpGobsExp
       - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac
+      - EncH3K4Me1
+      - EncH3K4Me3
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount_20211020
+      - ISCApath_20211103
+      - DGVCount_20200225
+      - encRegTfbsClustered
+  remm_v1_4_hg38:
+    genome_build: hg38
+    features:
+      - CpGperGC
+      - CpGperCpG
+      - CpGobsExp
+      - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac
+      - EncH3K4Me1
+      - EncH3K4Me3
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount_20211020
+      - ISCApath_20211103
+      - DGVCount_20200225
+      - encRegTfbsClustered
 variant_generation:
   random_120K:
     type: random
@@ -94,6 +145,16 @@ variant_generation:
       file: resources/regions/DKL1_hg38.bed.gz
 variants:
   cadd_v1_3_humanDerived_hg38:
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
+    genome_build: hg38
+    processing:
+      jannovar: hg38_refseq
+      filters:
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  cadd_v1_3_humanDerived_hg38_global_means:
     type: file
     properties:
       file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
@@ -182,16 +243,16 @@ training:
   #   implementation: parSMURF
   #   config:
   #     mode: cv
-  remm_v1_4_parsmurf_hg38_global_mean:
+  remm_v1_3_parsmurf_hg38_global_mean:
     positives: remm_snvs_20160109_liftover_global_means
-    negatives: cadd_v1_4_humanDerived_hg38
+    negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
     config:
       mode: cv
-  remm_v1_4_parsmurf_hg38_global_mean_additional_positives:
+  remm_v1_3_parsmurf_hg38_global_mean_additional_positives:
     positives: remm_snvs_20160109_liftover_global_means
-    negatives: cadd_v1_4_humanDerived_hg38
+    negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
     config:
@@ -213,7 +274,7 @@ scores:
   #   comments:
   #     - ReMM score version 0.3.1_hg38
 correlation:
-  test_correlation:
+  correlation_remm_v1_3:
     A:
       variants: validation_variants_random_120K_hg19
       feature_set: remm_v1_3_hg19
