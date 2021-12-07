@@ -435,7 +435,9 @@ GerpRS:
     url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
     file: gerpElement
     type: bed
+    column: 5
     files: all
+    method: upload
     default_value: 0.0
   hg38:
     url: ""
@@ -451,8 +453,10 @@ GerpRSpv:
   hg19:
     url: http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_elements.tar.gz
     file: gerpElement
+    column: 5
     files: all
     type: bed
+    method: upload
     default_value: 0.0
   hg38:
     url: ""
@@ -576,7 +580,7 @@ DnaseClusteredHyp:
     of the different cell lines.
   hg19:
     #url: http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegDnaseClustered/wgEncodeRegDnaseClusteredV3.txt.gz
-    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeRegDnaseClusteredV3.txt.gz
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/wgEncodeRegDnaseClusteredV3.txt.gz
     file: DnaseClusteredHyp
     files: all
     id: ""
@@ -1057,7 +1061,7 @@ ISCApath_20211103:
 dbVARCount_20211020:
   description: Count of overlapping dbVar entries. Not benign or or likley benign.
   hg19:
-    url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/archive/Homo_sapiens/by_assembly/GRCh37/gvf/GRCh37.2021_10_20.variant_call.all.gvf.gz
+    url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/archive/Homo_sapiens/by_assembly/GRCh37/gvf/GRCh37.2021_10_20.variant_call.clinical.pathogenic_or_likely_pathogenic.gvf.gz
     file: dbVARCount_20211020
     files:
       - chr1

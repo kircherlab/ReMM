@@ -236,13 +236,13 @@ variants:
       name: region_DKL1
     genome_build: hg38
 training:
-  # remm_v1_3_parsmurf_hg38:
-  #   positives: remm_snvs_20160109_liftover
-  #   negatives: cadd_v1_3_humanDerived_hg38
-  #   feature_set: remm_v1_3_hg38
-  #   implementation: parSMURF
-  #   config:
-  #     mode: cv
+  remm_v1_3_parsmurf_hg38:
+    positives: remm_snvs_20160109_liftover
+    negatives: cadd_v1_3_humanDerived_hg38
+    feature_set: remm_v1_3_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
   remm_v1_3_parsmurf_hg38_global_mean:
     positives: remm_snvs_20160109_liftover_global_means
     negatives: cadd_v1_3_humanDerived_hg38_global_means
