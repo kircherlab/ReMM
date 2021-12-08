@@ -145,7 +145,7 @@ rule getChromosomes:
         chr="|".join(["(chr%s)" % str(c) for c in list(range(1, 23)) + ["Y", "X"]]),
     shell:
         """
-        zcat {input} | grep -E "^{params.chr}\\s" | sort -k1,1 -k2,2n | gzip -c > {output}
+        zcat {input} | grep -E "^{params.chr}\\s[0-9]+\\s[0-9]+\\s" | sort -k1,1 -k2,2n | gzip -c > {output}
         """
 
 
