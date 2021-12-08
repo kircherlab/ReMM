@@ -42,7 +42,7 @@ rule ISCApath_20211103:
             "nstd75",
             "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38"
         ),
-        nstd37=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
+        nstd102=lambda wc: "%s%s.%s.variant_call.tsv.gz" % (
             features["ISCApath"][wc.genomeBuild]["url"],
             "nstd102",
             "GRCh37" if wc.genomeBuild == "hg19" else "GRCh38"
@@ -56,11 +56,13 @@ rule ISCApath_20211103:
         """       
         (
             curl {params.nstd75} | zcat; \
-            curl {params.nstd37} | zcat; \
+            curl {params.nstd102} | zcat; \
             curl {params.nstd45} | zcat
-        )  | cut -f 1,8,12,13 | \
+        )  | \
+        cut -f 1,8,12,13 | \
         awk -vIFS='\\t' -vOFS='\\t' '{{print "chr"$2,$3-1,$4,$1}}' | \
         egrep -v "^chr\s" | \
+        egrep -v "\s-1\s" | \
         sort -k1,1 -k2,2n | \
         bgzip -c > {output}
         """
