@@ -243,6 +243,7 @@ training:
     implementation: parSMURF
     config:
       mode: cv
+      seed: 1
   remm_v1_3_parsmurf_hg38_global_mean:
     positives: remm_snvs_20160109_liftover_global_means
     negatives: cadd_v1_3_humanDerived_hg38_global_means
@@ -250,6 +251,7 @@ training:
     implementation: parSMURF
     config:
       mode: cv
+      seed: 1
   remm_v1_3_parsmurf_hg38_global_mean_additional_positives:
     positives: remm_snvs_2019_liftover_global_means
     negatives: cadd_v1_3_humanDerived_hg38_global_means
@@ -257,6 +259,7 @@ training:
     implementation: parSMURF
     config:
       mode: cv
+      seed: 1
 # feature_correlation:
 #   setA: 
 #     variants: variantX

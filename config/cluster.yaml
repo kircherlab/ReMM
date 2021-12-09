@@ -81,7 +81,7 @@ features_mergeSingleFeatureVCF:
   mem: 20000
   queue: medium
 features_average:
-  time: "01:00"
+  time: "02:00"
   mem: 2000
   queue: medium
 ##############
@@ -140,6 +140,10 @@ training_parSMURF_train:
   mem: 100000
   queue: medium
 training_parSMURF_cv:
+  time: "04:00"
+  mem: 150000
+  queue: medium
+training_parSMURF_repetitiveCV:
   time: "04:00"
   mem: 150000
   queue: medium

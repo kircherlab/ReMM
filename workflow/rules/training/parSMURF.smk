@@ -30,7 +30,25 @@ rule training_parSMURF_generateConfig:
         ),
         name="{training_run}",
         models="results/training/{training_run}/predictions/models",
-        seed={"1"},
+        seed=lambda wc: config["training"][wc.training_run]["config"]["seed"],
+        mode=lambda wc: wc.mode,
+    script:
+        "../../scripts/generateParsmurfConfig.py"
+
+
+rule training_parSMURF_generateRepetitiveConfig:
+    input:
+        data="results/training/{training_run}/input/parsmurf.data.txt",
+        labels="results/training/{training_run}/input/parsmurf.labels.txt",
+        folds="results/training/{training_run}/input/parsmurf.folds.txt",
+        scaffold="resources/scaffold.json",
+    output:
+        config="results/training/{training_run}/input/repetitive/parsmurf.config.{seed}.{mode}.json",
+    params:
+        predictions="results/training/{training_run}/predictions/parsmurf/repetitive/predictions.{seed}.txt",
+        name=lambda wc: wc.training_run,
+        models="results/training/{training_run}/predictions/models",
+        seed=lambda wc: wc.seed,
         mode=lambda wc: wc.mode,
     script:
         "../../scripts/generateParsmurfConfig.py"
@@ -49,16 +67,30 @@ rule training_parSMURF_cv:
         workflow/bin/parSMURF1 --cfg {input.config}
         """
 
+rule training_parSMURF_repetitiveCV:
+    input:
+        data="results/training/{training_run}/input/parsmurf.data.txt",
+        labels="results/training/{training_run}/input/parsmurf.labels.txt",
+        folds="results/training/{training_run}/input/parsmurf.folds.txt",
+        config="results/training/{training_run}/input/repetitive/parsmurf.config.{seed}.cv.json",
+    output:
+        "results/training/{training_run}/predictions/parsmurf/repetitive/predictions.{seed}.txt",
+    shell:
+        """
+        workflow/bin/parSMURF1 --cfg {input.config}
+        """
 
 rule training_parSMURF_combine:
     input:
         predictions=(
-            "results/training/{training_run}/predictions/parsmurf/predictions.txt"
+            "results/training/{training_run}/predictions/parsmurf/{predictions_alone_or_repetitive}.txt"
         ),
         positives=lambda wc: getTrainingPositives(wc.training_run),
         negatives=lambda wc: getTrainingNegatives(wc.training_run),
     output:
-        "results/training/{training_run}/predictions/predictions.tsv.gz",
+        "results/training/{training_run}/predictions/{predictions_alone_or_repetitive}.tsv.gz",
+    wildcard_constraints:
+        predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)"
     shell:
         """
         paste \
@@ -68,15 +100,18 @@ rule training_parSMURF_combine:
         bgzip -c > {output}
         """
 
+
 rule training_parSMURF_combine_labels:
     input:
         predictions=(
-            "results/training/{training_run}/predictions/parsmurf/predictions.txt"
+            "results/training/{training_run}/predictions/parsmurf/{predictions_alone_or_repetitive}.txt"
         ),
         positives=lambda wc: getTrainingPositives(wc.training_run),
         negatives=lambda wc: getTrainingNegatives(wc.training_run),
     output:
-        "results/training/{training_run}/predictions/predictions_with_labels.tsv.gz",
+        "results/training/{training_run}/predictions/{predictions_alone_or_repetitive}.with_labels.tsv.gz",
+    wildcard_constraints:
+        predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)"
     shell:
         """
         (

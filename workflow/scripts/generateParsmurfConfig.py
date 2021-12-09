@@ -13,7 +13,7 @@ with open(snakemake.input.scaffold) as json_file:
     file['data']['forestDir'] = snakemake.params.models
     if "ensThrd" in snakemake.params.keys():
         file['exec']['ensThrd'] = snakemake.params.ensThrd
-    file['exec']['seed'] = int(list(snakemake.params.seed)[0])
+    file['exec']['seed'] = int(snakemake.params.seed)
     file['exec']['mode'] =snakemake.params.mode
     
     

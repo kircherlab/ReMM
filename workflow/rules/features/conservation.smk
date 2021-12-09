@@ -54,7 +54,7 @@ rule features_PriPhastCons_hg19_download_process:
     output:
         "results/features/download/priPhastCons/hg19/priPhastCons.{chr}.wig.gz",
     params:
-        url=lambda wildcards: "%s%s.phastCons46way.primate.wigFix.gz"
+        url=lambda wildcards: "%s%s.phastCons46way.primates.wigFix.gz"
         % (
             features["priPhastCons"]["hg19"]["url"],
             wildcards.chr,
