@@ -1,6 +1,6 @@
 ---
 __default__:
-  time: "0-00:10"
+  time: "00:10"
   threads: 1
   mem: 2000
   queue: debug
@@ -10,188 +10,188 @@ __default__:
 ### features ###
 ################
 features_getIntervals:
-  time: "5-00:00"
+  time: "120:00"
   mem: 10000
   queue: medium
 # conservation
 features_PriPhyloP_hg19_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 features_PriPhyloP_hg38_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 features_PriPhastCons_hg38_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 features_VerPhyloP_hg38_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 features_VerPhastCons_hg38_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 features_MamPhastCons_hg38_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 features_MamPhyloP_hg38_download_process:
-  time: "0-12:00"
+  time: "12:00"
   mem: 2000
   queue: medium
 # GC content
 get_GCContent:
-  time: "0-12:00"
+  time: "12:00"
   mem: 10000
   queue: medium
 # population
 features_1KG_hg38_process:
-  time: "1-12:00"
+  time: "36:00"
   mem: 10000
   queue: medium
 # epigenetics
 get_feature_EncH3K4Me3:
-  time: "0-12:00"
+  time: "12:00"
   mem: 10000
   queue: medium
 get_feature_EncH3K4Me1:
-  time: "0-12:00"
+  time: "12:00"
   mem: 10000
   queue: medium
 get_feature_EncH3K27Ac:
-  time: "0-12:00"
+  time: "12:00"
   mem: 10000
   queue: medium
 convert_bigwig_to_wig:
-  time: "0-12:00"
+  time: "12:00"
   mem: 10000
   queue: medium
 # singe_vcf
 features_createSingleFeatureVCF:
-  time: "7-00:00"
+  time: "200:00"
   mem: 15000
   queue: long
 features_indexSingleFeatureVCF:
-  time: "0-01:00"
+  time: "01:00"
 features_mergeSingleFeatureVCF:
-  time: "4-00:00"
+  time: "72:00"
   mem: 20000
   queue: medium
 features_average:
-  time: "0-02:00"
+  time: "02:00"
   mem: 2000
   queue: medium
 ##############
 ## variants ##
 ##############
 variants_annotateJannovar:
-  time: "0-01:00"
+  time: "01:00"
   mem: 10000
   queue: medium
 # Average
 # interval features
 
 getReMM:
-  time: "0-12:00"
+  time: "12:00"
   mem: 150000
   queue: medium
 get_feature_Intervals_DGVCount:
-  time: "0-12:00"
+  time: "12:00"
   mem: 150000
   queue: medium
 annotateFeaturesRandom:
-  time: "7-00:00"
+  time: "168:00"
   mem: 10000
   queue: medium
 
 runParSMURFPredict:
-  time: "0-12:00"
+  time: "12:00"
   mem: 150000
   queue: medium
 
 getConservation:
-  time: "5-00:00"
+  time: "120:00"
   mem: 10000
   queue: medium
 
 convertToBigWig:
-  time: "5-00:00"
+  time: "120:00"
   mem: 170000
   queue: medium
 ########################
 ###    ANNOTATION    ###
 ########################
 annotate_features:
-  time: "8-12:00"
+  time: "200:00"
   mem: 10000
   queue: long
 annotate_sort_features:
-  time: "0-01:00"
+  time: "01:00"
   mem: 80000
   queue: medium
 ########################
 ###     TRAINING     ###
 ########################
 training_parSMURF_train:
-  time: "0-01:00"
+  time: "01:00"
   mem: 100000
   queue: medium
 training_parSMURF_cv:
-  time: "0-04:00"
+  time: "04:00"
   mem: 150000
   queue: medium
 training_parSMURF_repetitiveCV:
-  time: "0-04:00"
+  time: "04:00"
   mem: 150000
   queue: medium
 training_parSMURF_combine:
-  time: "0-01:00"
+  time: "01:00"
   mem: 10000
   queue: medium
 ########################
 ###     SCORES       ###
 ########################
 scores_extract_features:
-  time: "0-06:00"
+  time: "06:00"
   mem: 40000
   queue: medium
 scores_parSMURF_test:
-  time: "0-00:20"
+  time: "00:20"
   mem: 40000
   queue: medium
   threads: 30
 scores_combineScores:
-  time: "2-00:00"
+  time: "48:00"
   mem: 40000
   queue: medium
   threads: 5
 scores_replaceScores:
-  time: "2-00:00"
+  time: "48:00"
   mem: 40000
   queue: medium
   threads: 5
 scores_indexScore:
-  time: "0-01:00"
+  time: "01:00"
   queue: medium
   threads: 5
 
 
 annotateFeatures38:
-  time: "0-12:00"
+  time: "12:00"
   mem: 150000
   queue: medium
 annotateFeatures19:
-  time: "0-12:00"
+  time: "12:00"
   mem: 150000
   queue: medium
 training_parSMURF_createParsmurfInput:
-  time: "0-00:30"
+  time: "00:30"
   mem: 10000
   queue: medium
 scores_getNotNRegions:
-  time: "0-01:00"
+  time: "01:00"
   mem: 10000
   queue: medium
