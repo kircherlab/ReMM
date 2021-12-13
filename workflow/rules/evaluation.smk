@@ -45,11 +45,11 @@ rule evaluation_aucRepetitiveRename:
     input:
         "results/evaluation/{training_run}/metrics/repetitive/auc_tmp.{seed}.tsv.gz",
     output:
-        "results/evaluation/{training_run}/metrics/repetitive/auc.{seed}.tsv.gz",
+        temp("results/evaluation/{training_run}/metrics/repetitive/auc.{seed}.tsv.gz"),
     params:
-        columns=lambda wc: ["value=seed_%d" % wc.seed],
+        columns=lambda wc: {"value": "seed_%d" % int(wc.seed)},
     wrapper:
-        getWrapper("file_manipulation/concat")
+        getWrapper("file_manipulation/rename")
 
 
 rule evaluation_aucRepetitiveCombine:
@@ -72,7 +72,9 @@ rule evaluation_aucRepetitiveMean:
     output:
         "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_max_min.tsv.gz",
     params:
-        columns=lambda wc: getSeedsForTraining(wc.training_run, 100),
+        columns=lambda wc: [
+            "seed_%d" % seed for seed in getSeedsForTraining(wc.training_run, 100)
+        ],
         new_columns=["mean", "max", "min"],
         operations=["mean", "max", "min"],
     wrapper:

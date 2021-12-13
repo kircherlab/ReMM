@@ -1,39 +1,13 @@
-rule getEncH3K27Ac:
+rule features_getEncodeEpigenetics:
     output:
-        "results/features/download/EncH3K27Ac/{genomeBuild}/EncH3K27Ac.{file}.bigWig",
+        "results/features/download/{encodeEpigenetic}/{genomeBuild}/{encodeEpigenetic}.{file}.bigWig",
     params:
-        url=lambda wildcards: "%s%s.bigWig" % (
-            features["EncH3K27Ac"][wildcards.genomeBuild]["url"],
-            wildcards.file,
+        url=lambda wc: "%s%s.bigWig" % (
+            features[wc.encodeEpigenetic][wc.genomeBuild]["url"],
+            wc.file,
         ),
-    shell:
-        """
-        curl {params.url} > {output}
-        """
-
-
-rule getEncH3K4Me1:
-    output:
-        "results/features/download/EncH3K4Me1/{genomeBuild}/EncH3K4Me1.{file}.bigWig",
-    params:
-        url=lambda wildcards: "%s%s.bigWig" % (
-            features["EncH3K4Me1"][wildcards.genomeBuild]["url"],
-            wildcards.file,
-        ),
-    shell:
-        """
-        curl {params.url} > {output}
-        """
-
-
-rule getEncH3K4Me3:
-    output:
-        "results/features/download/EncH3K4Me3/{genomeBuild}/EncH3K4Me3.{file}.bigWig",
-    params:
-        url=lambda wildcards: "%s%s.bigWig" % (
-            features["EncH3K4Me3"][wildcards.genomeBuild]["url"],
-            wildcards.file,
-        ),
+    wildcard_constraints:
+        encodeEpigenetic="(EncH3K27Ac)|(EncH3K27Ac_v1_4)|(EncH3K4Me1)|(EncH3K4Me1_v1_4)|(EncH3K4Me3)|(EncH3K4Me3_v1_4)",
     shell:
         """
         curl {params.url} > {output}

@@ -80,9 +80,9 @@ feature_sets:
       - verPhastCons
       - mamPhyloP
       - mamPhastCons
-      - EncH3K27Ac
-      - EncH3K4Me1
-      - EncH3K4Me3
+      - EncH3K27Ac_v1_4
+      - EncH3K4Me1_v1_4
+      - EncH3K4Me3_v1_4
       - DnaseClusteredHyp
       - DnaseClusteredScore
       - Fantom5Perm
@@ -109,9 +109,9 @@ feature_sets:
       - verPhastCons
       - mamPhyloP
       - mamPhastCons
-      - EncH3K27Ac
-      - EncH3K4Me1
-      - EncH3K4Me3
+      - EncH3K27Ac_v1_4
+      - EncH3K4Me1_v1_4
+      - EncH3K4Me3_v1_4
       - DnaseClusteredHyp
       - DnaseClusteredScore
       - Fantom5Perm
