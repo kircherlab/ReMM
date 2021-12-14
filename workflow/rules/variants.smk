@@ -141,7 +141,7 @@ rule variants_annotateJannovar:
         variants=lambda wc: getVariantsInput(wc.variant_set, "jannovar"),
         database=(
             lambda wc: "resources/%s.ser"
-            % config["variants"][wc.variant_set]["jannovar"]
+            % config["variants"][wc.variant_set]["processing"]["jannovar"]
         ),
     output:
         variants="results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz",
@@ -163,7 +163,7 @@ rule variants_filter_bcftools:
         vcf="results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
         idx="results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz.tbi",
     params:
-        bcftools_filter=lambda wc: config["variants"][wc.variant_set]["filters"][
+        bcftools_filter=lambda wc: config["variants"][wc.variant_set]["processing"]["filters"][
             "bcftools"
         ]["filter"],
     shell:
