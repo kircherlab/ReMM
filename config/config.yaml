@@ -289,13 +289,6 @@ training:
     config:
       mode: cv
       seed: 1
-# feature_correlation:
-#   setA: 
-#     variants: variantX
-#     feature_set: remm_v1_3_hg38
-#   setB: 
-#     variants: variantsY
-#     feature_set: remm_v1_3_hg38
 scores:
   remm_v0_4_parsmurf_hg38_score:
     training: remm_v1_4_parsmurf_hg38_test
@@ -309,9 +302,11 @@ correlation:
   random120K_remm_v1_4:
     A:
       variants: validation_variants_random_120K_hg19
+      training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
     B:
       variants: validation_variants_random_120K_hg38
+      training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
     correlate:
       features:
@@ -344,9 +339,11 @@ correlation:
   HBB_remm_v1_4:
     A:
       variants: validation_variants_HBB_hg19
+      training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
     B:
       variants: validation_variants_HBB_hg38
+      training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
     correlate:
       features:
@@ -379,9 +376,11 @@ correlation:
   DLK1_remm_v1_4:
     A:
       variants: validation_variants_DLK1_hg19
+      training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
     B:
       variants: validation_variants_DLK1_hg38
+      training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
     correlate:
       features:
@@ -414,11 +413,15 @@ correlation:
   PRDM9_remm_v1_4:
     A:
       variants: validation_variants_PRDM9_hg19
+      training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
     B:
       variants: validation_variants_PRDM9_hg38
+      training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
     correlate:
+      trainings:
+        - remm_v1_4_hg38
       features:
         - CpGperGC=CpGperGC
         - CpGperCpG=CpGperCpG

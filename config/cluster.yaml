@@ -152,6 +152,14 @@ training_parSMURF_combine:
   mem: 10000
   queue: medium
 ########################
+###   PREDICTIONS    ###
+########################
+predictions_parSMURF_run:
+  time: "0-00:20"
+  mem: 40000
+  queue: medium
+  threads: 30
+########################
 ###     SCORES       ###
 ########################
 scores_extract_features:

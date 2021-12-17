@@ -68,6 +68,8 @@ include: "rules/annotate.smk"
 include: "rules/training.smk"
 # Workflow evaluation
 include: "rules/evaluation.smk"
+# Workflow predictions
+include: "rules/predictions.smk"
 # Workflow scores
 include: "rules/scores.smk"
 # Workflow correlation
