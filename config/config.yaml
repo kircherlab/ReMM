@@ -306,10 +306,143 @@ scores:
   #   comments:
   #     - ReMM score version 0.3.1_hg38
 correlation:
-  correlation_remm_v1_3:
+  correlation_random120K_remm_v1_4:
     A:
       variants: validation_variants_random_120K_hg19
-      feature_set: remm_v1_3_hg19
+      feature_set: remm_v1_4_hg19
     B:
       variants: validation_variants_random_120K_hg38
-      feature_set: remm_v1_3_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  correlation_HBB_remm_v1_4:
+    A:
+      variants: validation_variants_HBB_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_HBB_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  correlation_DLK1_remm_v1_4:
+    A:
+      variants: validation_variants_DLK1_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_DLK1_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  correlation_PRDM9_remm_v1_4:
+    A:
+      variants: validation_variants_PRDM9_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_PRDM9_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
