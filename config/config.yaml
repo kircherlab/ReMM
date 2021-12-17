@@ -327,7 +327,7 @@ correlation:
         - mamPhastCons=mamPhastCons
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
-        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
         - DnaseClusteredHyp=DnaseClusteredHyp
         - DnaseClusteredScore=DnaseClusteredScore
         - Fantom5Perm=Fantom5Perm
@@ -362,7 +362,7 @@ correlation:
         - mamPhastCons=mamPhastCons
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
-        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
         - DnaseClusteredHyp=DnaseClusteredHyp
         - DnaseClusteredScore=DnaseClusteredScore
         - Fantom5Perm=Fantom5Perm
@@ -397,7 +397,7 @@ correlation:
         - mamPhastCons=mamPhastCons
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
-        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
         - DnaseClusteredHyp=DnaseClusteredHyp
         - DnaseClusteredScore=DnaseClusteredScore
         - Fantom5Perm=Fantom5Perm
@@ -432,7 +432,7 @@ correlation:
         - mamPhastCons=mamPhastCons
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
-        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
         - DnaseClusteredHyp=DnaseClusteredHyp
         - DnaseClusteredScore=DnaseClusteredScore
         - Fantom5Perm=Fantom5Perm
