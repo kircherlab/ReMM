@@ -10,23 +10,37 @@ Correlation of features and predicted scores through genome builds.
 """
 
 
-rule correlation_correlate_feature:
+rule correlation_join:
     input:
-        a=lambda wc: expand(
+        left=lambda wc: expand(
             "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
             variant_set=config["correlation"][wc.correlation]["A"]["variants"],
             feature_set=config["correlation"][wc.correlation]["A"]["feature_set"],
         ),
-        b=lambda wc: expand(
+        right=lambda wc: expand(
             "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
             variant_set=config["correlation"][wc.correlation]["B"]["variants"],
             feature_set=config["correlation"][wc.correlation]["B"]["feature_set"],
         ),
     output:
+        "results/correlation/{correlation}/features/join.tsv.gz",
+    params:
+        how="inner",
+        suffixes="_A _B",
+        left_on="ID",
+        right_on="ID",
+    wrapper:
+        getWrapper("file_manipulation/merge")
+
+
+rule correlation_correlate_feature:
+    input:
+        a="results/correlation/{correlation}/features/join.tsv.gz",
+    output:
         "results/correlation/{correlation}/features/feature.{featureA}.{featureB}.correlate.tsv.gz",
     params:
-        value_a="{featureA}",
-        value_b="{featureB}",
+        value_a="{featureA}_A",
+        value_b="{featureB}_B",
     wrapper:
         getWrapper("evaluate/correlation")
 
@@ -68,8 +82,8 @@ rule correlation_combine_correlate_feature:
         "results/correlation/{correlation}/feature.correlate.tsv.gz",
     params:
         columns=lambda wc: [
-            "Feature A=%s" % f[0]
+            "Feature_A=%s" % f[0]
             for f in correlation_getCorrelateFeatures(wc.correlation)
         ],
     wrapper:
-        getWrapper("file_manipulation/merge")
+        getWrapper("file_manipulation/concat")
