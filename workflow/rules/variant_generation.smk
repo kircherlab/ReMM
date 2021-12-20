@@ -25,6 +25,7 @@ rule variant_generation_random:
     shell:
         """
         bedtools random -n {params.n} -l 1 -seed {params.seed} -g {input.genome} | \
+        egrep "^(chr[0-9]+\\s)|^(chrX\\s)|^(chrY\\s)" | \
         sort -k1,1 -k2,2n -k3,3n | \
         bgzip -c >  {output};
         """
@@ -57,6 +58,11 @@ rule variant_generation_liftover:
 
 
 rule variant_generation_variantsFromRegions:
+    """
+    Create single position bed from regions. This has to be done for liftover hg19 
+    as well as for the hg38 posituions in the idetifier. Otherwise variant_generation_getFinalHg38 will 
+    have the region instead of positions.
+    """
     conda:
         "../envs/ReMM.yaml"
     input:
@@ -65,7 +71,11 @@ rule variant_generation_variantsFromRegions:
         "results/variant_generation/{name}/hg19/{name}.variants.liftover.success.pos.gz",
     shell:
         """
-        bedtools makewindows -w 1 -s 1 -i srcwinnum -b {input} | bgzip -c > {output}
+        zcat {input} | \
+        egrep "^(chr[0-9]+\\s)|^(chrX\\s)|^(chrY\\s)" | \
+        bedtools makewindows -w 1 -s 1 -i srcwinnum -b - | \
+        sed 's/[:_]/\\t/g' | awk -v "OFS=\\t" '{{print $1,$2,$3,$4":"$5+($8-1)":"$5+$8":"$7"_"$8}}' | \
+        bgzip -c > {output}
         """
 
 
@@ -81,7 +91,11 @@ rule variant_generation_getFinalHg38:
         """
         (
             echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
-            zcat {input} | cut -f 4 | awk -F\: -v "OFS=\\t" '{{print $1,$2+1,"variant_"$4,"N","N",".","PASS","."}}' | sort -k1,1 -k2,2n;
+            zcat {input} | \
+            egrep "^(chr[0-9]+\\s)|^(chrX\\s)|^(chrY\\s)" | \
+            cut -f 4 | \
+            awk -F\: -v "OFS=\\t" '{{print $1,$2+1,"variant_"$4,"N",".",".","PASS","."}}' | \
+            sort -k1,1 -k2,2n;
         ) | bgzip -c > {output.vcf};
         tabix {output.vcf};
         """
@@ -99,7 +113,11 @@ rule variant_generation_getFinalHg19:
         """
         (
             echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
-            zcat {input} | sed 's/:/\\t/g' | awk -v "OFS=\\t" '{{print $1,$2+1,"variant_"$7,"N","N",".","PASS","."}}' | sort -k1,1 -k2,2n;
+            zcat {input} | \
+            egrep "^(chr[0-9]+\\s)|^(chrX\\s)|^(chrY\\s)" | \
+            sed 's/:/\\t/g' | \
+            awk -v "OFS=\\t" '{{print $1,$2+1,"variant_"$7,"N",".",".","PASS","."}}' | \
+            sort -k1,1 -k2,2n;
         ) | bgzip -c > {output.vcf};
         tabix {output.vcf};
         """

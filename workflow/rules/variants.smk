@@ -28,7 +28,9 @@ def getVariantsInput(variant_set, step, idx=False):
     add = ".tbi" if idx else ""
     variant_set_config = config["variants"][variant_set]
     if variant_set_config["type"] == "file":
-        output = variant_set_config["properties"]["file"]
+        output = expand(
+            "{file}{add}", file=variant_set_config["properties"]["file"], add=add
+        )
     elif variant_set_config["type"] == "generation":
         output = expand(
             "results/variant_generation/{name}/{genomeBuild}/{name}.vcf.gz{add}",
@@ -141,7 +143,7 @@ rule variants_annotateJannovar:
         variants=lambda wc: getVariantsInput(wc.variant_set, "jannovar"),
         database=(
             lambda wc: "resources/%s.ser"
-            % config["variants"][wc.variant_set]["jannovar"]
+            % config["variants"][wc.variant_set]["processing"]["jannovar"]
         ),
     output:
         variants="results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz",
@@ -163,9 +165,9 @@ rule variants_filter_bcftools:
         vcf="results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz",
         idx="results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz.tbi",
     params:
-        bcftools_filter=lambda wc: config["variants"][wc.variant_set]["filters"][
-            "bcftools"
-        ]["filter"],
+        bcftools_filter=lambda wc: config["variants"][wc.variant_set]["processing"][
+            "filters"
+        ]["bcftools"]["filter"],
     shell:
         """
         (

@@ -68,6 +68,8 @@ include: "rules/annotate.smk"
 include: "rules/training.smk"
 # Workflow evaluation
 include: "rules/evaluation.smk"
+# Workflow predictions
+include: "rules/predictions.smk"
 # Workflow scores
 include: "rules/scores.smk"
 # Workflow correlation
@@ -85,7 +87,9 @@ include: "rules/process/getUtils.smk"
 include: "rules/process/createModelData.smk"
 
 
-##### all rules to generate files #####
+###################################
+### All rules to generate files ###
+###################################
 
 
 def getAllVariantsInput():
@@ -102,7 +106,17 @@ def getAllVariantsInput():
 # TODO Add all configs to all rule
 rule all:
     input:
+        # variants
         getAllVariantsInput(),
+        # feature sets
+        expand(
+            "results/evaluation/{training_run}/metrics/auc.tsv.gz",
+            training_run=list(config["training"].keys()),
+        ),
+        expand(
+            "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
+            training_run=list(config["training"].keys()),
+        ),
         vcf=expand(
             "results/features/feature_sets/{feature_set}.vcf.gz",
             feature_set=list(config["feature_sets"].keys()),
@@ -113,9 +127,9 @@ rule all:
         ),
 
 
+#######################################
 ### All rules for workflow features ###
-
-
+#######################################
 def getAllAverageFilesForFeatures(genomeBuild):
     """
     Get a list of features for a genome build that are defined in the feature config file as well as in the config file.
@@ -129,14 +143,18 @@ def getAllAverageFilesForFeatures(genomeBuild):
     )
 
 
-# all rule for average features
 rule all_feature_average:
+    """
+    Get feature averages. Needed to add in the config file before starting annotation.
+    """
     input:
         getAllAverageFilesForFeatures("hg19"),
-        getAllAverageFilesForFeatures("hg38")
+        getAllAverageFilesForFeatures("hg38"),
 
 
-# all rule for generating feature sets
+########################################
+# All rule for generating feature sets #
+########################################
 rule all_feature_sets:
     input:
         vcf=expand(
@@ -149,7 +167,9 @@ rule all_feature_sets:
         ),
 
 
-### All rules for workflow variants ###
+###################################
+# All rules for workflow variants #
+###################################
 
 
 # all rule to return all variant files
@@ -158,7 +178,9 @@ rule all_variants:
         getAllVariantsInput(),
 
 
-### All rules for workflow annotate ###
+###################################
+# All rules for workflow annotate #
+###################################
 def getAllAnnotations():
     """
     Get all positive and negatuve training annotations
@@ -191,10 +213,9 @@ rule all_annotation:
         getAllAnnotations(),
 
 
-### All rules for workflow evaluate ###
-
-
-# all rule to return all evaluation files (auc and PR ROC curves)
+######################################
+### All rules for workflow evaluate ##
+######################################
 rule all_evaluate:
     input:
         expand(
@@ -207,14 +228,24 @@ rule all_evaluate:
         ),
 
 
-### All rules for workflow variants ###
-
-
-# all rule to return unbiased score files
+####################################
+### All rules for workflow score ###
+####################################
 rule all_scores:
     input:
         expand(
             "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz{idx}",
             score_name=list(config["scores"].keys()),
             idx=["", ".tbi"],
+        ),
+
+
+##########################################
+### All rules for workflow correlation ###
+##########################################
+rule all_correlation:
+    input:
+        expand(
+            "results/correlation/{correlation}/feature.correlate.tsv.gz",
+            correlation=list(config["correlation"].keys()),
         ),
