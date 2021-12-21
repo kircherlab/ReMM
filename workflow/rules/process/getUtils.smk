@@ -1,8 +1,21 @@
+rule getCytoband:
+    output:
+        "resources/{genomeBuild}/cytoBand.txt.gz",
+    params:
+        url="http://hgdownload.cse.ucsc.edu/goldenpath/{genomeBuild}/database/cytoBand.txt.gz",
+    shell:
+        """
+        curl {params.url}  > {output}
+        """
+
 rule getChainFile:
     output:
-        "resources/hg19ToHg38.over.chain.gz",
+        "resources/{genomeBuild}/{chain}.over.chain.gz",
     params:
-        url="https://hgdownload.soe.ucsc.edu/gbdb/hg38/liftOver/hg19ToHg38.over.chain.gz",
+        url=(
+            lambda wc: "https://hgdownload.soe.ucsc.edu/gbdb/%s/liftOver/%s.over.chain.gz"
+            % (wc.genomeBuild, wc.chain)
+        ),
     shell:
         """
         curl {params.url}  > {output}

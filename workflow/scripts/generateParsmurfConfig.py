@@ -5,12 +5,17 @@ with open(snakemake.input.scaffold) as json_file:
     
     file['name'] = snakemake.params.name
     file['data']['dataFile'] = snakemake.input.data
-    file['data']['labelFile'] = snakemake.input.labels
-    file['data']['foldFile'] = snakemake.input.folds
+    if "labels" in snakemake.input.keys():
+        file['data']['labelFile'] = snakemake.input.labels
+    if "folds" in snakemake.input.keys():
+        file['data']['foldFile'] = snakemake.input.folds
     file['data']['outFile'] = snakemake.params.predictions
-    file['exec']['seed'] = int(list(snakemake.params.seed)[0])
+    file['data']['forestDir'] = snakemake.params.models
+    if "ensThrd" in snakemake.params.keys():
+        file['exec']['ensThrd'] = snakemake.params.ensThrd
+    file['exec']['seed'] = int(snakemake.params.seed)
     file['exec']['mode'] =snakemake.params.mode
-    file['data']['forestDir'] = "models/"+snakemake.wildcards.genomeBuild
+    
     
         
 with open(snakemake.output.config, 'w') as outfile:

@@ -3,22 +3,77 @@ To DoS:
 - Add a link for downloading the negative set (in 4.2 Benign variants)
 - Update the rules in the cluster file
 
-## Project workflow
-### Folder structure
+# Workflow documentation
 
-The folder Snakemake contains several subfolders:
+## Folder structure
 
-- config: configuration files for downloading and processing of annotations as well as configuration files for running parSMURF
+This folder (`workflow`) contains several subfolders:
+
+- bin: binaries used by Snakemake rules
+- envs: YAML file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
 - rules: Snakemake rules separated into subfolders according to the workflow steps
-- env: a YAML file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
+- schemas: JSON Schema files for validation of config files.
 - scripts: (external) scripts used by Snakemake rules
-- utils: diverse reference files and scaffolds used during the workflow
-- input: files that serve as input for  rules (raw feature files, variants)
-- output: computed files - output of rules (VCF feature files, training sets, predictions)
 
 Some directories contain README files with more detailed information on the content of folders. A DAG (directed acyclical graph) of the workflow (schematic representation) starting from the step *4. Variants* can be found in WorkflowDAG.jpg. The DAG for steps 1-3 is not shown for the sake of clarity because they contain more than one hundred rule executions.
 
-### 1. Collecting annotations
+## Naming convention
+
+All rules are named like `<sub-workflow>_nameOfTheRule` to make it creal where they belong to. `all` rules are special and documented in the main wokflow.
+
+Functions are normally written like `get<SubWorkflow><nameOfTheFunction>`. There are simple (or not so simple) getters for paths, configurations etc. E.g. the simple `getVariantSetGenomeBuild(variant_set)` returns the genome build of a variant set . The more complex `getVariantsInput(variant_set, step, idx=False)` returns the path to the vcf variant file taken into account that a variant file might be processed multiple times before.
+
+## Main workflow
+
+This is the `Snakemake` file. It includes the multiple subworkflows. Also it contains the all rule (the first rule). This one is run when no file or rule is given to the Snakemake run (it is calles `all`). Then multiple all rules are defined for each sub workflow. Like `all_evaluate` to generate all output files from the evaluate workflow.
+
+## Main sub-workflows
+
+Main workflows needed ti generate a while-genome score file for ReMM.
+
+### Variants
+
+Snakemake file: `rules/variants.smk`
+
+Config: `variants`
+
+Output path: `results/variants/<variant_set>`
+
+### Features
+
+Snakemake file: `rules/features.smk`
+
+Config: `feature_sets` and additional `config/features.yaml` config file for single features.
+
+Output path: `results/features/single_vcf/<feature_name>` and `results/features/feature_sets/<feature_set_name>`
+
+### Annotate
+
+Snakemake file: `rules/annotate.smk`
+
+Config: Not configured right now in the config file. Annotation of vcf files with feature sets are configured later in the training step.
+
+Output path: `results/annotation/<variant_set>`
+
+### Training
+
+Snakemake file: `rules/training.smk`
+
+Config: `training` with properties `positives`, `negatives`, `feature_set`, and `implementation`
+
+Output path: `results/training/<training_run>`
+
+### Scores
+
+## Other sub-workflows
+
+Other workflows written around the main subwokflows like evaluation of predictions or benchmarking different sets.
+
+### Evaluation
+
+### Correlation
+
+## 1. Collecting annotations
 
 Each annotation is downloaded and preprocessed by a separate Snakemake rule (*rules/features*). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download is managed by a **configuration file** (*config/featuresConfig38.json*) that contains the download links and the necessary meta information for the processing steps. Each feature has the following entry:
 

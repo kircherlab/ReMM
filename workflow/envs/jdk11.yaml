@@ -4,3 +4,4 @@ channels:
   - defaults
 dependencies:
   - openjdk==11.*
+  - htslib

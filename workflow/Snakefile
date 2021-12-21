@@ -1,3 +1,22 @@
+"""
+ReMM score workflow
+
+This workflow is for generating the ReMM score is consists on multiple sub workflows. For generating the WG score file the main modules are:
+    - Feature generation (features.smk)
+    - Variant processing (variants.smk)
+    - Annotation of variants (annotate.smk)
+    - Training of variants (training.smk)
+    - Whole genome scores (scores.smk)
+
+There are additional workflows:
+    - Evaluation of classifiers or predictions (evaluation.smk)
+
+
+The workflow is completly configured via the config file (config/config.yaml).
+"""
+
+#### imports ####
+from snakemake.utils import validate
 from os.path import join
 from glob import glob
 import datetime
@@ -8,141 +27,225 @@ import pandas as pd
 
 from snakemake.utils import min_version
 
-min_version("6.0.5")
+min_version("6.10.0")
 
 
 ##### load config and sample sheets #####
 
 
 configfile: "config/config.yaml"
+
+
+validate(config, schema="schemas/config.schema.yaml")
+
+
+# FIXME: Why this is necessary? Maybe can be removed!
 configfile: "config/featuresConfig38.json"
 
 
-# TODO implement validation
-# validate(config, schema="../schemas/config.schema.yaml")
+def getWrapper(wrapper):
+    """
+    Get directory for snakemake wrappers.
+    """
+    return "file:%s/%s/wrapper.py" % (
+        config["global_files"]["wrapper_directory"],
+        wrapper,
+    )
 
-##### all rules #####
+
+##### include workflow files #####
 
 
-##### include files #####
-
-
+# Workflow features
 include: "rules/features.smk"
+# Workflow variant generation
+include: "rules/variant_generation.smk"
+# Workflow variants
+include: "rules/variants.smk"
+# Workflow annotate
+include: "rules/annotate.smk"
+# Workflow training
+include: "rules/training.smk"
+# Workflow evaluation
+include: "rules/evaluation.smk"
+# Workflow predictions
+include: "rules/predictions.smk"
+# Workflow scores
+include: "rules/scores.smk"
+# Workflow correlation
+include: "rules/correlation.smk"
+
+
+# Workflow predict
+
+# Workflow replace
+
+# old rules
+
+
 include: "rules/process/getUtils.smk"
-include: "rules/process/folds.smk"
-include: "rules/process/positiveVariants.smk"
-include: "rules/process/negativeVariants.smk"
-include: "rules/process/annotateJannovar.smk"
 include: "rules/process/createModelData.smk"
-include: "rules/model/parSMURF.smk"
 
 
-## ancient is there to not rerun, delete sometime (createPropertyFile and createSingleFeatureVCF)
+###################################
+### All rules to generate files ###
+###################################
 
 
-rule createPropertyFile:
+def getAllVariantsInput():
+    """
+    Getter for all variants.
+    """
+    output = []
+    for variant_set in config["variants"]:
+        output += getVariantsInput(variant_set, "annotate")
+    return output
+
+
+# ALL rule. Generates variants and feature sets.
+# TODO Add all configs to all rule
+rule all:
     input:
-        lambda wc: ancient(
-            expand(
-                "results/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
-                file=config[wc.genomeBuild][wc.feature]["file"],
-                files=config[wc.genomeBuild][wc.feature]["files"],
-                extension=config[wc.genomeBuild][wc.feature]["type"],
+        # variants
+        getAllVariantsInput(),
+        # feature sets
+        expand(
+            "results/evaluation/{training_run}/metrics/auc.tsv.gz",
+            training_run=list(config["training"].keys()),
+        ),
+        expand(
+            "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
+            training_run=list(config["training"].keys()),
+        ),
+        vcf=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+        idx=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz.tbi",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+
+
+#######################################
+### All rules for workflow features ###
+#######################################
+def getAllAverageFilesForFeatures(genomeBuild):
+    """
+    Get a list of features for a genome build that are defined in the feature config file as well as in the config file.
+    Use them to to return the average feature path.
+    """
+    featureList = getDefinedFeatures(genomeBuild)
+    return expand(
+        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
+        feature=featureList,
+        genomeBuild=genomeBuild,
+    )
+
+
+rule all_feature_average:
+    """
+    Get feature averages. Needed to add in the config file before starting annotation.
+    """
+    input:
+        getAllAverageFilesForFeatures("hg19"),
+        getAllAverageFilesForFeatures("hg38"),
+
+
+########################################
+# All rule for generating feature sets #
+########################################
+rule all_feature_sets:
+    input:
+        vcf=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+        idx=expand(
+            "results/features/feature_sets/{feature_set}.vcf.gz.tbi",
+            feature_set=list(config["feature_sets"].keys()),
+        ),
+
+
+###################################
+# All rules for workflow variants #
+###################################
+
+
+# all rule to return all variant files
+rule all_variants:
+    input:
+        getAllVariantsInput(),
+
+
+###################################
+# All rules for workflow annotate #
+###################################
+def getAllAnnotations():
+    """
+    Get all positive and negatuve training annotations
+    TODO: Update for other annotations like benchmark sets
+    """
+    output = []
+    for training in config["training"].values():
+        output += [
+            "results/annotation/%s/%s.%s.sorted.tsv.gz"
+            % (
+                training["positives"],
+                training["positives"],
+                training["feature_set"],
             )
-        ),
-    output:
-        config="results/features/{genomeBuild}/PropertyFiles/{feature}.properties",
-    params:
-        file_type=lambda wc: config[wc.genomeBuild][wc.feature]["type"].split(".")[-1],
-        column=(
-            lambda wc: "column=" + config[wc.genomeBuild][wc.feature]["column"]
-            if config[wc.genomeBuild][wc.feature]["type"].split(".")[-1] == "bed"
-            else ""
-        ),
-        method=lambda wc: config[wc.genomeBuild][wc.feature]["method"],
-        description=lambda wc: config[wc.genomeBuild][wc.feature]["description"],
-    run:
-        files = " \n".join(["file = " + file for file in input])
-        shell(
-            """
-        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
-        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
-        """
-        )
-
-
-rule createSingleFeatureVCF:
-    input:
-        config=ancient(
-            "results/features/{genomeBuild}/PropertyFiles/{feature}.properties"
-        ),
-        files=lambda wc: ancient(
-            expand(
-                "results/features/{{genomeBuild}}/{file}/{file}.{files}.{extension}.gz",
-                file=config[wc.genomeBuild][wc.feature]["file"],
-                files=config[wc.genomeBuild][wc.feature]["files"],
-                extension=config[wc.genomeBuild][wc.feature]["type"],
+        ]
+        output += [
+            "results/annotation/%s/%s.%s.sorted.tsv.gz"
+            % (
+                training["negatives"],
+                training["negatives"],
+                training["feature_set"],
             )
+        ]
+    return output
+
+
+# all rule to return all annotated variants
+rule all_annotation:
+    input:
+        getAllAnnotations(),
+
+
+######################################
+### All rules for workflow evaluate ##
+######################################
+rule all_evaluate:
+    input:
+        expand(
+            "results/evaluation/{training_run}/metrics/auc.tsv.gz",
+            training_run=list(config["training"].keys()),
         ),
-    output:
-        temp=temp("results/features/single/{genomeBuild}/{feature}.temp.vcf.gz"),
-        vcf="results/features/single/{genomeBuild}/{feature}.vcf.gz",
-    params:
-        mem="5g",
-    conda:
-        "envs/jdk11.yaml"
-    shell:
-        """
-        export LC_ALL=C;
-        java -Xmx{params.mem} -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar \
-        vcf -p {input.config} --output {output.temp};
-        (
-            zcat {output.temp}| grep  "#";
-            zcat {output.temp} | \
-            grep  -v "#" | \
-            sort -k1,1 -k2,2n
-        ) | bgzip -c > {output.vcf}
-        """
-
-
-rule indexSingleFeatreVCF:
-    input:
-        "results/features/single/{genomeBuild}/{feature}.vcf.gz",
-    output:
-        "results/features/single/{genomeBuild}/{feature}.vcf.gz.tbi",
-    shell:
-        """
-        tabix {input}
-        """
-
-
-rule mergeSingleFeatureVCF:
-    input:
-        files=lambda wc: expand(
-            "results/features/single/{{genomeBuild}}/{feature}.vcf.gz",
-            feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name],
+        expand(
+            "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
+            training_run=list(config["training"].keys()),
         ),
-    #  idx=lambda wc: expand("output/features/single/{{genomeBuild}}/{feature}.vcf.gz.tbi",
-    #     feature=config["feature_set"][wc.genomeBuild][wc.feature_set_name])
-    output:
-        vcf="results/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz",
-        idx="results/features/combined/{genomeBuild}/{feature_set_name}.vcf.gz.tbi",
-    shell:
-        """
-        bcftools merge {input.files} | bgzip -c > {output.vcf};
-        tabix {output.vcf};
-        """
 
 
-rule annotateFeatures:
+####################################
+### All rules for workflow score ###
+####################################
+rule all_scores:
     input:
-        f="results/features/combined/hg38/featureSet.hg38.vcf.gz",
-        f_idx="results/features/combined/hg38/featureSet.hg38.vcf.gz.tbi",
-        n="results/variants/hg38/SNVs.hg38.{type}.refseq.filtered.vcf.gz",
-    output:
-        "results/variants/hg38/SNVs.hg38.{type}.annotated.tsv.gz",
-    shell:
-        """
-        java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \
-        --annotation-vcf {input.f} --file {input.n} | bgzip -c > {output}
-        """
+        expand(
+            "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz{idx}",
+            score_name=list(config["scores"].keys()),
+            idx=["", ".tbi"],
+        ),
+
+
+##########################################
+### All rules for workflow correlation ###
+##########################################
+rule all_correlation:
+    input:
+        expand(
+            "results/correlation/{correlation}/feature.correlate.tsv.gz",
+            correlation=list(config["correlation"].keys()),
+        ),

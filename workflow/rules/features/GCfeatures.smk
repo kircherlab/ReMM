@@ -1,6 +1,6 @@
 rule get_cpgIslandExt_file:
     output:
-        "results/features/{genome}/cpgIslandExt/cpgIslandExt.all.bed.gz",
+        "results/features/download/cpgIslandExt/{genome}/cpgIslandExt.all.bed.gz",
     params:
         url="https://hgdownload.soe.ucsc.edu/goldenPath/{genome}/database/cpgIslandExt.txt.gz",
     shell:
@@ -13,13 +13,13 @@ rule get_GCContent:
     input:
         lambda wc: config["global_files"]["genome_builds"][wc.genomeBuild]["reference"],
     output:
-        "results/features/{genomeBuild}/GCContent/GCContent.all.bed.gz",
+        "results/features/download/GCContent/{genomeBuild}/GCContent.all.bed.gz",
     params:
-        width=lambda wc: config[wc.genomeBuild]["GCContent"]["window_size"],
+        width=lambda wc: features["GCContent"][wc.genomeBuild]["window_size"],
     conda:
-        "../../envs/GCContent.yaml"
+        "../../envs/ruby.yaml"
     shell:
         """
-        ruby scripts/getGCContentGenomeWide.rb {input} {params.width} | \
+        ruby workflow/scripts/getGCContentGenomeWide.rb {input} {params.width} | \
         bgzip -c > {output}
         """

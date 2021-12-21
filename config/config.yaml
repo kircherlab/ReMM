@@ -1,5 +1,6 @@
 ---
 global_files:
+  wrapper_directory: /data/users/schubacm_c/work/projects/snakemake_wrappers
   genome_builds:
     hg38:
       reference: "/fast/projects/cubit/current/static_data/reference/GRCh38/hs38/hs38.fa"
@@ -7,3 +8,444 @@ global_files:
     hg19:
       reference: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa"
       genome: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa.genome"
+feature_sets:
+  remm_v1_3_hg19:
+      genome_build: hg19
+      features:
+        - CpGperGC
+        - CpGperCpG
+        - CpGobsExp
+        - GCContent
+        - priPhyloP
+        - priPhastCons
+        - verPhyloP
+        - verPhastCons
+        - mamPhyloP
+        - mamPhastCons
+        - EncH3K27Ac
+        - EncH3K4Me1
+        - EncH3K4Me3
+        - DnaseClusteredHyp
+        - DnaseClusteredScore
+        - Fantom5Perm
+        - Fantom5Robust
+        - GerpRS
+        - GerpRSpv
+        - rareVar
+        - commonVar
+        - fracRareCommon
+        - dbVARCount
+        - ISCApath
+        - DGVCount
+        - numTFBSConserved
+  remm_v1_3_hg38:
+    genome_build: hg38
+    features:
+      - CpGperGC
+      - CpGperCpG
+      - CpGobsExp
+      - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac
+      - EncH3K4Me1
+      - EncH3K4Me3
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount
+      - ISCApath
+      - DGVCount
+      - numTFBSConserved
+  remm_v1_4_hg19:
+    genome_build: hg19
+    features:
+      - CpGperGC
+      - CpGperCpG
+      - CpGobsExp
+      - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac_v1_4
+      - EncH3K4Me1_v1_4
+      - EncH3K4Me3_v1_4
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount_20211020
+      - ISCApath_20211103
+      - DGVCount_20200225
+      - encRegTfbsClustered
+  remm_v1_4_hg38:
+    genome_build: hg38
+    features:
+      - CpGperGC
+      - CpGperCpG
+      - CpGobsExp
+      - GCContent
+      - priPhyloP
+      - priPhastCons
+      - verPhyloP
+      - verPhastCons
+      - mamPhyloP
+      - mamPhastCons
+      - EncH3K27Ac_v1_4
+      - EncH3K4Me1_v1_4
+      - EncH3K4Me3_v1_4
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - Fantom5Perm
+      - Fantom5Robust
+      - GerpRS
+      - GerpRSpv
+      - rareVar
+      - commonVar
+      - fracRareCommon
+      - dbVARCount_20211020
+      - ISCApath_20211103
+      - DGVCount_20200225
+      - encRegTfbsClustered
+variant_generation:
+  random_120K:
+    type: random
+    properties:
+      n: 120000
+      seed: 42
+  region_HBB:
+    type: regions
+    properties:
+      file: resources/regions/HBB_hg38.bed.gz
+  region_PRDM9:
+    type: regions
+    properties:
+      file: resources/regions/PRDM9_hg38.bed.gz
+  region_DLK1:
+    type: regions
+    properties:
+      file: resources/regions/DLK1_hg38.bed.gz
+variants:
+  cadd_v1_3_humanDerived_hg38:
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
+    genome_build: hg38
+    processing:
+      jannovar: hg38_refseq
+      filters:
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  cadd_v1_3_humanDerived_hg38_global_means:
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_3_humanDerived_hg38.vcf.gz
+    genome_build: hg38
+    processing:
+      jannovar: hg38_refseq
+      filters:
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  cadd_v1_6_humanDerived_hg19:
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_6_humanDerived_hg19.vcf.gz
+    genome_build: hg19
+    processing:
+      jannovar: refseq_105_hg19
+      filters:
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  remm_snvs_20160109_global_means:
+    type: file
+    properties:
+      file: resources/variants/SNVs.all.20160109.vcf.gz
+    genome_build: hg19
+  remm_snvs_20160109_liftover:
+    type: file
+    properties:
+      file: resources/variants/SNVs.all.20160109.vcf.gz
+    genome_build: hg19
+    processing:
+      liftover: hg19ToHg38
+  remm_snvs_20160109_liftover_global_means:
+    type: file
+    properties:
+      file: resources/variants/SNVs.all.20160109.vcf.gz
+    genome_build: hg19
+    processing:
+      liftover: hg19ToHg38
+  remm_snvs_2019_liftover_global_means:
+    type: file
+    properties:
+      file: resources/variants/variants.all.2019.vcf.gz
+    genome_build: hg19
+    processing:
+      liftover: hg19ToHg38
+  validation_variants_random_120K_hg19:
+    type: generation
+    properties:
+      name: random_120K
+    genome_build: hg19
+  validation_variants_random_120K_hg38:
+    type: generation
+    properties:
+      name: random_120K
+    genome_build: hg38
+  validation_variants_HBB_hg19:
+    type: generation
+    properties:
+      name: region_HBB
+    genome_build: hg19
+  validation_variants_HBB_hg38:
+    type: generation
+    properties:
+      name: region_HBB
+    genome_build: hg38
+  validation_variants_PRDM9_hg19:
+    type: generation
+    properties:
+      name: region_PRDM9
+    genome_build: hg19
+  validation_variants_PRDM9_hg38:
+    type: generation
+    properties:
+      name: region_PRDM9
+    genome_build: hg38
+  validation_variants_DLK1_hg19:
+    type: generation
+    properties:
+      name: region_DLK1
+    genome_build: hg19
+  validation_variants_DLK1_hg38:
+    type: generation
+    properties:
+      name: region_DLK1
+    genome_build: hg38
+training:
+  remm_v1_3_parsmurf_hg38:
+    positives: remm_snvs_20160109_liftover
+    negatives: cadd_v1_3_humanDerived_hg38
+    feature_set: remm_v1_3_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_parsmurf_hg38_global_mean:
+    positives: remm_snvs_20160109_liftover_global_means
+    negatives: cadd_v1_3_humanDerived_hg38_global_means
+    feature_set: remm_v1_3_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_parsmurf_hg38_global_mean_additional_positives:
+    positives: remm_snvs_2019_liftover_global_means
+    negatives: cadd_v1_3_humanDerived_hg38_global_means
+    feature_set: remm_v1_3_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_4_hg38:
+    positives: remm_snvs_20160109_liftover_global_means
+    negatives: cadd_v1_3_humanDerived_hg38_global_means
+    feature_set: remm_v1_4_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_4_hg38_additional_positives:
+    positives: remm_snvs_2019_liftover_global_means
+    negatives: cadd_v1_3_humanDerived_hg38_global_means
+    feature_set: remm_v1_4_hg38
+    implementation: parSMURF
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_4_hg19:
+    positives: remm_snvs_20160109_global_means
+    negatives: cadd_v1_6_humanDerived_hg19
+    feature_set: remm_v1_4_hg19
+    implementation: parSMURF
+    config:
+      mode: cv
+      seed: 1
+scores:
+  remm_v0_4_parsmurf_hg38_score:
+    training: remm_v1_4_parsmurf_hg38_test
+    comments:
+      - ReMM score version v0.4.0.hg38
+  # remm_v0_3_1_parsmurf_hg38_score:
+  #   training: remm_v1_3_parsmurf_hg38
+  #   comments:
+  #     - ReMM score version 0.3.1_hg38
+correlation:
+  random120K_remm_v1_4:
+    A:
+      variants: validation_variants_random_120K_hg19
+      training: remm_v1_4_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_random_120K_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  HBB_remm_v1_4:
+    A:
+      variants: validation_variants_HBB_hg19
+      training: remm_v1_4_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_HBB_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  DLK1_remm_v1_4:
+    A:
+      variants: validation_variants_DLK1_hg19
+      training: remm_v1_4_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_DLK1_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  PRDM9_remm_v1_4:
+    A:
+      variants: validation_variants_PRDM9_hg19
+      training: remm_v1_4_hg19
+      feature_set: remm_v1_4_hg19
+    B:
+      variants: validation_variants_PRDM9_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+    correlate:
+      trainings:
+        - remm_v1_4_hg38
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered

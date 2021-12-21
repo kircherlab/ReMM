@@ -1,0 +1,163 @@
+---
+$schema: "http://json-schema.org/draft-07/schema#"
+
+title: Main config file
+description: Schema of the main config file for ReMM score workflow
+
+type: object
+
+# possible entries of the config file and which type they should be
+properties:
+  global_files:
+    title: Global settings
+    description: Global files used in the workflow. Use the full path to avoid errors.
+    type: object
+    properties:
+      wrapper_directory:
+        description: Directory of the wrapper. Needed to be cloned from https://github.com/kircherlab/snakemake_wrappers.
+        type: string
+      genome_builds:
+        description: Genome and Reference fiels for the genome builds hg19 an hg38.
+        type: object
+        properties:
+          hg38:
+            type: object
+            properties:
+              reference:
+                type: string
+              genome:
+                type: string
+            required:
+              - reference
+              - genome
+          hg19:
+            type: object
+            properties:
+              reference:
+                type: string
+              genome:
+                type: string
+            required:
+              - reference
+              - genome
+        required:
+          - hg38
+          - hg19
+    required:
+      - wrapper_directory
+      - genome_builds
+    additionalProperties: False
+  feature_sets:
+    description: Sets of features
+    additionalProperties:
+      description: Name of the feature set
+      type: object
+      properties:
+        genome_build:
+          type: string
+        features:
+          type: array
+      required:
+        - genome_build
+        - features
+      additionalProperties: False
+  variant_generation:
+    description: variant generation workflow.
+    type: object
+    additionalProprties:
+      type: object
+      properties:
+        type:
+          enum:
+            - random
+            - regions
+        properties:
+          type: object
+      required:
+        - type
+        - properties
+  variants:
+    description: Variant workflow. Input file and possible filters.
+    type: object
+    additionalProperties:
+      description: name of the variant set
+      type: object
+      properties:
+        type:
+          enum:
+            - file
+            - generation
+        properties:
+          type: object
+        genome_build:
+          enum:
+            - hg38
+            - hg19
+        processing:
+          type: object
+          properties:
+            liftover:
+              enum:
+                - hg19ToHg38
+                - hg38ToHg19
+            jannovar:
+              type: string
+            filters:
+              type: object
+              properties:
+                bcftools:
+                  type: object
+                  properties:
+                    filter:
+                      tyoe: string
+                  required:
+                    - filter
+      required:
+        - type
+        - properties
+        - genome_build
+      additionalProperties: False
+  training:
+    description: training run with variants
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        positives:
+          type: string
+        negatives:
+          type: string
+        feature_set:
+          type: string
+        implementation:
+          enum:
+            - parSMURF
+        config:
+          type: object
+      required:
+        - positives
+        - negatives
+        - feature_set
+        - implementation
+      additionalProperties: False
+  scores:
+    description: Whole genome score files
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        training:
+          type: string
+        comments:
+          type: array
+      required:
+        - training
+        - comments
+      additionalProperties: False
+  correlation:
+    description: correlation of features and scores
+    additionalProperties:
+      type: object
+required:
+    - global_files
+additionalProperties: False
