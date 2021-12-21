@@ -1,3 +1,5 @@
+[![tests YAML files](https://github.com/kircherlab/ReMM-GRCh38/actions/workflows/yamllint.yaml/badge.svg)](https://github.com/kircherlab/ReMM-GRCh38/actions/workflows/yamllint.yaml)
+
 ## ReMM for GRCh38
 
 The Regulatory Mendelian Mutation (ReMM) score was created for relevance prediction of non-coding variations (SNVs and small InDels) in the human genome (GRCh37) in terms of Mendelian diseases. This project updates the ReMM score for the genome build GRCh38.
