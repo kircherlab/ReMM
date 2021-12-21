@@ -174,7 +174,7 @@ variants:
       filters:
         bcftools:
           filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
-  remm_snvs_20160109_global_means:
+  remm_snvs_20160109:
     type: file
     properties:
       file: resources/variants/SNVs.all.20160109.vcf.gz
@@ -282,7 +282,7 @@ training:
       mode: cv
       seed: 1
   remm_v1_4_hg19:
-    positives: remm_snvs_20160109_global_means
+    positives: remm_snvs_20160109
     negatives: cadd_v1_6_humanDerived_hg19
     feature_set: remm_v1_4_hg19
     implementation: parSMURF
