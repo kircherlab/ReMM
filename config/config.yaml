@@ -246,6 +246,7 @@ training:
     negatives: cadd_v1_3_humanDerived_hg38
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
+    missing_value: zero
     config:
       mode: cv
       seed: 1
@@ -254,6 +255,7 @@ training:
     negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
+    missing_value: default_value
     config:
       mode: cv
       seed: 1
@@ -262,6 +264,7 @@ training:
     negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
+    missing_value: default_value
     config:
       mode: cv
       seed: 1
@@ -270,6 +273,7 @@ training:
     negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_4_hg38
     implementation: parSMURF
+    missing_value: default_value
     config:
       mode: cv
       seed: 1
@@ -278,6 +282,7 @@ training:
     negatives: cadd_v1_3_humanDerived_hg38_global_means
     feature_set: remm_v1_4_hg38
     implementation: parSMURF
+    missing_value: default_value
     config:
       mode: cv
       seed: 1
@@ -286,6 +291,7 @@ training:
     negatives: cadd_v1_6_humanDerived_hg19
     feature_set: remm_v1_4_hg19
     implementation: parSMURF
+    missing_value: default_value
     config:
       mode: cv
       seed: 1
@@ -304,10 +310,12 @@ correlation:
       variants: validation_variants_random_120K_hg19
       training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
+      missing_value: default_value
     B:
       variants: validation_variants_random_120K_hg38
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
+      missing_value: default_value
     correlate:
       features:
         - CpGperGC=CpGperGC
@@ -341,10 +349,12 @@ correlation:
       variants: validation_variants_HBB_hg19
       training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
+      missing_value: default_value
     B:
       variants: validation_variants_HBB_hg38
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
+      missing_value: default_value
     correlate:
       features:
         - CpGperGC=CpGperGC
@@ -378,10 +388,12 @@ correlation:
       variants: validation_variants_DLK1_hg19
       training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
+      missing_value: default_value
     B:
       variants: validation_variants_DLK1_hg38
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
+      missing_value: default_value
     correlate:
       features:
         - CpGperGC=CpGperGC
@@ -415,10 +427,12 @@ correlation:
       variants: validation_variants_PRDM9_hg19
       training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
+      missing_value: default_value
     B:
       variants: validation_variants_PRDM9_hg38
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
+      missing_value: default_value
     correlate:
       trainings:
         - remm_v1_4_hg38

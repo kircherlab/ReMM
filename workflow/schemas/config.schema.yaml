@@ -129,6 +129,8 @@ properties:
           type: string
         feature_set:
           type: string
+        missing_value:
+          type: string
         implementation:
           enum:
             - parSMURF
@@ -138,6 +140,7 @@ properties:
         - positives
         - negatives
         - feature_set
+        - missing_value
         - implementation
       additionalProperties: False
   scores:
@@ -156,8 +159,39 @@ properties:
       additionalProperties: False
   correlation:
     description: correlation of features and scores
-    additionalProperties:
-      type: object
+    type: object
+    properties:
+      A:
+        type: object
+        properties:
+          variants:
+            type: string
+          training:
+            type: string
+          feature_set:
+            type: string
+          missing_value:
+            type: string
+      B:
+        type: object
+        properties:
+          variants:
+            type: string
+          training:
+            type: string
+          feature_set:
+            type: string
+          missing_value:
+            type: string
+      correlate:
+        type: object
+        properties:
+          features:
+            type: object
+      required:
+        - A
+        - B
+        - correlate
 required:
     - global_files
 additionalProperties: False

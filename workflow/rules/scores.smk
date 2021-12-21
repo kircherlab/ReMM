@@ -45,15 +45,15 @@ rule scores_extract_features:
     input:
         feature_set=lambda wc: expand(
             "results/features/feature_sets/{feature_set}.vcf.gz",
-            feature_set=config["training"][config["scores"][wc.score_name]["training"]][
-                "feature_set"
-            ],
+            feature_set=config["training"][
+                config["scores"][wc.score_name]["training"]
+            ]["feature_set"],
         ),
         feature_set_idx=lambda wc: expand(
             "results/features/feature_sets/{feature_set}.vcf.gz.tbi",
-            feature_set=config["training"][config["scores"][wc.score_name]["training"]][
-                "feature_set"
-            ],
+            feature_set=config["training"][
+                config["scores"][wc.score_name]["training"]
+            ]["feature_set"],
         ),
         regions="results/scores/{score_name}/input/bed/split.{split}.bed",
     output:
@@ -77,8 +77,12 @@ rule scores_sort_features:
                 "--feature %s %f"
                 % (
                     feature,
-                    getFeatureDefaultValue(
-                        feature, config["scores"][wc.score_name]["genome_build"]
+                    getFeatureMissingValue(
+                        feature,
+                        config["scores"][wc.score_name]["genome_build"],
+                        config["training"][config["scores"][wc.score]["training"]][
+                            "missing_value"
+                        ],
                     ),
                 )
                 for feature in getFeaturesOfScore(wc.feature_set)

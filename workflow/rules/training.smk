@@ -44,9 +44,10 @@ for training_run in config["training"].keys():
 
 def getTrainingData(training_run, label):
     return expand(
-        "results/annotation/{variant_set_positive}/{variant_set_positive}.{feature_set}.sorted.tsv.gz",
+        "results/annotation/{variant_set_positive}/{variant_set_positive}.{feature_set}.{missing_value}.sorted.tsv.gz",
         variant_set_positive=config["training"][training_run][label],
         feature_set=config["training"][training_run]["feature_set"],
+        missing_value=config["training"][training_run]["missing_value"],
     )
 
 

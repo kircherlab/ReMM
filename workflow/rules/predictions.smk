@@ -1,8 +1,9 @@
 rule predictions_createInputData:
     input:
         lambda wc: expand(
-            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.sorted.tsv.gz",
+            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
             feature_set=config["training"][wc.training]["feature_set"],
+            missing_value=config["training"][wc.training]["missing_value"],
         ),
     output:
         temp(
@@ -17,8 +18,9 @@ rule predictions_createInputData:
 rule predictions_createInputLabels:
     input:
         lambda wc: expand(
-            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.sorted.tsv.gz",
+            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
             feature_set=config["training"][wc.training]["feature_set"],
+            missing_value=config["training"][wc.training]["missing_value"],
         ),
     output:
         temp(
@@ -75,8 +77,9 @@ rule predictionsparSMURF_combine_labels:
             "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.txt",
         ),
         data=lambda wc: expand(
-            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.sorted.tsv.gz",
+            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
             feature_set=config["training"][wc.training]["feature_set"],
+            missing_value=config["training"][wc.training]["missing_value"],
         ),
     output:
         "results/predictions/{training}/{variant_set}/predictions/predictions.with_IDs.tsv.gz",
