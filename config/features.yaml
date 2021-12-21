@@ -10,7 +10,9 @@ GCContent:
     type: bed
     method: upload
     column: 4
-    default_value: 0.409034
+    missing_value:
+      default_value: 0.409034
+      zero: 0.0
   hg38:
     url: ""
     file: GCContent
@@ -20,7 +22,9 @@ GCContent:
     type: bed
     method: upload
     column: 4
-    default_value: 0.408699
+    missing_value:
+      default_value: 0.408699
+      zero: 0.0
 CpGperGC:
   description: CpG islands. Percentage of island that is C or G. Downloaded from UCSC table browser
   hg19:
@@ -32,7 +36,9 @@ CpGperGC:
     type: bed
     method: upload
     column: 9
-    default_value: 65.085
+    missing_value:
+      default_value: 65.085
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -41,7 +47,9 @@ CpGperGC:
     type: bed
     method: upload
     column: 9
-    default_value: 65.8818
+    missing_value:
+      default_value: 65.8818
+      zero: 0.0
 CpGperCpG:
   description: CpG islands. Percentage of island that is CpG. Downloaded from UCSC table browser
   hg19:
@@ -52,7 +60,9 @@ CpGperCpG:
     type: bed
     method: upload
     column: 8
-    default_value: 18.2498
+    missing_value:
+      default_value: 18.2498
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -61,7 +71,9 @@ CpGperCpG:
     type: bed
     method: upload
     column: 8
-    default_value: 18.7278
+    missing_value:
+      default_value: 18.7278
+      zero: 0.0
 CpGobsExp:
   description: CpG islands. Ratio of observed (cpgNum) to expected(numC*numG/length) CpG in island downloaded from UCSC table browser
   hg19:
@@ -72,7 +84,9 @@ CpGobsExp:
     type: bed
     column: 10
     method: upload
-    default_value: 0.874298
+    missing_value:
+      default_value: 0.874298
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cpgIslandExt.txt.gz
     file: cpgIslandExt
@@ -81,7 +95,9 @@ CpGobsExp:
     type: bed
     column: 10
     method: upload
-    default_value: 0.874696
+    missing_value:
+      default_value: 0.874696
+      zero: 0.0
 priPhyloP:
   description: Conservation primate phyloP46way downloaded from USCS
   hg19:
@@ -115,7 +131,9 @@ priPhyloP:
     type: wig
     method: upload
     description: phyloP46way.primate
-    default_value: 0.0451375
+    missing_value:
+      default_value: 0.0451375
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP17way/hg38.phyloP17way.wigFix.gz
     file: priPhyloP
@@ -123,7 +141,9 @@ priPhyloP:
     id: ""
     type: wig
     method: upload
-    default_value: 0.0977878
+    missing_value:
+      default_value: 0.0977878
+      zero: 0.0
 priPhastCons:
   description: Conservation primates phastCons46way downloaded from UCSC
   hg19:
@@ -157,14 +177,18 @@ priPhastCons:
     type: wig
     method: upload
     description: phastCons46way.primate
-    default_value: 0.128082
+    missing_value:
+      default_value: 0.128082
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons17way/hg38.phastCons17way.wigFix.gz
     file: priPhastCons
     files: all
     type: wig
     method: upload
-    default_value: 0.151415
+    missing_value:
+      default_value: 0.151415
+      zero: 0.0
 verPhyloP:
   description: Conservation vertebrate phyloP100way downloaded from UCSC
   hg19:
@@ -198,7 +222,9 @@ verPhyloP:
     type: wig
     method: upload
     description: phyloP46way
-    default_value: 0.0892683
+    missing_value:
+      default_value: 0.0892683
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.100way.phyloP100way/
     file: verPhyloP
@@ -230,7 +256,9 @@ verPhyloP:
     id: ""
     type: wig
     method: upload
-    default_value: 0.0954381
+    missing_value:
+      default_value: 0.0954381
+      zero: 0.0
 verPhastCons:
   description: Conservation vertebrate phastCons100way downloaded from UCSC
   hg19:
@@ -264,7 +292,10 @@ verPhastCons:
     type: wig
     method: upload
     description: phyloP46way
-    default_value: 0.102729
+    missing_value:
+      default_value: 0.102729
+      zero: 0.0
+    
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.100way.phastCons/
     file: verPhastCons
@@ -296,7 +327,9 @@ verPhastCons:
     type: wig
     id: ""
     method: upload
-    default_value: 0.0980657
+    missing_value:
+      default_value: 0.0980657
+      zero: 0.0
 mamPhyloP:
   description: Conservation placental mammals phyloP46way downloaded from USCS
   hg19:
@@ -330,7 +363,9 @@ mamPhyloP:
     type: wig
     method: upload
     description: verPhastCons.placental
-    default_value: 0.0357644
+    missing_value:
+      default_value: 0.0357644
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP30way/hg38.30way.phyloP/
     file: mamPhyloP
@@ -362,7 +397,9 @@ mamPhyloP:
     type: wig
     id: ""
     method: upload
-    default_value: 0.100913
+    missing_value:
+      default_value: 0.100913
+      zero: 0.0
 mamPhastCons:
   description: Conservation placental mammals phastCons46way downloaded from UCSC
   hg19:
@@ -396,7 +433,9 @@ mamPhastCons:
     type: wig
     method: upload
     description: mamPhastCons.placental
-    default_value: 0.0878941
+    missing_value:
+      default_value: 0.0878941
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons30way/hg38.30way.phastCons/
     file: mamPhastCons
@@ -428,7 +467,9 @@ mamPhastCons:
     id: ""
     type: wig
     method: upload
-    default_value: 0.128491
+    missing_value:
+      default_value: 0.128491
+      zero: 0.0
 GerpRS:
   description: GERP++ element score
   hg19:
@@ -438,7 +479,9 @@ GerpRS:
     column: 5
     files: all
     method: upload
-    default_value: 1064.06
+    missing_value:
+      default_value: 1064.06
+      zero: 0.0
   hg38:
     url: ""
     file: gerpElement
@@ -447,7 +490,9 @@ GerpRS:
     type: bed
     column: 4
     method: upload
-    default_value: 1441.64
+    missing_value:
+      default_value: 1441.64
+      zero: 0.0
 GerpRSpv:
   description: GERP++ element p-value
   hg19:
@@ -457,7 +502,9 @@ GerpRSpv:
     files: all
     type: bed
     method: upload
-    default_value: 1.0
+    missing_value:
+      default_value: 1.0
+      zero: 0.0
   hg38:
     url: ""
     file: gerpElement
@@ -466,7 +513,9 @@ GerpRSpv:
     type: bed
     column: 5
     method: upload
-    default_value: 1.0
+    missing_value:
+      default_value: 1.0
+      zero: 0.0
 EncH3K27Ac:
   description: Maximum ENCODE H3K27 acetylation level
   hg19:
@@ -484,7 +533,9 @@ EncH3K27Ac:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k27ac/
     file: EncH3K27Ac
@@ -500,7 +551,9 @@ EncH3K27Ac:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 EncH3K4Me1:
   description: Maximum ENCODE H3K4 methylation level
   hg19:
@@ -518,7 +571,9 @@ EncH3K4Me1:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me1/
     file: EncH3K4Me1
@@ -534,7 +589,9 @@ EncH3K4Me1:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 EncH3K4Me3:
   description: Maximum ENCODE H3K4 trimethylation level
   hg19:
@@ -552,7 +609,9 @@ EncH3K4Me3:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://hgdownload.cse.ucsc.edu/goldenPath/hg38/encodeDCC/wgEncodeRegMarkH3k4me3/
     file: EncH3K4Me3
@@ -568,7 +627,9 @@ EncH3K4Me3:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 EncH3K27Ac_v1_4:
   description: Maximum ENCODE H3K27 acetylation level
   hg19:
@@ -586,7 +647,9 @@ EncH3K27Ac_v1_4:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeReg/wgEncodeRegMarkH3k27ac/
     file: EncH3K27Ac_v1_4
@@ -602,7 +665,9 @@ EncH3K27Ac_v1_4:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 EncH3K4Me1_v1_4:
   description: Maximum ENCODE H3K4 methylation level
   hg19:
@@ -620,7 +685,9 @@ EncH3K4Me1_v1_4:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeReg/wgEncodeRegMarkH3k4me1/
     file: EncH3K4Me1
@@ -636,7 +703,9 @@ EncH3K4Me1_v1_4:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 EncH3K4Me3_v1_4:
   description: Maximum ENCODE H3K4 trimethylation level
   hg19:
@@ -654,7 +723,9 @@ EncH3K4Me3_v1_4:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeReg/wgEncodeRegMarkH3k4me3/
     file: EncH3K4Me3
@@ -670,7 +741,9 @@ EncH3K4Me3_v1_4:
     type: encode.bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 DnaseClusteredHyp:
   description: Number of DnaseClustered V3 cells that are hypersensitive in that
     region. This track shows DNase hypersensitive areas assayed in a large collection
@@ -689,7 +762,9 @@ DnaseClusteredHyp:
     type: bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeRegDnaseClustered.txt.gz
     file: DnaseClusteredHyp
@@ -698,7 +773,9 @@ DnaseClusteredHyp:
     type: bed
     column: 4
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 DnaseClusteredScore:
   description: DnaseClustered V3 Score. This track shows DNase hypersensitive areas
     assayed in a large collection of cell types by the ENCODE project. Regulatory
@@ -716,7 +793,9 @@ DnaseClusteredScore:
     type: bed
     column: 5
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeRegDnaseClustered.txt.gz
     file: DnaseClusteredScore
@@ -725,7 +804,9 @@ DnaseClusteredScore:
     type: bed
     column: 5
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 Fantom5Perm:
   description: permissive enhancers by the Andersson et al. paper.
   hg19:
@@ -735,7 +816,9 @@ Fantom5Perm:
     type: bed
     column: 5
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts3.bed.gz?download=1
     file: Fantom5Perm
@@ -746,7 +829,9 @@ Fantom5Perm:
     type: bed
     column: 5
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 Fantom5Robust:
   description: robust enhancers by the Andersson et al. paper.
   hg19:
@@ -756,7 +841,9 @@ Fantom5Robust:
     type: bed
     column: 5
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://zenodo.org/record/545682/files/hg38.tc.decompose_smoothing_merged.ctssMaxCounts11_ctssMaxTpm1.bed.gz?download=1
     file: Fantom5Robust
@@ -767,7 +854,9 @@ Fantom5Robust:
     type: bed
     column: 5
     method: upload-max
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 numTFBSConserved:
   description: Number of overlapping transcription factor binding sites conserved
     in the human/mouse/rat alignment. A binding site is considered to be conserved
@@ -804,7 +893,9 @@ numTFBSConserved:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload-test.gi.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/encRegTfbsClusteredWithCells.hg38.bed.gz
     file: numTFBSConserved
@@ -837,7 +928,9 @@ numTFBSConserved:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 encRegTfbsClustered:
   description: TFBS clusters together with input cell sources.
   hg19:
@@ -871,7 +964,9 @@ encRegTfbsClustered:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://hgdownload-test.gi.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/encRegTfbsClusteredWithCells.hg38.bed.gz
     file: encRegTfbsClustered
@@ -904,14 +999,19 @@ encRegTfbsClustered:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 rareVar:
   description: "Number of rare 1000 genome variants (< 0.5% allele frequency) in a +-500 window."
   hg19:
     file: 1KG
     files: all
     type: bed
-    default_value: 0.0
+    method: upload
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls
     file: 1KG
@@ -943,14 +1043,19 @@ rareVar:
     id: ""
     column: 5
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 commonVar:
   description: "Number of common 1000 genome variants (>= 0.5% allele frequency) in a +-500 window."
   hg19:
     file: 1KG
     files: all
     type: bed
-    default_value: 0.0
+    method: upload
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls
     file: 1KG
@@ -982,14 +1087,19 @@ commonVar:
     id: ""
     column: 6
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 fracRareCommon:
   description: Fraction of rare and common variants in a +-500 window.
   hg19:
     file: 1KG
     files: all
     type: bed
-    default_value: 0.0
+    method: upload
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20200515_EBI_Freebayescalls
     file: 1KG
@@ -1021,7 +1131,9 @@ fracRareCommon:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 ISCApath:
   description: Count of overlapping ISCA entries (nstd37_45_75). Use only pathogenic
     or likely pathogenic.
@@ -1057,7 +1169,9 @@ ISCApath:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/
     file: ISCApath
@@ -1090,7 +1204,9 @@ ISCApath:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 ISCApath_20211103:
   description: Count of overlapping ISCA entries (nstd45_75_102). Use only pathogenic
     or likely pathogenic.
@@ -1126,7 +1242,9 @@ ISCApath_20211103:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/
     file: ISCApath_20211103
@@ -1159,7 +1277,9 @@ ISCApath_20211103:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 dbVARCount_20211020:
   description: Count of overlapping dbVar entries. Not benign or or likley benign.
   hg19:
@@ -1194,7 +1314,9 @@ dbVARCount_20211020:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/archive/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.2021_10_20.variant_call.clinical.pathogenic_or_likely_pathogenic.gvf.gz
     file: dbVARCount_20211020
@@ -1227,7 +1349,9 @@ dbVARCount_20211020:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 dbVARCount:
   description: Count of overlapping dbVar entries. Not benign or or likley benign.
   hg19:
@@ -1262,7 +1386,9 @@ dbVARCount:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/archive/Homo_sapiens/by_assembly/GRCh38/gvf/GRCh38.2020_12_11.variant_call.clinical.pathogenic_or_likely_pathogenic.gvf.gz
     file: dbVARCount
@@ -1295,7 +1421,9 @@ dbVARCount:
     type: bed
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 DGVCount:
   description: Count of overlapping DGV entries.
   hg19:  
@@ -1330,7 +1458,9 @@ DGVCount:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_2014-10-16.txt
     file: DGVCount
@@ -1363,7 +1493,9 @@ DGVCount:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
 DGVCount_20200225:
   description: Count of overlapping DGV entries.
   hg19:  
@@ -1398,7 +1530,9 @@ DGVCount_20200225:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
   hg38:
     url: http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_2020-02-25.txt
     file: DGVCount_20200225
@@ -1431,4 +1565,6 @@ DGVCount_20200225:
     id: ""
     column: 4
     method: upload
-    default_value: 0.0
+    missing_value:
+      default_value: 0.0
+      zero: 0.0
