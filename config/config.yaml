@@ -1,6 +1,6 @@
 ---
 global_files:
-  wrapper_directory: /data/users/schubacm_c/work/projects/snakemake_wrappers
+  wrapper_directory: /data/gpfs-1/users/schubacm_c/work/projects/snakemake_wrappers
   genome_builds:
     hg38:
       reference: "/fast/projects/cubit/current/static_data/reference/GRCh38/hs38/hs38.fa"
@@ -164,6 +164,17 @@ variants:
       filters:
         bcftools:
           filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  cadd_v1_6_humanDerived_hg19_downsample:
+    type: file
+    properties:
+      file: resources/variants/cadd_v1_6_humanDerived_hg19.vcf.gz
+    genome_build: hg19
+    processing:
+      jannovar: refseq_105_hg19
+      filters:
+        downsample: 13911061
+        bcftools:
+          filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
   remm_snvs_20160109:
     type: file
     properties:
@@ -290,6 +301,25 @@ training:
   remm_v1_4_hg19_zero:
     positives: remm_snvs_20160109
     negatives: cadd_v1_6_humanDerived_hg19
+    feature_set: remm_v1_4_hg19
+    implementation: parSMURF
+    missing_value: zero
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_4_hg19_downsample:
+    positives: remm_snvs_20160109
+    negatives: cadd_v1_6_humanDerived_hg19_downsample
+    feature_set: remm_v1_4_hg19
+    implementation: parSMURF
+    missing_value: default_value
+    config:
+      mode: cv
+      seed: 1
+
+  remm_v1_4_hg19_downsample_zero:
+    positives: remm_snvs_20160109
+    negatives: cadd_v1_6_humanDerived_hg19_downsample
     feature_set: remm_v1_4_hg19
     implementation: parSMURF
     missing_value: zero

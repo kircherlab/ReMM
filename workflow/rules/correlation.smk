@@ -39,8 +39,8 @@ rule correlation_correlate_score:
     output:
         "results/correlation/{correlation}/score.correlate.tsv.gz",
     params:
-        value_a="{SCORE}_A",
-        value_b="{SCORE}_B",
+        value_a="SCORE_A",
+        value_b="SCORE_B",
     wrapper:
         getWrapper("evaluate/correlation")
 
