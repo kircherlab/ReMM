@@ -14,16 +14,33 @@ additionalProperties:
       type: string
     hg19:
       type: object
-      # properties:
-      #   default_value: number
-      # required:
-      #   - default_value
+      properties:
+        method:
+          enum: [upload, upload-max]
+        type:
+          enum: [wig, bed, encode.bed]
+        missing_value:
+          type: object
+          additionalProperties:
+            type: number
+      required:
+        - method
+        - type
+        - missing_value
     hg38:
       type: object
-      # properties:
-      #   default_value: number
-      # required:
-      #   - default_value
-
+      properties:
+        method:
+          enum: [upload, upload-max]
+        type:
+          enum: [wig, bed, encode.bed]
+        missing_value:
+          type: object
+          additionalProperties:
+            type: number
+      required:
+        - method
+        - type
+        - missing_value
   required:
     - description

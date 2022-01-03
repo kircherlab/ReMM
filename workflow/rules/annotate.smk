@@ -19,11 +19,11 @@ def getFeaturesOfFeatureSet(feature_set):
     return config["feature_sets"][feature_set]["features"]
 
 
-def getFeatureDefaultValue(feature, genome_build):
+def getFeatureMissingValue(feature, genome_build, missing_value_config):
     """
     return the default value of a feature (and its genome build)
     """
-    return features[feature][genome_build]["default_value"]
+    return features[feature][genome_build]["missing_value"][missing_value_config]
 
 
 # annotate variants with features
@@ -51,15 +51,17 @@ rule annotate_sort_features:
     input:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
     output:
-        "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
+        "results/annotation/{variant_set}/{variant_set}.{feature_set}.{missing_value}.sorted.tsv.gz",
     params:
         features=lambda wc: " ".join(
             [
                 "--feature %s %f"
                 % (
                     feature,
-                    getFeatureDefaultValue(
-                        feature, getVariantSetGenomeBuild(wc.variant_set)
+                    getFeatureMissingValue(
+                        feature,
+                        getVariantSetGenomeBuild(wc.variant_set),
+                        wc.missing_value,
                     ),
                 )
                 for feature in getFeaturesOfFeatureSet(wc.feature_set)
