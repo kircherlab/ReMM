@@ -22,7 +22,7 @@ def getVariantsInput(variant_set, step, idx=False):
     """
     input variants are different for each process step becaus ethey are flexible.
     this trys to collect the correct input. The following steps are possible only in that order:
-    liftover > jannovar > bcftools > annotate
+    liftover > jannovar > filters (bcftools > downsample) > annotate
     """
 
     add = ".tbi" if idx else ""
@@ -42,7 +42,7 @@ def getVariantsInput(variant_set, step, idx=False):
         raise Exception("Unknown variant type %s" % variant_set_config["type"])
     if step == "liftover":
         return output
-
+    # liftover
     if (
         "processing" in variant_set_config
         and "liftover" in variant_set_config["processing"]
@@ -52,6 +52,7 @@ def getVariantsInput(variant_set, step, idx=False):
             variant_set=variant_set,
             add=add,
         )
+    # jannovar
     if step == "jannovar":
         return output
     if (
@@ -63,6 +64,7 @@ def getVariantsInput(variant_set, step, idx=False):
             variant_set=variant_set,
             add=add,
         )
+    # bcftools
     if step == "bcftools":
         return output
     if (
@@ -72,6 +74,19 @@ def getVariantsInput(variant_set, step, idx=False):
         if "bcftools" in variant_set_config["processing"]["filters"]:
             output = expand(
                 "results/variants/{variant_set}/bcftools/{variant_set}.vcf.gz{add}",
+                variant_set=variant_set,
+                add=add,
+            )
+    # downsample
+    if step == "downsample":
+        return output
+    if (
+        "processing" in variant_set_config
+        and "filters" in variant_set_config["processing"]
+    ):
+        if "downsample" in variant_set_config["processing"]["filters"]:
+            output = expand(
+                "results/variants/{variant_set}/downsample/{variant_set}.vcf.gz{add}",
                 variant_set=variant_set,
                 add=add,
             )
@@ -173,6 +188,29 @@ rule variants_filter_bcftools:
         (
             echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
             bcftools view -H {params.bcftools_filter} {input};
+        ) | bgzip -c > {output.vcf};
+        tabix {output.vcf};
+        """
+
+
+# filter variants with a bcftools filter command set in the config file
+rule variants_filter_downsample:
+    conda:
+        "../envs/ReMM.yaml"
+    input:
+        lambda wc: getVariantsInput(wc.variant_set, "downsample"),
+    output:
+        vcf="results/variants/{variant_set}/downsample/{variant_set}.vcf.gz",
+        idx="results/variants/{variant_set}/downsample/{variant_set}.vcf.gz.tbi",
+    params:
+        sample_size=lambda wc: config["variants"][wc.variant_set]["processing"][
+            "filters"
+        ]["downsample"],
+    shell:
+        """
+        (
+            zcat {input} | egrep "^#";
+            zcat {input} | egrep -v "^#" | sort -R | awk 'NR <= {params.sample_size} {{ print }}' | sort -k1,1 -k2,2n;
         ) | bgzip -c > {output.vcf};
         tabix {output.vcf};
         """
