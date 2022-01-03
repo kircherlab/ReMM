@@ -51,14 +51,16 @@ rule correlation_correlate_score:
 rule correlation_featureJoin:
     input:
         left=lambda wc: expand(
-            "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
+            "results/annotation/{variant_set}/{variant_set}.{feature_set}.{missing_value}.sorted.tsv.gz",
             variant_set=config["correlation"][wc.correlation]["A"]["variants"],
             feature_set=config["correlation"][wc.correlation]["A"]["feature_set"],
+            missing_value=config["correlation"][wc.correlation]["B"]["missing_value"],
         ),
         right=lambda wc: expand(
-            "results/annotation/{variant_set}/{variant_set}.{feature_set}.sorted.tsv.gz",
+            "results/annotation/{variant_set}/{variant_set}.{feature_set}.{missing_value}.sorted.tsv.gz",
             variant_set=config["correlation"][wc.correlation]["B"]["variants"],
             feature_set=config["correlation"][wc.correlation]["B"]["feature_set"],
+            missing_value=config["correlation"][wc.correlation]["B"]["missing_value"],
         ),
     output:
         "results/correlation/{correlation}/features/join.tsv.gz",

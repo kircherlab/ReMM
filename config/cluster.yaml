@@ -91,6 +91,10 @@ variants_annotateJannovar:
   time: "0-01:00"
   mem: 10000
   queue: medium
+variants_filter_downsample:
+  time: "0-04:00"
+  mem: 10000
+  queue: medium
 # Average
 # interval features
 
