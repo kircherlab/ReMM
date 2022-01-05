@@ -70,6 +70,8 @@ include: "rules/training.smk"
 include: "rules/evaluation.smk"
 # Workflow predictions
 include: "rules/predictions.smk"
+# Workflow feature_importance
+include: "rules/feature_importance.smk"
 # Workflow scores
 include: "rules/scores.smk"
 # Workflow correlation

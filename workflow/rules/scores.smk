@@ -6,7 +6,7 @@
 def getFeaturesOfScore(score_name):
     training = config["scores"][score_name]["training"]
     feature_set = config["training"][training]["feature_set"]
-    return getFeaturesOfFeatuteSet(feature_set)
+    return getFeaturesOfFeatureSet(feature_set)
 
 
 rule scores_getNotNRegions:
@@ -65,7 +65,6 @@ rule scores_extract_features:
         """
 
 
-# TODO add default value for feature
 rule scores_sort_features:
     input:
         "results/scores/{score_name}/input/annotation/{split}.unsorted.tsv.gz",
@@ -79,13 +78,15 @@ rule scores_sort_features:
                     feature,
                     getFeatureMissingValue(
                         feature,
-                        config["scores"][wc.score_name]["genome_build"],
-                        config["training"][config["scores"][wc.score]["training"]][
+                        getTrainingRunGenomeBuild(
+                            config["scores"][wc.score_name]["training"]
+                        ),
+                        config["training"][config["scores"][wc.score_name]["training"]][
                             "missing_value"
                         ],
                     ),
                 )
-                for feature in getFeaturesOfScore(wc.feature_set)
+                for feature in getFeaturesOfScore(wc.score_name)
             ]
         ),
     shell:

@@ -7,6 +7,9 @@
 Results will be saved in results/training/<training_run>
 """
 
+def getFeaturesOfTraining(training_run):
+    feature_set = config["training"][training_run]["feature_set"]
+    return getFeaturesOfFeatureSet(feature_set)
 
 def getTrainingRunGenomeBuild(training_run):
     """
