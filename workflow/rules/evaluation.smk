@@ -1,3 +1,15 @@
+###################################
+#### evaluation sub workflow  ####
+###################################
+
+
+"""
+Results will be saved in results/evaluation/<training_run>
+
+Evaluation of training runs like AUPRC, AUROC or curves. 
+Also mean AURPRC and AUROC for repetetive (100 times) CV training.
+"""
+
 import random
 
 

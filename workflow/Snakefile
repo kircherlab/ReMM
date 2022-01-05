@@ -228,6 +228,21 @@ rule all_evaluate:
             "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
             training_run=list(config["training"].keys()),
         ),
+        expand(
+            "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_max_min.tsv.gz",
+            training_run=list(config["training"].keys()),
+        ),
+
+
+#################################################
+### All rules for workflow feature importance ###
+#################################################
+rule all_featureImportance:
+    input:
+        expand(
+            "results/training/{training_run}/feature_importance/feature_importance.names.mean_max_min.tsv.gz",
+            training_run=list(config["training"].keys()),
+        ),
 
 
 ####################################
