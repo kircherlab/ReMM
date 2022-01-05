@@ -25,6 +25,10 @@ def getSeedsForTraining(training_run, n):
     return seeds
 
 
+### metrics ###
+
+
+# create AUC metrics for a run
 rule evaluation_auc:
     input:
         "results/training/{training_run}/predictions/predictions.with_labels.tsv.gz",
@@ -38,6 +42,7 @@ rule evaluation_auc:
         getWrapper("evaluate/auc")
 
 
+# create AUC metrics for a repetitive run
 rule evaluation_aucRepetitive:
     input:
         "results/training/{training_run}/predictions/repetitive/predictions.{seed}.with_labels.tsv.gz",
@@ -53,6 +58,7 @@ rule evaluation_aucRepetitive:
         getWrapper("evaluate/auc")
 
 
+# rename header for repetetive metrics (before merging)
 rule evaluation_aucRepetitiveRename:
     input:
         "results/evaluation/{training_run}/metrics/repetitive/auc_tmp.{seed}.tsv.gz",
@@ -64,6 +70,7 @@ rule evaluation_aucRepetitiveRename:
         getWrapper("file_manipulation/rename")
 
 
+# combine repetitive metrics
 rule evaluation_aucRepetitiveCombine:
     input:
         lambda wc: expand(
@@ -78,6 +85,7 @@ rule evaluation_aucRepetitiveCombine:
         getWrapper("file_manipulation/concat")
 
 
+# create mean max min for all repetitive runs
 rule evaluation_aucRepetitiveMean:
     input:
         "results/evaluation/{training_run}/metrics/repetitive/auc_all.tsv.gz",
@@ -93,9 +101,9 @@ rule evaluation_aucRepetitiveMean:
         getWrapper("file_manipulation/summarize_columns")
 
 
-#### plots
+### plots ###
 
-
+# plot prc and roc curve for training
 rule evaluation_plot_metrics:
     input:
         "results/training/{training_run}/predictions/predictions.with_labels.tsv.gz",

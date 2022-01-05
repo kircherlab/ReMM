@@ -1,7 +1,9 @@
-#### Variants subworkflow ####
+############################
+### Variants subworkflow ###
+############################
 
 """
-Results will be saved in results/variants/
+Results will be saved in results/variants/<variant_set>
 """
 
 

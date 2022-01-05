@@ -1,6 +1,18 @@
-# TODO documentation
+##########################################
+#### variant generation sub workflow  ####
+##########################################
 
 
+"""
+Results will be saved in `results/variant_generation/<name>`
+
+Generates variants but the same variant set for hg19 and hg38. Uses single positions from a bed file (config type regions) or generates random variants (config type random) of a defined length.
+
+Final output is `results/variant_generation/<name>/hg19/<name>.vcf.gz"`
+"""
+
+
+# just copy the bed file specified in the config
 rule variant_generation_regionsToVariants:
     input:
         lambda wc: config["variant_generation"][wc.name]["properties"]["file"],
@@ -12,6 +24,7 @@ rule variant_generation_regionsToVariants:
         """
 
 
+# generate random positions unsing bedtools random
 rule variant_generation_random:
     conda:
         "../envs/ReMM.yaml"
@@ -32,6 +45,9 @@ rule variant_generation_random:
 
 
 def getRegionFileForVariantGeneration(name):
+    """
+    Helper to get the correct file for regions or variants
+    """
     if config["variant_generation"][name]["type"] == "random":
         return "results/variant_generation/{name}/hg38/random_full.{regions_or_variants}.bed.gz"
     if config["variant_generation"][name]["type"] == "regions":
@@ -39,6 +55,7 @@ def getRegionFileForVariantGeneration(name):
     raise Exception("Unknown type of variant generation name: %s" % name)
 
 
+# liftover the variants to hg19
 rule variant_generation_liftover:
     conda:
         "../envs/ReMM.yaml"
@@ -57,6 +74,7 @@ rule variant_generation_liftover:
         """
 
 
+# split regions to window size 1
 rule variant_generation_variantsFromRegions:
     """
     Create single position bed from regions. This has to be done for liftover hg19 
@@ -79,6 +97,7 @@ rule variant_generation_variantsFromRegions:
         """
 
 
+# get the final hg38 variants (also defined for hg19)
 rule variant_generation_getFinalHg38:
     conda:
         "../envs/ReMM.yaml"
@@ -101,6 +120,7 @@ rule variant_generation_getFinalHg38:
         """
 
 
+# get the final hg19 variants (also defined for hg38)
 rule variant_generation_getFinalHg19:
     conda:
         "../envs/ReMM.yaml"

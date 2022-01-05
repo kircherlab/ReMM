@@ -4,12 +4,17 @@
 
 
 """
-Results will be saved in results/correlation/<correlation_set>
+Results will be saved in `results/correlation/<correlation_set>`
 
 Correlation of features and predicted scores through genome builds.
+
+Final output is `results/correlation/<correlation>/feature.correlate.tsv.gz`
 """
 
+### SCORES ###
 
+
+# join two prediction files by the variant ID
 rule correlation_scoreJoin:
     input:
         left=lambda wc: expand(
@@ -33,6 +38,7 @@ rule correlation_scoreJoin:
         getWrapper("file_manipulation/merge")
 
 
+# correlate the predicted score from both predictions
 rule correlation_correlate_score:
     input:
         a="results/correlation/{correlation}/prediction/join.tsv.gz",
@@ -48,6 +54,7 @@ rule correlation_correlate_score:
 ## FEATURES ###
 
 
+# join two annotation files on the variant ID
 rule correlation_featureJoin:
     input:
         left=lambda wc: expand(
@@ -73,6 +80,7 @@ rule correlation_featureJoin:
         getWrapper("file_manipulation/merge")
 
 
+# correlate two features defined in the config file
 rule correlation_correlate_feature:
     input:
         a="results/correlation/{correlation}/features/join.tsv.gz",
@@ -86,6 +94,10 @@ rule correlation_correlate_feature:
 
 
 def correlation_getCorrelateFeatures(correlation):
+    """
+    Function to collect features that should be correlated from both feature sets-
+    Raises exception when feature not present in feature set.
+    """
     features = [
         i.split("=")
         for i in config["correlation"][correlation]["correlate"]["features"]
@@ -110,6 +122,7 @@ def correlation_getCorrelateFeatures(correlation):
     return features
 
 
+# combine correlated features
 rule correlation_combine_correlate_feature:
     input:
         lambda wc: expand(
