@@ -200,8 +200,8 @@ annotateFeatures19:
   mem: 150000
   queue: medium
 training_parSMURF_createParsmurfInput:
-  time: "0-00:30"
-  mem: 10000
+  time: "0-40:00"
+  mem: "40G"
   queue: medium
 scores_getNotNRegions:
   time: "0-01:00"

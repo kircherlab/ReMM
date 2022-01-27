@@ -140,3 +140,30 @@ rule correlation_combine_correlate_feature:
         ],
     wrapper:
         getWrapper("file_manipulation/concat")
+
+
+# combine correlated features
+rule correlation_plot:
+    input:
+        lambda wc: expand(
+            "results/annotation/{variant_set}/{variant_set}.{feature_set}.{missing_value}.sorted.tsv.gz",
+            variant_set=config["correlation"][wc.correlation]["A"]["variants"],
+            feature_set=config["correlation"][wc.correlation]["A"]["feature_set"],
+            missing_value=config["correlation"][wc.correlation]["B"]["missing_value"],
+        ),
+        lambda wc: expand(
+            "results/annotation/{variant_set}/{variant_set}.{feature_set}.{missing_value}.sorted.tsv.gz",
+            variant_set=config["correlation"][wc.correlation]["B"]["variants"],
+            feature_set=config["correlation"][wc.correlation]["B"]["feature_set"],
+            missing_value=config["correlation"][wc.correlation]["B"]["missing_value"],
+        ),
+    output:
+        "results/correlation/{correlation}/feature.correlate.{method}.png",
+    params:
+        columns=lambda wc: [
+            f[0] for f in correlation_getCorrelateFeatures(wc.correlation)
+        ],
+        arrange="ID",
+        method=lambda wc: wc.method,
+    wrapper:
+        getWrapper("plots/ggcorrplot")

@@ -260,9 +260,29 @@ rule all_scores:
 ##########################################
 ### All rules for workflow correlation ###
 ##########################################
+def getCorrelationPlots():
+    output = []
+    for correlation, values in config["correlation"].items():
+        if "plot" in values["correlate"]:
+            output += expand(
+                "results/correlation/{correlation}/{input_type}.correlate.{method}.png",
+                correlation=correlation,
+                input_type=values["correlate"]["plot"],
+                method=["spearman", "pearson"],
+            )
+    return output
+
+
 rule all_correlation:
     input:
         expand(
-            "results/correlation/{correlation}/feature.correlate.tsv.gz",
+            "results/correlation/{correlation}/{input_type}.correlate.tsv.gz",
             correlation=list(config["correlation"].keys()),
+            input_type=["feature", "score"],
         ),
+        getCorrelationPlots(),
+
+
+rule all_correlation_plots:
+    input:
+        getCorrelationPlots(),

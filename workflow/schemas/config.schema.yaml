@@ -160,38 +160,48 @@ properties:
   correlation:
     description: correlation of features and scores
     type: object
-    properties:
-      A:
-        type: object
-        properties:
-          variants:
-            type: string
-          training:
-            type: string
-          feature_set:
-            type: string
-          missing_value:
-            type: string
-      B:
-        type: object
-        properties:
-          variants:
-            type: string
-          training:
-            type: string
-          feature_set:
-            type: string
-          missing_value:
-            type: string
-      correlate:
-        type: object
-        properties:
-          features:
-            type: object
+    additionalProperties:
+      type: object
+      properties:
+        A:
+          type: object
+          properties:
+            variants:
+              type: string
+            training:
+              type: string
+            feature_set:
+              type: string
+            missing_value:
+              type: string
+        B:
+          type: object
+          properties:
+            variants:
+              type: string
+            training:
+              type: string
+            feature_set:
+              type: string
+            missing_value:
+              type: string
+        correlate:
+          type: object
+          properties:
+            plot:
+              type: array
+              items:
+                type: string
+                enum: [score, feature]
+            features:
+              type: array
+              items:
+                type: string
       required:
         - A
         - B
         - correlate
+      additionalProperties: False
 required:
     - global_files
 additionalProperties: False

@@ -143,6 +143,10 @@ variant_generation:
     type: regions
     properties:
       file: resources/regions/DLK1_hg38.bed.gz
+  training_v0_4:
+    type: variants
+    properties:
+      file: resources/variants/training_v0.4.hg38.vcf.gz
 variants:
   cadd_v1_3_humanDerived_hg38:
     type: file
@@ -175,6 +179,11 @@ variants:
         downsample: 13911061
         bcftools:
           filter: -i 'INFO/ANN~"|3_prime_UTR_intron_variant|" || INFO/ANN~"|5_prime_UTR_intron_variant|" || INFO/ANN~"|3_prime_UTR_exon_variant|" || INFO/ANN~"|5_prime_UTR_exon_variant|" || INFO/ANN~"|non_coding_transcript_intron_variant|" || INFO/ANN~"|non_coding_transcript_exon_variant|" || INFO/ANN~"|coding_transcript_intron_variant|" || INFO/ANN~"|upstream_gene_variant|" || INFO/ANN~"|downstream_gene_variant|" || INFO/ANN~"|intergenic_variant|" || INFO/ANN~"|splice_donor_variant|" || INFO/ANN~"|splice_acceptor_variant|" || INFO/ANN~"|splice_region_variant|"'
+  ReMM_negative_snvs_noncoding_20180118:
+    type: file
+    properties:
+      file: resources/variants/SNVs.noncoding.20180118.vcf.gz
+    genome_build: hg19
   remm_snvs_20160109:
     type: file
     properties:
@@ -234,7 +243,71 @@ variants:
     properties:
       name: region_DLK1
     genome_build: hg38
+  validation_variants_training_v0_4_hg19:
+    type: generation
+    properties:
+      name: training_v0_4
+    genome_build: hg19
+  validation_variants_training_v0_4_hg38:
+    type: generation
+    properties:
+      name: training_v0_4
+    genome_build: hg38
 training:
+  remm_v1_3_hg19_remmNegatives:
+    positives: remm_snvs_20160109
+    negatives: ReMM_negative_snvs_noncoding_20180118
+    feature_set: remm_v1_3_hg19
+    implementation: parSMURF
+    missing_value: default_value
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_hg19_remmNegatives_zero:
+    positives: remm_snvs_20160109
+    negatives: ReMM_negative_snvs_noncoding_20180118
+    feature_set: remm_v1_3_hg19
+    implementation: parSMURF
+    missing_value: zero
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_hg19:
+    positives: remm_snvs_20160109
+    negatives: cadd_v1_6_humanDerived_hg19
+    feature_set: remm_v1_3_hg19
+    implementation: parSMURF
+    missing_value: default_value
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_hg19_zero:
+    positives: remm_snvs_20160109
+    negatives: cadd_v1_6_humanDerived_hg19
+    feature_set: remm_v1_3_hg19
+    implementation: parSMURF
+    missing_value: zero
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_hg19_downsample:
+    positives: remm_snvs_20160109
+    negatives: cadd_v1_6_humanDerived_hg19_downsample
+    feature_set: remm_v1_3_hg19
+    implementation: parSMURF
+    missing_value: default_value
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_3_hg19_downsample_zero:
+    positives: remm_snvs_20160109
+    negatives: cadd_v1_6_humanDerived_hg19_downsample
+    feature_set: remm_v1_3_hg19
+    implementation: parSMURF
+    missing_value: zero
+    config:
+      mode: cv
+      seed: 1
   remm_v1_3_parsmurf_hg38:
     positives: remm_snvs_20160109_liftover
     negatives: cadd_v1_3_humanDerived_hg38
@@ -325,13 +398,31 @@ training:
     config:
       mode: cv
       seed: 1
+  remm_v1_4_hg19_remmNegatives_zero:
+    positives: remm_snvs_20160109
+    negatives: ReMM_negative_snvs_noncoding_20180118
+    feature_set: remm_v1_4_hg19
+    implementation: parSMURF
+    missing_value: zero
+    config:
+      mode: cv
+      seed: 1
+  remm_v1_4_hg19_remmNegatives:
+    positives: remm_snvs_20160109
+    negatives: ReMM_negative_snvs_noncoding_20180118
+    feature_set: remm_v1_4_hg19
+    implementation: parSMURF
+    missing_value: default_value
+    config:
+      mode: cv
+      seed: 1
 scores:
   remm_score_v0_4_hg38:
     training: remm_v1_4_hg38
     comments:
       - ReMM score version v0.4.0.hg38
-      - Authors: Max Schubach, Lusine Nazaretyan, Martin Kircher
-      - https://kircherlab.bihealth.org
+      - "Authors: Max Schubach, Lusine Nazaretyan, Martin Kircher"
+      - "https://kircherlab.bihealth.org"
   # remm_v0_3_1_parsmurf_hg38_score:
   #   training: remm_v1_3_parsmurf_hg38
   #   comments:
@@ -349,6 +440,8 @@ correlation:
       feature_set: remm_v1_4_hg38
       missing_value: default_value
     correlate:
+      plot:
+        - feature
       features:
         - CpGperGC=CpGperGC
         - CpGperCpG=CpGperCpG
@@ -466,8 +559,47 @@ correlation:
       feature_set: remm_v1_4_hg38
       missing_value: default_value
     correlate:
-      trainings:
-        - remm_v1_4_hg38
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  training_v0_4_remm_v1_4:
+    A:
+      variants: validation_variants_training_v0_4_hg19
+      training: remm_v1_4_hg19
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: validation_variants_training_v0_4_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      plot:
+        - feature
       features:
         - CpGperGC=CpGperGC
         - CpGperCpG=CpGperCpG

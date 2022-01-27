@@ -12,6 +12,17 @@ Final output is `results/variant_generation/<name>/hg19/<name>.vcf.gz"`
 """
 
 
+# for variants make a bed file out of the vcf file
+rule variant_generation_variantsToRegions:
+    input:
+        lambda wc: config["variant_generation"][wc.name]["properties"]["file"],
+    output:
+        "results/variant_generation/{name}/hg38/variants_full.variants.bed.gz",
+    shell:
+        """
+        zcat {input} | egrep -v "^#" | awk -v "OFS=\\t" '{{print $1,$2-1,$2,NR}}' | bgzip -c > {output}
+        """
+
 # just copy the bed file specified in the config
 rule variant_generation_regionsToVariants:
     input:
@@ -50,8 +61,10 @@ def getRegionFileForVariantGeneration(name):
     """
     if config["variant_generation"][name]["type"] == "random":
         return "results/variant_generation/{name}/hg38/random_full.{regions_or_variants}.bed.gz"
-    if config["variant_generation"][name]["type"] == "regions":
+    elif config["variant_generation"][name]["type"] == "regions":
         return "results/variant_generation/{name}/hg38/regions_full.{regions_or_variants}.bed.gz"
+    elif config["variant_generation"][name]["type"] == "variants":
+        return "results/variant_generation/{name}/hg38/variants_full.{regions_or_variants}.bed.gz"
     raise Exception("Unknown type of variant generation name: %s" % name)
 
 
