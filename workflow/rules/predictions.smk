@@ -1,4 +1,4 @@
-rule predictions_createInputData:
+checkpoint predictions_createInputData:
     input:
         lambda wc: expand(
             "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
@@ -7,44 +7,65 @@ rule predictions_createInputData:
         ),
     output:
         temp(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.txt"
+            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt"
         ),
+    params:
+        lines=100000,
+        prefix="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.",
+        suffix=".txt",
     shell:
         """
-        zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4- > {output}
+        split --additional-suffix={params.suffix} -a 4 -l {params.lines} <(
+            zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4-
+        ) {params.prefix}
         """
+
+
+# rule predictions_createInputData:
+#     input:
+#         lambda wc: expand(
+#             "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
+#             feature_set=config["training"][wc.training]["feature_set"],
+#             missing_value=config["training"][wc.training]["missing_value"],
+#         ),
+#     output:
+#         temp(
+#             "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.txt"
+#         ),
+#     shell:
+#         """
+#         zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4- > {output}
+#         """
 
 
 rule predictions_createInputLabels:
     input:
-        lambda wc: expand(
-            "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
-            feature_set=config["training"][wc.training]["feature_set"],
-            missing_value=config["training"][wc.training]["missing_value"],
-        ),
+        "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
     output:
         temp(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.txt"
+            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
         ),
     shell:
         """
-        zcat {input} | egrep -v "^CHR\sPOSITION\sID" | awk '{{print 1}}' > {output}
+        cat {input} | awk '{{print 1}}' > {output}
         """
 
 
 rule predictions_parSMURF_conf:
     input:
-        data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.txt",
+        data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
         models=("results/training/{training}/predictions/models/0.out.forest"),
         labels=(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.txt"
+            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
         ),
         scaffold="resources/scaffold.json",
     output:
-        config="results/predictions/{training}/{variant_set}/input/model/parsmurf.config.json",
+        config=temp(
+            "results/predictions/{training}/{variant_set}/input/model/parsmurf.config.{split}.json"
+        ),
     params:
         predictions=(
-            "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.txt"
+            "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt"
         ),
         name="{training}_{variant_set}",
         models=("results/training/{training}/predictions/models"),
@@ -57,17 +78,61 @@ rule predictions_parSMURF_conf:
 
 rule predictions_parSMURF_run:
     input:
-        data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.txt",
-        config="results/predictions/{training}/{variant_set}/input/model/parsmurf.config.json",
+        data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
+        config="results/predictions/{training}/{variant_set}/input/model/parsmurf.config.{split}.json",
         labels=(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.txt"
+            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
         ),
         models=("results/training/{training}/predictions/models/0.out.forest"),
+    output:
+        temp(
+            "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt"
+        ),
+    shell:
+        """
+        workflow/bin/parSMURF1 --cfg {input.config}
+        """
+
+
+def aggregate_PredictedScores(wc):
+    checkpoint_output = checkpoints.predictions_createInputData.get(
+        **wc, split="aaaa"
+    ).output[0]
+    variables = glob_wildcards(
+        os.path.join(os.path.dirname(checkpoint_output), "parsmurf.data.{i}.txt")
+    ).i
+    variables.sort()
+    return expand(
+        "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt",
+        training=wc.training,
+        variant_set=wc.variant_set,
+        split=variables,
+    )
+
+
+def aggregate_Data(wc):
+    checkpoint_output = checkpoints.predictions_createInputData.get(
+        **wc, split="aaaa"
+    ).output[0]
+    return expand(
+        "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
+        training=wc.training,
+        variant_set=wc.variant_set,
+        split=glob_wildcards(
+            os.path.join(os.path.dirname(checkpoint_output), "parsmurf.data.{i}.txt")
+        ).i,
+    )
+
+
+rule predictions_parSMURF_aggregate:
+    input:
+        predictions=aggregate_PredictedScores,
+        data=aggregate_Data,
     output:
         "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.txt",
     shell:
         """
-        workflow/bin/parSMURF1 --cfg {input.config}
+        cat {input.predictions} > {output};
         """
 
 

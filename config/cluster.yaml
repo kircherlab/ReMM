@@ -159,10 +159,27 @@ training_parSMURF_combine:
 ###   PREDICTIONS    ###
 ########################
 predictions_parSMURF_run:
-  time: "0-00:20"
-  mem: 40000
+  time: "0-01:20"
+  mem: 30G
   queue: medium
   threads: 30
+predictions_parSMURF_aggregate:
+  mem: 15G
+########################
+###    CORRELATION   ###
+########################
+correlation_featureJoin:
+  time: "0-01:20"
+  mem: 50000
+  queue: medium
+correlation_plot:
+  time: "0-00:20"
+  mem: 50000
+  queue: medium
+correlation_correlate_feature:
+  time: "0-00:20"
+  mem: 50000
+  queue: medium
 ########################
 ###     SCORES       ###
 ########################
@@ -189,8 +206,6 @@ scores_indexScore:
   time: "0-01:00"
   queue: medium
   threads: 5
-
-
 annotateFeatures38:
   time: "0-12:00"
   mem: 150000

@@ -9,6 +9,35 @@ global_files:
       reference: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa"
       genome: "/fast/projects/cubit/current/static_data/reference/hg19/ucsc/hg19.fa.genome"
 feature_sets:
+  remm_v1_3_hg19_old:
+    genome_build: hg19
+    features:
+      - CpGobsExp
+      - CpGperCpG
+      - CpGperGC
+      - DGVCount
+      - DnaseClusteredHyp
+      - DnaseClusteredScore
+      - EncH3K27Ac
+      - EncH3K4Me1
+      - EncH3K4Me3
+      - GCContent
+      - GerpRS
+      - GerpRSpv
+      - ISCApath
+      - commonVar
+      - dbVARCount
+      - fantom5Perm
+      - fantom5Robust
+      - fracRareCommon
+      - mamPhastCons46way
+      - mamPhyloP46way
+      - numTFBSConserved
+      - priPhastCons46way
+      - priPhyloP46way
+      - rareVar
+      - verPhastCons46way
+      - verPhyloP46way
   remm_v1_3_hg19:
       genome_build: hg19
       features:
@@ -254,6 +283,15 @@ variants:
       name: training_v0_4
     genome_build: hg38
 training:
+  remm_v1_3_hg19_old_remmNegatives_zero:
+    positives: remm_snvs_20160109
+    negatives: ReMM_negative_snvs_noncoding_20180118
+    feature_set: remm_v1_3_hg19_old
+    implementation: parSMURF
+    missing_value: zero
+    config:
+      mode: cv
+      seed: 1
   remm_v1_3_hg19_remmNegatives:
     positives: remm_snvs_20160109
     negatives: ReMM_negative_snvs_noncoding_20180118
@@ -594,6 +632,47 @@ correlation:
       missing_value: default_value
     B:
       variants: validation_variants_training_v0_4_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      plot:
+        - feature
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  training_positives_v0_4_remm_v1_4:
+    A:
+      variants: remm_snvs_20160109
+      training: remm_v1_4_hg19
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: remm_snvs_20160109_liftover
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
       missing_value: default_value
