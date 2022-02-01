@@ -172,11 +172,19 @@ correlation_featureJoin:
   time: "0-01:20"
   mem: 50000
   queue: medium
+correlation_scoreJoin:
+  time: "0-01:20"
+  mem: 50000
+  queue: medium
 correlation_plot:
   time: "0-00:20"
   mem: 50000
   queue: medium
 correlation_correlate_feature:
+  time: "0-00:20"
+  mem: 50000
+  queue: medium
+correlation_correlate_score:
   time: "0-00:20"
   mem: 50000
   queue: medium
