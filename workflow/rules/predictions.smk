@@ -54,7 +54,10 @@ rule predictions_createInputLabels:
 rule predictions_parSMURF_conf:
     input:
         data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
-        models=("results/training/{training}/predictions/models/0.out.forest"),
+        models=expand(
+            "results/training/{{training}}/predictions/models/{model_number}.out.forest",
+            model_number=list(range(0, 100)),
+        ),
         labels=(
             "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
         ),
@@ -83,7 +86,10 @@ rule predictions_parSMURF_run:
         labels=(
             "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
         ),
-        models=("results/training/{training}/predictions/models/0.out.forest"),
+        models=expand(
+            "results/training/{{training}}/predictions/models/{model_number}.out.forest",
+            model_number=list(range(0, 100)),
+        ),
     output:
         temp(
             "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt"

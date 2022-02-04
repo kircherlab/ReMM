@@ -229,7 +229,7 @@ rule all_evaluate:
             training_run=list(config["training"].keys()),
         ),
         expand(
-            "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_max_min.tsv.gz",
+            "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_std_min_max.tsv.gz",
             training_run=list(config["training"].keys()),
         ),
 
@@ -240,7 +240,7 @@ rule all_evaluate:
 rule all_featureImportance:
     input:
         expand(
-            "results/training/{training_run}/feature_importance/feature_importance.names.mean_max_min.tsv.gz",
+            "results/training/{training_run}/feature_importance/feature_importance.names.mean_std_min_max.tsv.gz",
             training_run=list(config["training"].keys()),
         ),
 

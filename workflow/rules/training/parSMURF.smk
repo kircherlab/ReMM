@@ -67,6 +67,7 @@ rule training_parSMURF_cv:
         workflow/bin/parSMURF1 --cfg {input.config}
         """
 
+
 rule training_parSMURF_repetitiveCV:
     input:
         data="results/training/{training_run}/input/parsmurf.data.txt",
@@ -80,6 +81,7 @@ rule training_parSMURF_repetitiveCV:
         workflow/bin/parSMURF1 --cfg {input.config}
         """
 
+
 rule training_parSMURF_combine:
     input:
         predictions=(
@@ -90,7 +92,7 @@ rule training_parSMURF_combine:
     output:
         "results/training/{training_run}/predictions/{predictions_alone_or_repetitive}.tsv.gz",
     wildcard_constraints:
-        predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)"
+        predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)",
     shell:
         """
         paste \
@@ -111,7 +113,7 @@ rule training_parSMURF_combine_labels:
     output:
         "results/training/{training_run}/predictions/{predictions_alone_or_repetitive}.with_labels.tsv.gz",
     wildcard_constraints:
-        predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)"
+        predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)",
     shell:
         """
         (
@@ -135,7 +137,14 @@ rule training_parSMURF_train:
         folds="results/training/{training_run}/input/parsmurf.folds.txt",
         config="results/training/{training_run}/input/parsmurf.config.train.json",
     output:
-        "results/training/{training_run}/predictions/models/0.out.forest",
+        expand(
+            "results/training/{{training_run}}/predictions/models/{model_number}.out.forest",
+            model_number=list(range(0, 100)),
+        ),
+        expand(
+            "results/training/{{training_run}}/predictions/models/{model_number}.out.importance",
+            model_number=list(range(0, 100)),
+        ),
     params:
         models="results/training/{training_run}/predictions/models/",
     shell:

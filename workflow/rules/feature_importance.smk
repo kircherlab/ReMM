@@ -68,10 +68,10 @@ rule featureImportance_aucRepetitiveMean:
     input:
         "results/training/{training}/feature_importance/feature_importance.names.tsv.gz",
     output:
-        "results/training/{training}/feature_importance/feature_importance.names.mean_max_min.tsv.gz",
+        "results/training/{training}/feature_importance/feature_importance.names.mean_std_min_max.tsv.gz",
     params:
         columns=lambda wc: ["Importance_%d" % num for num in range(100)],
-        new_columns=["mean", "max", "min"],
-        operations=["mean", "max", "min"],
+        new_columns=["mean", "std", "min", "max"],
+        operations=["mean", "std", "min", "max"],
     wrapper:
         getWrapper("file_manipulation/summarize_columns")

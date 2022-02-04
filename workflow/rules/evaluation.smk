@@ -90,18 +90,19 @@ rule evaluation_aucRepetitiveMean:
     input:
         "results/evaluation/{training_run}/metrics/repetitive/auc_all.tsv.gz",
     output:
-        "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_max_min.tsv.gz",
+        "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_std_min_max.tsv.gz",
     params:
         columns=lambda wc: [
             "seed_%d" % seed for seed in getSeedsForTraining(wc.training_run, 100)
         ],
-        new_columns=["mean", "max", "min"],
-        operations=["mean", "max", "min"],
+        new_columns=["mean", "std", "min", "max"],
+        operations=["mean", "std", "min", "max"],
     wrapper:
         getWrapper("file_manipulation/summarize_columns")
 
 
 ### plots ###
+
 
 # plot prc and roc curve for training
 rule evaluation_plot_metrics:

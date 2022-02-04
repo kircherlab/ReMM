@@ -668,3 +668,243 @@ correlation:
         - ISCApath_20211103=ISCApath_20211103
         - DGVCount_20200225=DGVCount_20200225
         - encRegTfbsClustered=encRegTfbsClustered
+  random120K_remm_v1_4_remmNegatives:
+    A:
+      variants: validation_variants_random_120K_hg19
+      training: remm_v1_4_hg19_remmNegatives
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: validation_variants_random_120K_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      plot:
+        - feature
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  HBB_remm_v1_4_remmNegatives:
+    A:
+      variants: validation_variants_HBB_hg19
+      training: remm_v1_4_hg19_remmNegatives
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: validation_variants_HBB_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  DLK1_remm_v1_4_remmNegatives:
+    A:
+      variants: validation_variants_DLK1_hg19
+      training: remm_v1_4_hg19_remmNegatives
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: validation_variants_DLK1_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  PRDM9_remm_v1_4_remmNegatives:
+    A:
+      variants: validation_variants_PRDM9_hg19
+      training: remm_v1_4_hg19_remmNegatives
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: validation_variants_PRDM9_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  training_v0_4_remm_v1_4_remmNegatives:
+    A:
+      variants: validation_variants_training_v0_4_hg19
+      training: remm_v1_4_hg19_remmNegatives
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: validation_variants_training_v0_4_hg38
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      plot:
+        - feature
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
+  training_positives_v0_4_remm_v1_4_remmNegatives:
+    A:
+      variants: remm_snvs_20160109
+      training: remm_v1_4_hg19_remmNegatives
+      feature_set: remm_v1_4_hg19
+      missing_value: default_value
+    B:
+      variants: remm_snvs_20160109_liftover
+      training: remm_v1_4_hg38
+      feature_set: remm_v1_4_hg38
+      missing_value: default_value
+    correlate:
+      plot:
+        - feature
+      features:
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
+        - priPhyloP=priPhyloP
+        - priPhastCons=priPhastCons
+        - verPhyloP=verPhyloP
+        - verPhastCons=verPhastCons
+        - mamPhyloP=mamPhyloP
+        - mamPhastCons=mamPhastCons
+        - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
+        - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
+        - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
+        - rareVar=rareVar
+        - commonVar=commonVar
+        - fracRareCommon=fracRareCommon
+        - dbVARCount_20211020=dbVARCount_20211020
+        - ISCApath_20211103=ISCApath_20211103
+        - DGVCount_20200225=DGVCount_20200225
+        - encRegTfbsClustered=encRegTfbsClustered
