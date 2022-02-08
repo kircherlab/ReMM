@@ -29,13 +29,13 @@ checkpoint scores_split_notN_regions:
             ),
         ),
     output:
-        regions=directory("results/scores/{score_name}/input/bed"),
+        regions=temp("results/scores/{score_name}/input/bed/split.{split}.bed"),
     params:
         prefix="results/scores/{score_name}/input/bed/split",
         dir_name="results/scores/{score_name}/input/bed",
     shell:
         """
-        mkdir {params.dir_name};
+        mkdir -p {params.dir_name};
         bedtools makewindows -b {input} -w 500000 | \
         bedtools split -i - -n 3000 -p {params.prefix}
         """
@@ -69,7 +69,7 @@ rule scores_sort_features:
     input:
         "results/scores/{score_name}/input/annotation/{split}.unsorted.tsv.gz",
     output:
-        "results/scores/{score_name}/input/annotation/{split}.sorted.tsv.gz",
+        temp("results/scores/{score_name}/input/annotation/{split}.sorted.tsv.gz"),
     params:
         features=lambda wc: " ".join(
             [
@@ -81,9 +81,9 @@ rule scores_sort_features:
                         getTrainingRunGenomeBuild(
                             config["scores"][wc.score_name]["training"]
                         ),
-                        config["training"][config["scores"][wc.score_name]["training"]][
-                            "missing_value"
-                        ],
+                        config["training"][
+                            config["scores"][wc.score_name]["training"]
+                        ]["missing_value"],
                     ),
                 )
                 for feature in getFeaturesOfScore(wc.score_name)
@@ -99,23 +99,41 @@ include: "scores/parSMURF.smk"
 
 
 def aggregate_PredictedScoresPerInterval(wc):
-    checkpoint_output = checkpoints.scores_split_notN_regions.get(**wc).output[0]
+    checkpoint_output = checkpoints.scores_split_notN_regions.get(
+        **wc, split="00001"
+    ).output[0]
     return expand(
         "results/scores/{score_name}/predictions/split/predictions_{split}.tsv.gz",
         score_name=wc.score_name,
-        split=glob_wildcards(os.path.join(checkpoint_output, "split.{i}.bed")).i,
+        split=glob_wildcards(
+            os.path.join(os.path.dirname(checkpoint_output), "split.{i}.bed")
+        ).i,
+    )
+
+
+def aggregate_Interval(wc):
+    checkpoint_output = checkpoints.scores_split_notN_regions.get(
+        **wc, split="00001"
+    ).output[0]
+    return expand(
+        "results/scores/{score_name}/input/bed/split.{split}.bed",
+        score_name=wc.score_name,
+        split=glob_wildcards(
+            os.path.join(os.path.dirname(checkpoint_output), "split.{i}.bed")
+        ).i,
     )
 
 
 rule scores_combineScores:
     input:
-        aggregate_PredictedScoresPerInterval,
+        scores=aggregate_PredictedScoresPerInterval,
+        intervals=aggregate_Interval,
     output:
         prediction="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
     shell:
         """
         export LC_ALL=C;
-        zcat {input} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction};
+        zcat {input.scores} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction};
         """
 
 

@@ -423,6 +423,12 @@ scores:
       - ReMM score version v0.4.0.hg38
       - "Authors: Max Schubach, Lusine Nazaretyan, Martin Kircher"
       - "https://kircherlab.bihealth.org"
+  remm_score_v0_4_hg19:
+    training: remm_v1_4_hg19_remmNegatives
+    comments:
+      - ReMM score version v0.4.0.hg19
+      - "Authors: Max Schubach, Lusine Nazaretyan, Martin Kircher"
+      - "https://kircherlab.bihealth.org"
   # remm_v0_3_1_parsmurf_hg38_score:
   #   training: remm_v1_3_parsmurf_hg38
   #   comments:
