@@ -170,6 +170,8 @@ predictions_parSMURF_aggregate:
 ########################
 evaluation_metrics_per_threshold:
   time: "0-01:30"
+  queue: medium
+  mem: 10G
 ########################
 ###    CORRELATION   ###
 ########################
