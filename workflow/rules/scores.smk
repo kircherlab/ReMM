@@ -2,6 +2,8 @@
 # Create a final whole genome wide score
 ###############################################
 
+scores_NumberOfSplits = 3000
+
 
 def getFeaturesOfScore(score_name):
     training = config["scores"][score_name]["training"]
@@ -20,7 +22,7 @@ rule scores_getNotNRegions:
         """
 
 
-checkpoint scores_split_notN_regions:
+rule scores_split_notN_regions:
     input:
         lambda wc: expand(
             "resources/{genomeBuild}/notNRegions.bed",
@@ -29,15 +31,21 @@ checkpoint scores_split_notN_regions:
             ),
         ),
     output:
-        regions=temp("results/scores/{score_name}/input/bed/split.{split}.bed"),
+        regions=temp(
+            expand(
+                "results/scores/{{score_name}}/input/bed/split.{split}.bed",
+                split=["%.5d" % i for i in range(1, scores_NumberOfSplits + 1)],
+            )
+        ),
     params:
         prefix="results/scores/{score_name}/input/bed/split",
         dir_name="results/scores/{score_name}/input/bed",
+        files=scores_NumberOfSplits,
     shell:
         """
         mkdir -p {params.dir_name};
         bedtools makewindows -b {input} -w 500000 | \
-        bedtools split -i - -n 3000 -p {params.prefix}
+        bedtools split -i - -n {params.files} -p {params.prefix}
         """
 
 
@@ -98,36 +106,12 @@ rule scores_sort_features:
 include: "scores/parSMURF.smk"
 
 
-def aggregate_PredictedScoresPerInterval(wc):
-    checkpoint_output = checkpoints.scores_split_notN_regions.get(
-        **wc, split="00001"
-    ).output[0]
-    return expand(
-        "results/scores/{score_name}/predictions/split/predictions_{split}.tsv.gz",
-        score_name=wc.score_name,
-        split=glob_wildcards(
-            os.path.join(os.path.dirname(checkpoint_output), "split.{i}.bed")
-        ).i,
-    )
-
-
-def aggregate_Interval(wc):
-    checkpoint_output = checkpoints.scores_split_notN_regions.get(
-        **wc, split="00001"
-    ).output[0]
-    return expand(
-        "results/scores/{score_name}/input/bed/split.{split}.bed",
-        score_name=wc.score_name,
-        split=glob_wildcards(
-            os.path.join(os.path.dirname(checkpoint_output), "split.{i}.bed")
-        ).i,
-    )
-
-
 rule scores_combineScores:
     input:
-        scores=aggregate_PredictedScoresPerInterval,
-        intervals=aggregate_Interval,
+        scores=expand(
+            "results/scores/{{score_name}}/predictions/split/predictions_{split}.tsv.gz",
+            split=["%.5d" % i for i in range(1, scores_NumberOfSplits + 1)],
+        ),
     output:
         prediction="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
     shell:

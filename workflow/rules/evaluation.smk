@@ -101,6 +101,22 @@ rule evaluation_aucRepetitiveMean:
         getWrapper("file_manipulation/summarize_columns")
 
 
+# create metrcis table per theshold for single run
+
+
+rule evaluation_metrics_per_threshold:
+    input:
+        "results/training/{training_run}/predictions/predictions.with_labels.tsv.gz",
+    output:
+        "results/evaluation/{training_run}/metrics/metrics_per_threshold.tsv.gz",
+    params:
+        label_column="LABEL",
+        prediction_column="SCORE",
+        positive_label=1,
+    wrapper:
+        getWrapper("evaluate/metrics_per_threshold")
+
+
 ### plots ###
 
 
@@ -112,7 +128,7 @@ rule evaluation_plot_metrics:
         "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
     params:
         label_column="LABEL",
-        score_column="SCORE",
+        prediction_column="SCORE",
         positive_label=1,
     wrapper:
         getWrapper("plots/metric_curves")

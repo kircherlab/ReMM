@@ -166,6 +166,11 @@ predictions_parSMURF_run:
 predictions_parSMURF_aggregate:
   mem: 15G
 ########################
+###    Evaluation    ###
+########################
+evaluation_metrics_per_threshold:
+  time: "0-01:30"
+########################
 ###    CORRELATION   ###
 ########################
 correlation_featureJoin:
