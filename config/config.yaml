@@ -689,25 +689,19 @@ correlation:
       plot:
         - feature
       features:
-        - CpGperGC=CpGperGC
-        - CpGperCpG=CpGperCpG
-        - CpGobsExp=CpGobsExp
-        - GCContent=GCContent
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
         - priPhyloP=priPhyloP
         - priPhastCons=priPhastCons
         - verPhyloP=verPhyloP
         - verPhastCons=verPhastCons
         - mamPhyloP=mamPhyloP
         - mamPhastCons=mamPhastCons
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
         - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
-        - DnaseClusteredHyp=DnaseClusteredHyp
-        - DnaseClusteredScore=DnaseClusteredScore
-        - Fantom5Perm=Fantom5Perm
-        - Fantom5Robust=Fantom5Robust
-        - GerpRS=GerpRS
-        - GerpRSpv=GerpRSpv
         - rareVar=rareVar
         - commonVar=commonVar
         - fracRareCommon=fracRareCommon
@@ -715,6 +709,12 @@ correlation:
         - ISCApath_20211103=ISCApath_20211103
         - DGVCount_20200225=DGVCount_20200225
         - encRegTfbsClustered=encRegTfbsClustered
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
   HBB_remm_v1_4_remmNegatives:
     A:
       variants: validation_variants_HBB_hg19
@@ -846,26 +846,23 @@ correlation:
     correlate:
       plot:
         - feature
+      labs:
+        x: GRCh37
+        y: GRCh38
       features:
-        - CpGperGC=CpGperGC
-        - CpGperCpG=CpGperCpG
-        - CpGobsExp=CpGobsExp
-        - GCContent=GCContent
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
         - priPhyloP=priPhyloP
-        - priPhastCons=priPhastCons
         - verPhyloP=verPhyloP
-        - verPhastCons=verPhastCons
         - mamPhyloP=mamPhyloP
+        - priPhastCons=priPhastCons
+        - verPhastCons=verPhastCons
         - mamPhastCons=mamPhastCons
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
         - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
-        - DnaseClusteredHyp=DnaseClusteredHyp
-        - DnaseClusteredScore=DnaseClusteredScore
-        - Fantom5Perm=Fantom5Perm
-        - Fantom5Robust=Fantom5Robust
-        - GerpRS=GerpRS
-        - GerpRSpv=GerpRSpv
         - rareVar=rareVar
         - commonVar=commonVar
         - fracRareCommon=fracRareCommon
@@ -873,6 +870,12 @@ correlation:
         - ISCApath_20211103=ISCApath_20211103
         - DGVCount_20200225=DGVCount_20200225
         - encRegTfbsClustered=encRegTfbsClustered
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent
   training_positives_v0_4_remm_v1_4_remmNegatives:
     A:
       variants: remm_snvs_20160109
@@ -887,26 +890,23 @@ correlation:
     correlate:
       plot:
         - feature
+      labs:
+        x: GRCh37
+        y: GRCh38
       features:
-        - CpGperGC=CpGperGC
-        - CpGperCpG=CpGperCpG
-        - CpGobsExp=CpGobsExp
-        - GCContent=GCContent
+        - GerpRS=GerpRS
+        - GerpRSpv=GerpRSpv
         - priPhyloP=priPhyloP
-        - priPhastCons=priPhastCons
         - verPhyloP=verPhyloP
-        - verPhastCons=verPhastCons
         - mamPhyloP=mamPhyloP
+        - priPhastCons=priPhastCons
+        - verPhastCons=verPhastCons
         - mamPhastCons=mamPhastCons
+        - DnaseClusteredHyp=DnaseClusteredHyp
+        - DnaseClusteredScore=DnaseClusteredScore
         - EncH3K27Ac_v1_4=EncH3K27Ac_v1_4
         - EncH3K4Me1_v1_4=EncH3K4Me1_v1_4
         - EncH3K4Me3_v1_4=EncH3K4Me3_v1_4
-        - DnaseClusteredHyp=DnaseClusteredHyp
-        - DnaseClusteredScore=DnaseClusteredScore
-        - Fantom5Perm=Fantom5Perm
-        - Fantom5Robust=Fantom5Robust
-        - GerpRS=GerpRS
-        - GerpRSpv=GerpRSpv
         - rareVar=rareVar
         - commonVar=commonVar
         - fracRareCommon=fracRareCommon
@@ -914,3 +914,9 @@ correlation:
         - ISCApath_20211103=ISCApath_20211103
         - DGVCount_20200225=DGVCount_20200225
         - encRegTfbsClustered=encRegTfbsClustered
+        - Fantom5Perm=Fantom5Perm
+        - Fantom5Robust=Fantom5Robust
+        - CpGperGC=CpGperGC
+        - CpGperCpG=CpGperCpG
+        - CpGobsExp=CpGobsExp
+        - GCContent=GCContent

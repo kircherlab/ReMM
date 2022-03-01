@@ -143,6 +143,21 @@ rule correlation_combine_correlate_feature:
 
 
 # combine correlated features
+def getCorrPlotLabs(correlation, lab):
+    if "labs" in config["correlation"][correlation]["correlate"]:
+        return config["correlation"][correlation]["correlate"]["labs"][lab]
+    else:
+        return ""
+
+
+def getCorrPlotXLab(correlation):
+    return getCorrPlotLabs(correlation, "x")
+
+
+def getCorrPlotYLab(correlation):
+    return getCorrPlotLabs(correlation, "y")
+
+
 rule correlation_plot:
     input:
         lambda wc: expand(
@@ -164,6 +179,9 @@ rule correlation_plot:
             f[0] for f in correlation_getCorrelateFeatures(wc.correlation)
         ],
         arrange="ID",
+        order=False,
         method=lambda wc: wc.method,
+        xlab=lambda wc: getCorrPlotXLab(wc.correlation),
+        ylab=lambda wc: getCorrPlotYLab(wc.correlation),
     wrapper:
         getWrapper("plots/ggcorrplot")

@@ -232,6 +232,10 @@ rule all_evaluate:
             "results/evaluation/{training_run}/metrics/repetitive/auc_all.mean_std_min_max.tsv.gz",
             training_run=list(config["training"].keys()),
         ),
+        expand(
+            "results/evaluation/{training_run}/metrics/pre_re_f1_f2.png",
+            training_run=list(config["training"].keys()),
+        )
 
 
 #################################################
