@@ -113,6 +113,7 @@ rule evaluation_metrics_per_threshold:
         label_column="LABEL",
         prediction_column="SCORE",
         positive_label=1,
+        decimals=3,
     wrapper:
         getWrapper("evaluate/metrics_per_threshold")
 
@@ -128,7 +129,18 @@ rule evaluation_plot_metrics:
         "results/evaluation/{training_run}/metrics/curves_prc_roc.png",
     params:
         label_column="LABEL",
-        prediction_column="SCORE",
+        score_column="SCORE",
         positive_label=1,
     wrapper:
         getWrapper("plots/metric_curves")
+
+
+rule evaluation_plot_pre_re_f1_f2:
+    input:
+        "results/evaluation/{training_run}/metrics/metrics_per_threshold.tsv.gz",
+    output:
+        "results/evaluation/{training_run}/metrics/pre_re_f1_f2.png",
+    params:
+        xname="'ReMM score'",
+    wrapper:
+        getWrapper("plots/pre_re_f1_f2")
