@@ -21,28 +21,25 @@ with open("config/features.yaml", "r") as file:
 
 validate(features, schema="../schemas/features.schema.yaml")
 
-# getter functions
-
-
-def getDefinedFeatures(genomeBuild):
-    """
-    Get a list of features for a genome build that are defined in the feature config file as well as in the config file.
-    """
-    featureList = []
-    for feature, build in features.items():
-        if genomeBuild in build:
-            featureList += [feature]
-    return featureList
-
 
 # include multiple subwokflows for feature groups
 
 
 include: "features/GCfeatures.smk"
+
+
 include: "features/conservation.smk"
+
+
 include: "features/encodeEpigenetics.smk"
+
+
 include: "features/population.smk"
+
+
 include: "features/fantom.smk"
+
+
 include: "features/geneticVariation.smk"
 
 
@@ -58,9 +55,13 @@ rule features_createPropertyFile:
             )
         ),
     output:
-        config="results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties",
+        config=(
+            "results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties"
+        ),
     params:
-        file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[-1],
+        file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[
+            -1
+        ],
         column=(
             lambda wc: "column=%d" % features[wc.feature][wc.genomeBuild]["column"]
             if features[wc.feature][wc.genomeBuild]["type"].split(".")[-1] == "bed"
@@ -69,16 +70,18 @@ rule features_createPropertyFile:
         method=lambda wc: features[wc.feature][wc.genomeBuild]["method"],
         description=lambda wc: features[wc.feature]["description"],
     run:
-        files = " \n".join(["file = " + file for file in input])
+        files = " \n".join(["file = %s" % file for file in input])
         shell(
             """
-        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
-        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
-        """
+                echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
+                \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
+                """
         )
 
 
-# create single VCF file of features
+        # create single VCF file of features
+
+
 rule features_createSingleFeatureVCF:
     input:
         config=ancient(

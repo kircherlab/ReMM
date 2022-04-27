@@ -43,37 +43,49 @@ validate(config, schema="schemas/config.schema.yaml")
 configfile: "config/featuresConfig38.json"
 
 
-def getWrapper(wrapper):
-    """
-    Get directory for snakemake wrappers.
-    """
-    return "file:%s/%s/wrapper.py" % (
-        config["global_files"]["wrapper_directory"],
-        wrapper,
-    )
-
-
 ##### include workflow files #####
+
+
+# Workflow common
+include: "rules/common.smk"
 
 
 # Workflow features
 include: "rules/features.smk"
+
+
 # Workflow variant generation
 include: "rules/variant_generation.smk"
+
+
 # Workflow variants
 include: "rules/variants.smk"
+
+
 # Workflow annotate
 include: "rules/annotate.smk"
+
+
 # Workflow training
 include: "rules/training.smk"
+
+
 # Workflow evaluation
 include: "rules/evaluation.smk"
+
+
 # Workflow predictions
 include: "rules/predictions.smk"
+
+
 # Workflow feature_importance
 include: "rules/feature_importance.smk"
+
+
 # Workflow scores
 include: "rules/scores.smk"
+
+
 # Workflow correlation
 include: "rules/correlation.smk"
 
@@ -86,6 +98,8 @@ include: "rules/correlation.smk"
 
 
 include: "rules/process/getUtils.smk"
+
+
 include: "rules/process/createModelData.smk"
 
 
@@ -94,23 +108,12 @@ include: "rules/process/createModelData.smk"
 ###################################
 
 
-def getAllVariantsInput():
-    """
-    Getter for all variants.
-    """
-    output = []
-    for variant_set in config["variants"]:
-        output += getVariantsInput(variant_set, "annotate")
-    return output
-
-
 # ALL rule. Generates variants and feature sets.
 # TODO Add all configs to all rule
 rule all:
     input:
-        # variants
-        getAllVariantsInput(),
-        # feature sets
+        getAllVariantsInput(), # variants
+         # feature sets
         expand(
             "results/evaluation/{training_run}/metrics/auc.tsv.gz",
             training_run=list(config["training"].keys()),
@@ -132,18 +135,6 @@ rule all:
 #######################################
 ### All rules for workflow features ###
 #######################################
-def getAllAverageFilesForFeatures(genomeBuild):
-    """
-    Get a list of features for a genome build that are defined in the feature config file as well as in the config file.
-    Use them to to return the average feature path.
-    """
-    featureList = getDefinedFeatures(genomeBuild)
-    return expand(
-        "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
-        feature=featureList,
-        genomeBuild=genomeBuild,
-    )
-
 
 rule all_feature_average:
     """
@@ -183,30 +174,6 @@ rule all_variants:
 ###################################
 # All rules for workflow annotate #
 ###################################
-def getAllAnnotations():
-    """
-    Get all positive and negatuve training annotations
-    TODO: Update for other annotations like benchmark sets
-    """
-    output = []
-    for training in config["training"].values():
-        output += [
-            "results/annotation/%s/%s.%s.sorted.tsv.gz"
-            % (
-                training["positives"],
-                training["positives"],
-                training["feature_set"],
-            )
-        ]
-        output += [
-            "results/annotation/%s/%s.%s.sorted.tsv.gz"
-            % (
-                training["negatives"],
-                training["negatives"],
-                training["feature_set"],
-            )
-        ]
-    return output
 
 
 # all rule to return all annotated variants
@@ -235,7 +202,7 @@ rule all_evaluate:
         expand(
             "results/evaluation/{training_run}/metrics/pre_re_f1_f2.png",
             training_run=list(config["training"].keys()),
-        )
+        ),
 
 
 #################################################
@@ -264,17 +231,6 @@ rule all_scores:
 ##########################################
 ### All rules for workflow correlation ###
 ##########################################
-def getCorrelationPlots():
-    output = []
-    for correlation, values in config["correlation"].items():
-        if "plot" in values["correlate"]:
-            output += expand(
-                "results/correlation/{correlation}/{input_type}.correlate.{method}.png",
-                correlation=correlation,
-                input_type=values["correlate"]["plot"],
-                method=["spearman", "pearson"],
-            )
-    return output
 
 
 rule all_correlation:

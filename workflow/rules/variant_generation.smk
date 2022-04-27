@@ -12,6 +12,10 @@ Final output is `results/variant_generation/<name>/hg19/<name>.vcf.gz"`
 """
 
 
+# definitions and functions
+include: "variant_generation_defs.smk"
+
+
 # for variants make a bed file out of the vcf file
 rule variant_generation_variantsToRegions:
     input:
@@ -22,6 +26,7 @@ rule variant_generation_variantsToRegions:
         """
         zcat {input} | egrep -v "^#" | awk -v "OFS=\\t" '{{print $1,$2-1,$2,NR}}' | bgzip -c > {output}
         """
+
 
 # just copy the bed file specified in the config
 rule variant_generation_regionsToVariants:
@@ -53,19 +58,6 @@ rule variant_generation_random:
         sort -k1,1 -k2,2n -k3,3n | \
         bgzip -c >  {output};
         """
-
-
-def getRegionFileForVariantGeneration(name):
-    """
-    Helper to get the correct file for regions or variants
-    """
-    if config["variant_generation"][name]["type"] == "random":
-        return "results/variant_generation/{name}/hg38/random_full.{regions_or_variants}.bed.gz"
-    elif config["variant_generation"][name]["type"] == "regions":
-        return "results/variant_generation/{name}/hg38/regions_full.{regions_or_variants}.bed.gz"
-    elif config["variant_generation"][name]["type"] == "variants":
-        return "results/variant_generation/{name}/hg38/variants_full.{regions_or_variants}.bed.gz"
-    raise Exception("Unknown type of variant generation name: %s" % name)
 
 
 # liftover the variants to hg19

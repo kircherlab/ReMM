@@ -12,20 +12,6 @@ Output is a TSV file with headers.
 """
 
 
-def getFeaturesOfFeatureSet(feature_set):
-    """
-    Return the features of a feature set
-    """
-    return config["feature_sets"][feature_set]["features"]
-
-
-def getFeatureMissingValue(feature, genome_build, missing_value_config):
-    """
-    return the default value of a feature (and its genome build)
-    """
-    return features[feature][genome_build]["missing_value"][missing_value_config]
-
-
 # annotate variants with features
 rule annotate_features:
     conda:
