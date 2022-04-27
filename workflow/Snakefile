@@ -136,6 +136,7 @@ rule all:
 ### All rules for workflow features ###
 #######################################
 
+
 rule all_feature_average:
     """
     Get feature averages. Needed to add in the config file before starting annotation.

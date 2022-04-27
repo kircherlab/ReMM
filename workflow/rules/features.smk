@@ -73,13 +73,14 @@ rule features_createPropertyFile:
         files = " \n".join(["file = %s" % file for file in input])
         shell(
             """
-                echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
-                \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
-                """
+                        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
+                        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
+                        """
         )
 
 
         # create single VCF file of features
+
 
 
 rule features_createSingleFeatureVCF:

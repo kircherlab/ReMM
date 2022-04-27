@@ -6,8 +6,10 @@
 Results will be saved in results/variants/<variant_set>
 """
 
+
 # definitions and functions
 include: "variants_defs.smk"
+
 
 # liftover variants
 rule variants_liftover:

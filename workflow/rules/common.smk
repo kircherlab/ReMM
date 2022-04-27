@@ -107,6 +107,7 @@ def getFeatureMissingValue(feature, genome_build, missing_value_config):
     """
     return features[feature][genome_build]["missing_value"][missing_value_config]
 
+
 def getFeaturesOfTraining(training_run):
     feature_set = config["training"][training_run]["feature_set"]
     return getFeaturesOfFeatureSet(feature_set)
