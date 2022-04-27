@@ -1,0 +1,15 @@
+---
+---
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - htslib
+  - bcftools
+  - bedtools
+  - pandas
+  - numpy
+  - pyfaidx
+  - click
