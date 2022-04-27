@@ -1,3 +1,6 @@
+
+include: "predictions_defs.smk"
+
 checkpoint predictions_createInputData:
     input:
         lambda wc: expand(
@@ -11,7 +14,9 @@ checkpoint predictions_createInputData:
         ),
     params:
         lines=100000,
-        prefix="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.",
+        prefix=(
+            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data."
+        ),
         suffix=".txt",
     shell:
         """
@@ -58,20 +63,16 @@ rule predictions_parSMURF_conf:
             "results/training/{{training}}/predictions/models/{model_number}.out.forest",
             model_number=list(range(0, 100)),
         ),
-        labels=(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
-        ),
+        labels="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt",
         scaffold="resources/scaffold.json",
     output:
         config=temp(
             "results/predictions/{training}/{variant_set}/input/model/parsmurf.config.{split}.json"
         ),
     params:
-        predictions=(
-            "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt"
-        ),
+        predictions="results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt",
         name="{training}_{variant_set}",
-        models=("results/training/{training}/predictions/models"),
+        models="results/training/{training}/predictions/models",
         seed=lambda wc: config["training"][wc.training]["config"]["seed"],
         mode="predict",
         ensThrd="30",
@@ -83,9 +84,7 @@ rule predictions_parSMURF_run:
     input:
         data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
         config="results/predictions/{training}/{variant_set}/input/model/parsmurf.config.{split}.json",
-        labels=(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
-        ),
+        labels="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt",
         models=expand(
             "results/training/{{training}}/predictions/models/{model_number}.out.forest",
             model_number=list(range(0, 100)),
@@ -98,36 +97,6 @@ rule predictions_parSMURF_run:
         """
         workflow/bin/parSMURF1 --cfg {input.config}
         """
-
-
-def aggregate_PredictedScores(wc):
-    checkpoint_output = checkpoints.predictions_createInputData.get(
-        **wc, split="aaaa"
-    ).output[0]
-    variables = glob_wildcards(
-        os.path.join(os.path.dirname(checkpoint_output), "parsmurf.data.{i}.txt")
-    ).i
-    variables.sort()
-    return expand(
-        "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt",
-        training=wc.training,
-        variant_set=wc.variant_set,
-        split=variables,
-    )
-
-
-def aggregate_Data(wc):
-    checkpoint_output = checkpoints.predictions_createInputData.get(
-        **wc, split="aaaa"
-    ).output[0]
-    return expand(
-        "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
-        training=wc.training,
-        variant_set=wc.variant_set,
-        split=glob_wildcards(
-            os.path.join(os.path.dirname(checkpoint_output), "parsmurf.data.{i}.txt")
-        ).i,
-    )
 
 
 rule predictions_parSMURF_aggregate:

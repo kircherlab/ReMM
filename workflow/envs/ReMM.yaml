@@ -15,4 +15,3 @@ dependencies:
   - ucsc-bigwigtobedgraph
   - ucsc-liftover
   - click
-  - snakemake

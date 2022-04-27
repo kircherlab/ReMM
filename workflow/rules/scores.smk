@@ -5,12 +5,6 @@
 scores_NumberOfSplits = 3000
 
 
-def getFeaturesOfScore(score_name):
-    training = config["scores"][score_name]["training"]
-    feature_set = config["training"][training]["feature_set"]
-    return getFeaturesOfFeatureSet(feature_set)
-
-
 rule scores_getNotNRegions:
     input:
         lambda wc: config["global_files"]["genome_builds"][wc.genomeBuild]["reference"],
@@ -53,15 +47,15 @@ rule scores_extract_features:
     input:
         feature_set=lambda wc: expand(
             "results/features/feature_sets/{feature_set}.vcf.gz",
-            feature_set=config["training"][
-                config["scores"][wc.score_name]["training"]
-            ]["feature_set"],
+            feature_set=config["training"][config["scores"][wc.score_name]["training"]][
+                "feature_set"
+            ],
         ),
         feature_set_idx=lambda wc: expand(
             "results/features/feature_sets/{feature_set}.vcf.gz.tbi",
-            feature_set=config["training"][
-                config["scores"][wc.score_name]["training"]
-            ]["feature_set"],
+            feature_set=config["training"][config["scores"][wc.score_name]["training"]][
+                "feature_set"
+            ],
         ),
         regions="results/scores/{score_name}/input/bed/split.{split}.bed",
     output:
@@ -89,9 +83,9 @@ rule scores_sort_features:
                         getTrainingRunGenomeBuild(
                             config["scores"][wc.score_name]["training"]
                         ),
-                        config["training"][
-                            config["scores"][wc.score_name]["training"]
-                        ]["missing_value"],
+                        config["training"][config["scores"][wc.score_name]["training"]][
+                            "missing_value"
+                        ],
                     ),
                 )
                 for feature in getFeaturesOfScore(wc.score_name)

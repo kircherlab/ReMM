@@ -10,19 +10,8 @@ Evaluation of training runs like AUPRC, AUROC or curves.
 Also mean AURPRC and AUROC for repetetive (100 times) CV training.
 """
 
-import random
 
-
-def getSeedsForTraining(training_run, n):
-    """
-    Getting n number of integers in the range of 0,100000 using the seed of the given training run.
-    """
-    seed = config["training"][training_run]["config"]["seed"]
-    random.seed(seed)
-
-    seeds = [random.randint(0, 100000) for x in range(n)]
-
-    return seeds
+include: "evaluation_defs.smk"
 
 
 ### metrics ###

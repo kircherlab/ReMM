@@ -14,43 +14,43 @@ features_getIntervals:
   mem: 10000
   queue: medium
 # conservation
-features_PriPhyloP_hg19_download_process:
+features_conservation_PriPhyloP_hg19_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
-features_PriPhyloP_hg38_download_process:
+features_conservation_PriPhyloP_hg38_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
-features_PriPhastCons_hg38_download_process:
+features_conservation_PriPhastCons_hg38_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
-features_VerPhyloP_hg38_download_process:
+features_conservation_VerPhyloP_hg38_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
-features_VerPhastCons_hg38_download_process:
+features_conservation_VerPhastCons_hg38_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
-features_MamPhastCons_hg38_download_process:
+features_conservation_MamPhastCons_hg38_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
-features_MamPhyloP_hg38_download_process:
+features_conservation_MamPhyloP_hg38_download_process:
   time: "0-12:00"
   mem: 2000
   queue: medium
 # GC content
-get_GCContent:
+features_GCfeatures_get_GCContent:
   time: "0-12:00"
-  mem: 10000
+  mem: 10G
   queue: medium
 # population
 features_1KG_hg38_process:
   time: "1-12:00"
-  mem: 10000
+  mem: 10G
   queue: medium
 # epigenetics
 get_feature_EncH3K4Me3:

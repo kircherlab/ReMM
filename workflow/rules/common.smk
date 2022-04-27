@@ -113,6 +113,12 @@ def getFeaturesOfTraining(training_run):
     return getFeaturesOfFeatureSet(feature_set)
 
 
+def getFeaturesOfScore(score_name):
+    training = config["scores"][score_name]["training"]
+    feature_set = config["training"][training]["feature_set"]
+    return getFeaturesOfFeatureSet(feature_set)
+
+
 ########################
 ### Training getters ###
 ########################
