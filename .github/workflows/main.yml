@@ -37,7 +37,7 @@ jobs:
         with:
           directory: .
           snakefile: workflow/Snakefile
-          args: "--lint --configfile config/example_config.yaml"
+          args: "--lint"
 
   # Testing:
   #   runs-on: ubuntu-latest
