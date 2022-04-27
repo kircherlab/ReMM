@@ -72,10 +72,7 @@ rule features_createPropertyFile:
     run:
         files = " \n".join(["file = %s" % file for file in input])
         shell(
-            """
-                        echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type}
-                        \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}
-                        """
+            "echo -e 'name = {wildcards.feature} \n{files} \ntype = {params.file_type} \nmethod = {params.method} \ndescription = {params.description} \n{params.column}' > {output}"
         )
 
 

@@ -13,5 +13,5 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@v3
         id: release
         with:
-          release-type: go # just keep a changelog, no version anywhere outside of git tags
+          release-type: go  # just keep a changelog, no version anywhere outside of git tags
           package-name: ReMM-workflow
