@@ -295,7 +295,7 @@ verPhastCons:
     missing_value:
       default_value: 0.102729
       zero: 0.0
-    
+
   hg38:
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.100way.phastCons/
     file: verPhastCons
@@ -789,7 +789,7 @@ DnaseClusteredScore:
     The uniform peaks in that track are the basis for the clusters shown here, which
     combine data from the peaks of the different cell lines.
   hg19:
-  #   url: http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegDnaseClustered/
+    #   url: http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegDnaseClustered/
     url: https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/wgEncodeRegDnaseClusteredV3.txt.gz
     file: DnaseClusteredScore
     files: all
@@ -1430,7 +1430,7 @@ dbVARCount:
       zero: 0.0
 DGVCount:
   description: Count of overlapping DGV entries.
-  hg19:  
+  hg19:
     url: http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_2014-10-16.txt
     file: DGVCount
     files:
@@ -1502,7 +1502,7 @@ DGVCount:
       zero: 0.0
 DGVCount_20200225:
   description: Count of overlapping DGV entries.
-  hg19:  
+  hg19:
     url: http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_2020-02-25.txt
     file: DGVCount_20200225
     files:
