@@ -14,8 +14,27 @@ rule features_getEncodeEpigenetics:
         """
 
 
-## ancient is there to not rerun, delete sometime
-rule convertBigWigToBedGraph:
+rule features_encodeEpigenetics_mergeBigWigUsingMax:
+    conda:
+        "../../envs/ucsc_tools.yml"
+    input:
+        lambda wc: expand(
+            "results/features/download/{{encodeEpigenetic}}/{{genomeBuild}}/{{encodeEpigenetic}}.{files}.bigWig",
+            files=features[wc.encodeEpigenetic][wc.genomeBuild]["merge"],
+        ),
+    output:
+        "results/features/download/{encodeEpigenetic}/{genomeBuild}/{encodeEpigenetic}.merged.bed.gz",
+    log:
+        temp(
+            "logs/features/encodeEpigenetics/mergeBigWigUsingMax.{encodeEpigenetic}.{genomeBuild}.log"
+        ),
+    shell:
+        """
+        bigWigMerge -max {input} >(bgzip -c > {output}) &> {log}
+        """
+
+
+rule features_encodeEpigenetics_convertBigWigToBedGraph:
     input:
         "results/features/download/{file}/{genomeBuild}/{file}.{files}.bigWig",
     output:
@@ -23,6 +42,23 @@ rule convertBigWigToBedGraph:
     shell:
         """
         bigWigToBedGraph {input} >(bgzip -c > {output})
+        """
+
+
+rule features_encodeEpigenetics_convertBigWigToWig:
+    conda:
+        "../../envs/ucsc_tools.yml"
+    input:
+        "results/features/download/{file}/{genomeBuild}/{file}.{files}.bigWig",
+    output:
+        "results/features/download/{file}/{genomeBuild}/{file}.{files}.encode.wig.gz",
+    log:
+        temp(
+            "logs/features/encodeEpigenetics/convertBigWigToWig.{file}.{genomeBuild}.{files}.log"
+        ),
+    shell:
+        """
+        bigWigToWig {input} >(bgzip -c > {output}) &> {log}
         """
 
 

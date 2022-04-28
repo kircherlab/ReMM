@@ -654,6 +654,8 @@ EncH3K27Ac_v1_4:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeReg/wgEncodeRegMarkH3k27ac/
     file: EncH3K27Ac_v1_4
     files:
+      - merged
+    merge:
       - wgEncodeBroadHistoneGm12878H3k27acStdSig
       - wgEncodeBroadHistoneH1hescH3k27acStdSig
       - wgEncodeBroadHistoneHsmmH3k27acStdSig
@@ -661,10 +663,10 @@ EncH3K27Ac_v1_4:
       - wgEncodeBroadHistoneK562H3k27acStdSig
       - wgEncodeBroadHistoneNhekH3k27acStdSig
       - wgEncodeBroadHistoneNhlfH3k27acStdSig
-    id: ".encode"
-    type: encode.bed
+    #id: ".encode"
+    type: bed
     column: 4
-    method: upload-max
+    method: upload
     missing_value:
       default_value: 0.0
       zero: 0.0
@@ -672,7 +674,7 @@ EncH3K4Me1_v1_4:
   description: Maximum ENCODE H3K4 methylation level
   hg19:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/
-    file: EncH3K4Me1_v1_4
+    file: EncH3K4Me1
     files:
       - wgEncodeBroadHistoneGm12878H3k4me1StdSig
       - wgEncodeBroadHistoneH1hescH3k4me1StdSig
@@ -690,9 +692,10 @@ EncH3K4Me1_v1_4:
       zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeReg/wgEncodeRegMarkH3k4me1/
-    file: EncH3K4Me1
-    id: ".encode"
+    file: EncH3K4Me1_v1_4
     files:
+      - merged
+    merge:
       - wgEncodeBroadHistoneGm12878H3k4me1StdSig
       - wgEncodeBroadHistoneH1hescH3k4me1StdSig
       - wgEncodeBroadHistoneHsmmH3k4me1StdSig
@@ -700,9 +703,9 @@ EncH3K4Me1_v1_4:
       - wgEncodeBroadHistoneK562H3k4me1StdSig
       - wgEncodeBroadHistoneNhekH3k4me1StdSig
       - wgEncodeBroadHistoneNhlfH3k4me1StdSig
-    type: encode.bed
+    type: bed
     column: 4
-    method: upload-max
+    method: upload
     missing_value:
       default_value: 0.0
       zero: 0.0
@@ -728,9 +731,10 @@ EncH3K4Me3_v1_4:
       zero: 0.0
   hg38:
     url: https://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/wgEncodeReg/wgEncodeRegMarkH3k4me3/
-    file: EncH3K4Me3
-    id: ".encode"
+    file: EncH3K4Me3_v1_4
     files:
+      - merged
+    merge:
       - wgEncodeBroadHistoneGm12878H3k4me3StdSig
       - wgEncodeBroadHistoneH1hescH3k4me3StdSig
       - wgEncodeBroadHistoneHsmmH3k4me3StdSig
@@ -738,9 +742,9 @@ EncH3K4Me3_v1_4:
       - wgEncodeBroadHistoneK562H3k4me3StdSig
       - wgEncodeBroadHistoneNhekH3k4me3StdSig
       - wgEncodeBroadHistoneNhlfH3k4me3StdSig
-    type: encode.bed
+    type: bed
     column: 4
-    method: upload-max
+    method: upload
     missing_value:
       default_value: 0.0
       zero: 0.0

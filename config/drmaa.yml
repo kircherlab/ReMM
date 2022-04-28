@@ -65,9 +65,13 @@ get_feature_EncH3K27Ac:
   time: "12:00"
   mem: 10000
   queue: medium
-convert_bigwig_to_wig:
+features_encodeEpigenetics_mergeBigWigUsingMax:
+  time: "0-01:00"
+  mem: 15G
+  queue: medium
+features_encodeEpigenetics_convertBigWigToWig:
   time: "12:00"
-  mem: 10000
+  mem: 5G
   queue: medium
 # singe_vcf
 features_createSingleFeatureVCF:
