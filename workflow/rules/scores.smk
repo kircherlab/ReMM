@@ -6,17 +6,23 @@ scores_NumberOfSplits = 3000
 
 
 rule scores_getNotNRegions:
+    conda:
+        "../envs/default.yml"
     input:
         lambda wc: config["global_files"]["genome_builds"][wc.genomeBuild]["reference"],
     output:
         "resources/{genomeBuild}/notNRegions.bed",
+    log:
+        temp("results/logs/scores/getNotNRegions.{genomeBuild}.log"),
     shell:
         """
-        python workflow/scripts/notNRegionsOfGenome.py --input {input} --output {output} 
+        python workflow/scripts/notNRegionsOfGenome.py --input {input} --output {output} &> {log}
         """
 
 
 rule scores_split_notN_regions:
+    conda:
+        "../envs/default.yml"
     input:
         lambda wc: expand(
             "resources/{genomeBuild}/notNRegions.bed",
@@ -32,18 +38,22 @@ rule scores_split_notN_regions:
             )
         ),
     params:
-        prefix="results/scores/{score_name}/input/bed/split",
-        dir_name="results/scores/{score_name}/input/bed",
+        prefix=lambda wc: "results/scores/%s/input/bed/split" % wc.score_name,
+        dir_name=lambda wc: "results/scores/%s/input/bed" % wc.score_name,
         files=scores_NumberOfSplits,
+    log:
+        temp("results/logs/scores/split_notN_regions.{score_name}.log"),
     shell:
         """
         mkdir -p {params.dir_name};
         bedtools makewindows -b {input} -w 500000 | \
-        bedtools split -i - -n {params.files} -p {params.prefix}
+        bedtools split -i - -n {params.files} -p {params.prefix} &> {log}
         """
 
 
 rule scores_extract_features:
+    conda:
+        "../envs/default.yml"
     input:
         feature_set=lambda wc: expand(
             "results/features/feature_sets/{feature_set}.vcf.gz",
@@ -60,14 +70,18 @@ rule scores_extract_features:
         regions="results/scores/{score_name}/input/bed/split.{split}.bed",
     output:
         temp("results/scores/{score_name}/input/annotation/{split}.unsorted.tsv.gz"),
+    log:
+        temp("results/logs/scores/extract_features.{score_name}.{split}.log"),
     shell:
         """
         python workflow/scripts/getAnnotationsByInterval.py --input {input.feature_set} --output {output} \
-        --regions {input.regions}
+        --regions {input.regions} &> {log}
         """
 
 
 rule scores_sort_features:
+    conda:
+        "../envs/default.yml"
     input:
         "results/scores/{score_name}/input/annotation/{split}.unsorted.tsv.gz",
     output:
@@ -91,9 +105,11 @@ rule scores_sort_features:
                 for feature in getFeaturesOfScore(wc.score_name)
             ]
         ),
+    log:
+        temp("results/logs/scores/sort_features.{score_name}.{split}.log"),
     shell:
         """
-        python workflow/scripts/sortAnnotationFile.py --input {input} --output {output} {params.features}
+        python workflow/scripts/sortAnnotationFile.py --input {input} --output {output} {params.features} &> {log}
         """
 
 
@@ -101,6 +117,8 @@ include: "scores/parSMURF.smk"
 
 
 rule scores_combineScores:
+    conda:
+        "../envs/default.yml"
     input:
         scores=expand(
             "results/scores/{{score_name}}/predictions/split/predictions_{split}.tsv.gz",
@@ -108,14 +126,18 @@ rule scores_combineScores:
         ),
     output:
         prediction="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
+    log:
+        temp("results/logs/scores/combineScores.{score_name}.log"),
     shell:
         """
         export LC_ALL=C;
-        zcat {input.scores} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction};
+        zcat {input.scores} | sort -k1,1 -k2,2n | bgzip -c > {output.prediction} 2> {log};
         """
 
 
 rule scores_replaceScores:
+    conda:
+        "../envs/default.yml"
     input:
         biased_score="results/scores/{score_name}/release/{score_name}.biased.tsv.gz",
         predictions=lambda wc: expand(
@@ -128,22 +150,28 @@ rule scores_replaceScores:
         comments=lambda wc: " ".join(
             ["--comment '%s'" % i for i in config["scores"][wc.score_name]["comments"]]
         ),
+    log:
+        temp("results/logs/scores/replaceScores.{score_name}.log"),
     shell:
         """
         zcat {input.biased_score} | \
         python workflow/scripts/replaceScores.py \
         --replace-score-file {input.predictions} \
         {params.comments} \
-        | bgzip -c > {output.score};
+        | bgzip -c > {output.score} 2> {log};
         """
 
 
 rule scores_indexScore:
+    conda:
+        "../envs/default.yml"
     input:
         "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz",
     output:
         "results/scores/{score_name}/release/{score_name}.unbiased.tsv.gz.tbi",
+    log:
+        temp("results/logs/scores/indexScore.{score_name}.log"),
     shell:
         """
-        tabix -s 1 -b 2 -e 2 -c "#" {input}
+        tabix -s 1 -b 2 -e 2 -c "#" {input} &> {log}
         """
