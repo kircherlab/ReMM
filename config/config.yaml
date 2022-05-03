@@ -196,7 +196,7 @@ variants:
     genome_build: hg19
     processing:
       liftover: hg19ToHg38
-  remm_snvs_2019_liftover_global_means:
+  remm_snvs_2019_liftover:
     type: file
     properties:
       file: resources/variants/variants.all.2019.vcf.gz
@@ -327,7 +327,7 @@ training:
       mode: cv
       seed: 1
   remm_v1_3_parsmurf_hg38_global_mean_additional_positives:
-    positives: remm_snvs_2019_liftover_global_means
+    positives: remm_snvs_2019_liftover
     negatives: cadd_v1_3_humanDerived_hg38
     feature_set: remm_v1_3_hg38
     implementation: parSMURF
@@ -354,7 +354,7 @@ training:
       mode: cv
       seed: 1      
   remm_v1_4_hg38_additional_positives:
-    positives: remm_snvs_2019_liftover_global_means
+    positives: remm_snvs_2019_liftover
     negatives: cadd_v1_3_humanDerived_hg38
     feature_set: remm_v1_4_hg38
     implementation: parSMURF
