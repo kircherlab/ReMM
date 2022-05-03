@@ -7,3 +7,4 @@ dependencies:
   - "ucsc-bigwigtowig"
   - "ucsc-bigwigtobedgraph"
   - "ucsc-bigwigmerge"
+  - "ucsc-liftover"

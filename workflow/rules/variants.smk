@@ -14,7 +14,7 @@ include: "variants_defs.smk"
 # liftover variants
 rule variants_liftover:
     conda:
-        "../envs/ReMM.yaml"
+        "../envs/ucsc_tools.yml"
     input:
         liftover_config=lambda wc: expand(
             "resources/{genomeBuild}/{liftover}.over.chain.gz",
@@ -25,13 +25,15 @@ rule variants_liftover:
     output:
         f="results/variants/{variant_set}/liftover/{variant_set}.failed.bed.gz",
         o="results/variants/{variant_set}/liftover/{variant_set}.success.pos.gz",
+    log:
+        temp("results/logs/variants/liftover.{variant_set}.log"),
     shell:
         """
         liftOver <(
             zcat {input.variants} | \
             grep -v "^#" | \
             awk 'BEGIN{{ OFS="\\t" }}{{ print $1,$2-1,$2,$1":"$2":"$4":"$5":"$8 }}'\
-        ) {input.liftover_config} >( gzip -c > {output.o} ) >( gzip -c > {output.f});
+        ) {input.liftover_config} >( gzip -c > {output.o} ) >( gzip -c > {output.f}) &> {log};
         """
 
 
@@ -54,14 +56,16 @@ rule variants_liftover_filter:
     output:
         vcf="results/variants/{variant_set}/liftover/{variant_set}.vcf.gz",
         idx="results/variants/{variant_set}/liftover/{variant_set}.vcf.gz.tbi",
+    log:
+        temp("results/logs/variants/liftover_filter.{variant_set}.log"),
     shell:
         """
         python workflow/scripts/filterLiftoverVariants.py \
         --input {input.variants} \
         --reference-old {input.ref_old} \
         --reference-new {input.ref_new} \
-        --output >(bgzip -c > {output.vcf});
-        tabix {output.vcf};
+        --output >(bgzip -c > {output.vcf}) &> {log};
+        tabix {output.vcf} &>> {log};
         """
 
 
@@ -78,10 +82,12 @@ rule variants_annotateJannovar:
     output:
         variants="results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz",
         idx="results/variants/{variant_set}/jannovar/{variant_set}.vcf.gz.tbi",
+    log:
+        temp("results/logs/variants/annotateJannovar.{variant_set}.log"),
     shell:
         """
-        jannovar -Xmx4g annotate-vcf -d {input.database} -i {input.variants} -o {output.variants};
-        tabix {output.variants};
+        jannovar -Xmx4g annotate-vcf -d {input.database} -i {input.variants} -o {output.variants} &> {log};
+        tabix {output.variants} &>> {log};
         """
 
 
@@ -98,13 +104,15 @@ rule variants_filter_bcftools:
         bcftools_filter=lambda wc: config["variants"][wc.variant_set]["processing"][
             "filters"
         ]["bcftools"]["filter"],
+    log:
+        temp("results/logs/variants/filter_bcftools.{variant_set}.log"),
     shell:
         """
         (
             echo -e "##fileformat=VCFv4.1\\n#CHROM\\tPOS\\tID\\tREF\\tALT\\tQUAL\\tFILTER\\tINFO";
             bcftools view -H {params.bcftools_filter} {input};
-        ) | bgzip -c > {output.vcf};
-        tabix {output.vcf};
+        ) | bgzip -c > {output.vcf} 2> {log};
+        tabix {output.vcf} &>> {log};
         """
 
 
@@ -121,11 +129,13 @@ rule variants_filter_downsample:
         sample_size=lambda wc: config["variants"][wc.variant_set]["processing"][
             "filters"
         ]["downsample"],
+    log:
+        temp("results/logs/variants/filter_downsample.{variant_set}.log"),
     shell:
         """
         (
             zcat {input} | egrep "^#";
             zcat {input} | egrep -v "^#" | sort -R | awk 'NR <= {params.sample_size} {{ print }}' | sort -k1,1 -k2,2n;
-        ) | bgzip -c > {output.vcf};
-        tabix {output.vcf};
+        ) | bgzip -c > {output.vcf} 2> {log};
+        tabix {output.vcf} &>> {log};
         """

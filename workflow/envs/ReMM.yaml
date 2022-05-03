@@ -12,6 +12,4 @@ dependencies:
   - pickleshare
   - pyfaidx
   - jsonschema
-  - ucsc-bigwigtobedgraph
-  - ucsc-liftover
   - click

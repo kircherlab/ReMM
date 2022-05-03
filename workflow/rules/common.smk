@@ -55,12 +55,22 @@ def getAllAnnotations():
     output = []
     for training in config["training"].values():
         output += [
-            "results/annotation/%s/%s.%s.sorted.tsv.gz"
-            % (training["positives"], training["positives"], training["feature_set"],)
+            "results/annotation/%s/%s.%s.%s.sorted.tsv.gz"
+            % (
+                training["positives"],
+                training["positives"],
+                training["feature_set"],
+                training["missing_value"],
+            )
         ]
         output += [
-            "results/annotation/%s/%s.%s.sorted.tsv.gz"
-            % (training["negatives"], training["negatives"], training["feature_set"],)
+            "results/annotation/%s/%s.%s.%s.sorted.tsv.gz"
+            % (
+                training["negatives"],
+                training["negatives"],
+                training["feature_set"],
+                training["missing_value"],
+            )
         ]
     return output
 
