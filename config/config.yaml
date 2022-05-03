@@ -147,6 +147,10 @@ variant_generation:
     type: variants
     properties:
       file: resources/variants/training_v0.4.hg38.vcf.gz
+  training_positives_v0_4:
+    type: variants
+    properties:
+      file: results/variants/remm_snvs_20160109_liftover/liftover/remm_snvs_20160109_liftover.vcf.gz
 variants:
   cadd_v1_3_humanDerived_hg38:
     type: file
@@ -242,6 +246,16 @@ variants:
     type: generation
     properties:
       name: region_DLK1
+    genome_build: hg38
+  validation_variants_positives_training_v0_4_hg19:
+    type: generation
+    properties:
+      name: training_positives_v0_4
+    genome_build: hg19
+  validation_variants_positives_training_v0_4_hg38:
+    type: generation
+    properties:
+      name: training_positives_v0_4
     genome_build: hg38
   validation_variants_training_v0_4_hg19:
     type: generation
@@ -635,12 +649,12 @@ correlation:
         - encRegTfbsClustered=encRegTfbsClustered
   training_positives_v0_4_remm_v1_4:
     A:
-      variants: remm_snvs_20160109
+      variants: validation_variants_positives_training_v0_4_hg19
       training: remm_v1_4_hg19
       feature_set: remm_v1_4_hg19
       missing_value: default_value
     B:
-      variants: remm_snvs_20160109_liftover
+      variants: validation_variants_positives_training_v0_4_hg38
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
       missing_value: default_value
@@ -878,12 +892,12 @@ correlation:
         - GCContent=GCContent
   training_positives_v0_4_remm_v1_4_remmNegatives:
     A:
-      variants: remm_snvs_20160109
+      variants: validation_variants_positives_training_v0_4_hg19
       training: remm_v1_4_hg19_remmNegatives
       feature_set: remm_v1_4_hg19
       missing_value: default_value
     B:
-      variants: remm_snvs_20160109_liftover
+      variants: validation_variants_positives_training_v0_4_hg38
       training: remm_v1_4_hg38
       feature_set: remm_v1_4_hg38
       missing_value: default_value
