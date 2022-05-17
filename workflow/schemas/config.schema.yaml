@@ -64,13 +64,14 @@ properties:
   variant_generation:
     description: variant generation workflow.
     type: object
-    additionalProprties:
+    additionalProperties:
       type: object
       properties:
         type:
           enum:
             - random
             - regions
+            - variants
         properties:
           type: object
       required:
@@ -202,6 +203,22 @@ properties:
         - B
         - correlate
       additionalProperties: False
+  evaluation_combined:
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        models:
+          type: array
+          items:
+            type: string
+        names:
+          type: object
+          patterProperties:
+            ^((PR)|(ROC))$:
+              type: array
+              items:
+                type: string
 required:
     - global_files
 additionalProperties: False

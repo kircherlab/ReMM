@@ -934,3 +934,15 @@ correlation:
         - CpGperCpG=CpGperCpG
         - CpGobsExp=CpGobsExp
         - GCContent=GCContent
+evaluation_combined:
+  remm_v0_4:
+    models:
+      - remm_v1_4_hg19_remmNegatives
+      - remm_v1_4_hg38
+    names:
+      PR:
+        - ReMM score v0.4.hg19 (0.384)
+        - ReMM score v0.4.hg38 (0.610)
+      ROC:
+        - ReMM score v0.4.hg19 (0.993)
+        - ReMM score v0.4.hg38 (0.996)

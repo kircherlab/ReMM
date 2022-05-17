@@ -133,3 +133,22 @@ rule evaluation_plot_pre_re_f1_f2:
         xname="'ReMM score'",
     wrapper:
         getWrapper("plots/pre_re_f1_f2")
+
+
+rule evaluation_plot_combined:
+    input:
+        lambda wc: expand(
+            "results/evaluation/{model}/metrics/metrics_per_threshold.tsv.gz",
+            model=config["evaluation_combined"][wc.evaluation]["models"],
+        ),
+    output:
+        "results/evaluation_combined/{evaluation}/{type}.png",
+    params:
+        xname=lambda wc: "'Precision'" if wc.type == "PR" else "'False positive rate'",
+        yname=lambda wc: "'Recall'" if wc.type == "PR" else "'True positive rate'",
+        names=lambda wc: config["evaluation_combined"][wc.evaluation]["names"][wc.type],
+        type=lambda wc: wc.type,
+    log:
+        temp("results/logs/evaluate/evaluation_plot_combined.{evaluation}.{type}.log"),
+    wrapper:
+        getWrapper("plots/PR_ROC_curves_metric")
