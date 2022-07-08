@@ -1,8 +1,3 @@
-To DoS:
-- Complete the ReMM environment file, create it during the workflow
-- Add a link for downloading the negative set (in 4.2 Benign variants)
-- Update the rules in the cluster file
-
 # Workflow documentation
 
 ## Folder structure
@@ -25,7 +20,7 @@ Functions are normally written like `get<SubWorkflow><nameOfTheFunction>`. There
 
 ## Main workflow
 
-This is the `Snakemake` file. It includes the multiple subworkflows. Also it contains the all rule (the first rule). This one is run when no file or rule is given to the Snakemake run (it is calles `all`). Then multiple all rules are defined for each sub workflow. Like `all_evaluate` to generate all output files from the evaluate workflow.
+This is the `Snakefile` file. It includes the multiple subworkflows. Also it contains the all rule (the first rule). This one is run when no file or rule is given to the Snakemake run (it is calles `all`). Then multiple all rules are defined for each sub workflow. Like `all_evaluate` to generate all output files from the evaluate workflow.
 
 ## Main sub-workflows
 
@@ -117,22 +112,28 @@ Description: Generates variants (same variant set for hg19 and hg38). Uses singl
 
 ## 1. Collecting annotations
 
-Each annotation is downloaded and preprocessed by a separate Snakemake rule (*rules/features*). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download is managed by a **configuration file** (*config/featuresConfig38.json*) that contains the download links and the necessary meta information for the processing steps. Each feature has the following entry:
+Each annotation is downloaded and preprocessed by a separate Snakemake rule (*rules/features*). This modularization is needed due to different data sources and due to the non-identical preprocessing steps. The download is managed by a **configuration file** (`confi/features.yaml`) that contains the download links and the necessary meta information for the processing steps. Each feature has the following entry:
 
 
+```yaml
+feature_name:
+  description: description of the feature
+  hg19|hg38:
+    url: link to the file that should be downloaded
+    file: name to give to the downloaded
+    files: if feature data is spread across files that have to be downloaded, than you have to write the names of the files in a list; if only one file will be downloaded, write "all",
+    window_size: 75
+    type: type of the file  before it is converted into VCF by AttibuteDB (see below)
+    method: methods for processing the files by AttibuteDB (see below)
+    column: Which column should be used in the file type
+    missing_value:
+      default_value: the missing value of the feature
+      zero: 0.0
 ```
- "feature name": {
-            "url": link to the file that should be downloaded,
-            "file" : name to give to the downloaded file,
-            "files" : if feature data is spread across files that have to be downloaded, than you have to write the names of the files in a list; if only one file will be downloaded, write "all",
-            "type": type of the file  before it is converted into VCF by AttibuteDB (see below),
-            "method": methods for processing the files by AttibuteDB (see below),
-            "description": short description of the feature
-        }
-```
-If you want to add a feature for the calculation of the ReMM score, you have to define it as descibed above and add the name of the feature in the list *feature_set["hg38"]* at the top of the JSON configuration file. Next, you have to add a snakemake rule for downloading the feature. For that, create a new text file *featureName.snakerule* in the folder *rules/features* and add a rule that uses the new entry in the *config/featuresConfig38.json* for downloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. In the rule, you can preprocess the data if needed or use a separate snakemake rule for that (use the same snakerule file). At the end, you need to output a comma-separated file in the input/featureName folder, that will be used in the next step. All following steps do not need to be modified in order to add a new feature.
 
-To remove a feature from computation of ReMM, you need only to remove its name from the top list *feature_set["hg38"]* in *featuresConfig38.json*. Features not defined in the list will be not further processed even if the feature has an entry in the configuration file. 
+If you want to add a feature for the calculation of the ReMM score, you have to define it as descibed above and add the name of the feature in the list under `feature_sets` in the configuration file. Next, you have to add a snakemake rule for downloading the feature. For that, create a new text file *featureName.snakerule* in the folder *rules/features* and add a rule that uses the new entry in the `config/feature.yaml` for downloading the feature and naming the file(s). You can use one of the existing rules as a scaffold. In the rule, you can preprocess the data if needed or use a separate snakemake rule for that (use the same snakerule file). At the end, you need to output a comma-separated file in the input/featureName folder, that will be used in the next step. All following steps do not need to be modified in order to add a new feature.
+
+To remove a feature from computation of ReMM, you need only to remove its name from the top list `feature_sets` in `config/config.yam`. Features not defined in the list will be not further processed even if the feature has an entry in the configuration file. 
 
 ### 2. Converting into VCF
 After raw feature files are downloaded and processed, they have to be converted into VCF format. This is done by the program **AttributeDB** that needs a **property file** for processing features. The file contains following information:
@@ -172,11 +173,3 @@ ParSMURF outputs a tab-delimited file with containing two columns. The first col
 
 ### 8. Genome-wide ReMM score
 Not done yet
-
----------------------
-
-
-Absolute paths:
-/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz
-/fast/groups/ag_kircher/CADD/cadd_v1.3/training_data/GRCh38/humanDerived/annotated/SNVs.vcf.gz
-/fast/work/groups/ag_kircher/ReMM/ReMM/data/variants/RegulatoryMendelianMutations/GRCh37/SNVs.all.20160109.vcf.gz
