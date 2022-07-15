@@ -38,6 +38,8 @@ rule correlation_scoreJoin:
         suffixes="_A _B",
         left_on="ID",
         right_on="ID",
+    log:
+        temp("results/logs/correlation/correlation_scoreJoin.{correlation}.log"),
     wrapper:
         getWrapper("file_manipulation/merge")
 
@@ -51,6 +53,10 @@ rule correlation_correlate_score:
     params:
         value_a="SCORE_A",
         value_b="SCORE_B",
+    log:
+        temp(
+            "results/logs/correlation/correlation_featcorrelation_correlate_scoreureJoin.{correlation}.log"
+        ),
     wrapper:
         getWrapper("evaluate/correlation")
 
@@ -80,6 +86,8 @@ rule correlation_featureJoin:
         suffixes="_A _B",
         left_on="ID",
         right_on="ID",
+    log:
+        temp("results/logs/correlation/correlation_featureJoin.{correlation}.log"),
     wrapper:
         getWrapper("file_manipulation/merge")
 
@@ -93,6 +101,8 @@ rule correlation_correlate_feature:
     params:
         value_a="{featureA}_A",
         value_b="{featureB}_B",
+    log:
+        temp("results/logs/correlation/correlation_correlate_feature.{correlation}.{featureA}.{featureB}.log"),
     wrapper:
         getWrapper("evaluate/correlation")
 
@@ -113,6 +123,10 @@ rule correlation_combine_correlate_feature:
             "Feature_A=%s" % f[0]
             for f in correlation_getCorrelateFeatures(wc.correlation)
         ],
+    log:
+        temp(
+            "results/logs/correlation/correlation_combine_correlate_feature.{correlation}.log"
+        ),
     wrapper:
         getWrapper("file_manipulation/concat")
 
@@ -143,5 +157,7 @@ rule correlation_plot:
         method=lambda wc: wc.method,
         xlab=lambda wc: getCorrPlotXLab(wc.correlation),
         ylab=lambda wc: getCorrPlotYLab(wc.correlation),
+    log:
+        temp("results/logs/correlation/correlation_plot.{correlation}.{method}.log"),
     wrapper:
         getWrapper("plots/ggcorrplot")

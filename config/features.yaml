@@ -483,7 +483,7 @@ GerpRS:
       default_value: 1064.06
       zero: 0.0
   hg38:
-    url: ""
+    url: "/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz"
     file: gerpElement
     files: all
     id: ""

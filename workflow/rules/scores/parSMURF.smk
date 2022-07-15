@@ -1,8 +1,12 @@
 rule scores_parSMURF_data:
+    conda:
+        "../../envs/default.yml"
     input:
         "results/scores/{score_name}/input/annotation/{split}.sorted.tsv.gz",
     output:
         temp("results/scores/{score_name}/input/parsmurf/parsmurf.data.{split}.txt"),
+    log:
+        temp("results/logs/scores/parSMURF_data.{score_name}.{split}.log"),
     shell:
         """
         zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4- > {output}
@@ -10,10 +14,14 @@ rule scores_parSMURF_data:
 
 
 rule scores_parSMURF_labels:
+    conda:
+        "../../envs/default.yml"
     input:
         "results/scores/{score_name}/input/annotation/{split}.sorted.tsv.gz",
     output:
         temp("results/scores/{score_name}/input/parsmurf/parsmurf.labels.{split}.txt"),
+    log:
+        temp("results/logs/scores/parSMURF_labels.{score_name}.{split}.log"),
     shell:
         """
         zcat {input} | egrep -v "^CHR\sPOSITION\sID" | awk '{{print 1}}' > {output}
@@ -21,6 +29,8 @@ rule scores_parSMURF_labels:
 
 
 rule scores_parSMURF_conf:
+    conda:
+        "../../envs/default.yml"
     input:
         data="results/scores/{score_name}/input/parsmurf/parsmurf.data.{split}.txt",
         models=(
@@ -47,11 +57,15 @@ rule scores_parSMURF_conf:
         seed="1",
         mode="predict",
         ensThrd="30",
+    log:
+        temp("results/logs/scores/parSMURF_conf.{score_name}.{split}.log"),
     script:
         "../../scripts/generateParsmurfConfig.py"
 
 
 rule scores_parSMURF_test:
+    conda:
+        "../../envs/default.yml"
     input:
         data="results/scores/{score_name}/input/parsmurf/parsmurf.data.{split}.txt",
         config="results/scores/{score_name}/input/model/parsmurf.config.{split}.json",
@@ -64,6 +78,8 @@ rule scores_parSMURF_test:
         ),
     output:
         temp("results/scores/{score_name}/predictions/parsmurf/predictions_{split}.txt"),
+    log:
+        temp("results/logs/scores/parSMURF_test.{score_name}.{split}.log"),
     shell:
         """
         workflow/bin/parSMURF1 --cfg {input.config}
@@ -71,6 +87,8 @@ rule scores_parSMURF_test:
 
 
 rule scores_parSMURF_combine:
+    conda:
+        "../../envs/default.yml"
     input:
         predictions=(
             "results/scores/{score_name}/predictions/parsmurf/predictions_{split}.txt"
@@ -78,6 +96,8 @@ rule scores_parSMURF_combine:
         positions="results/scores/{score_name}/input/annotation/{split}.sorted.tsv.gz",
     output:
         temp("results/scores/{score_name}/predictions/split/predictions_{split}.tsv.gz"),
+    log:
+        temp("results/logs/scores/parSMURF_combine.{score_name}.{split}.log"),
     shell:
         """
         paste \

@@ -293,7 +293,7 @@ rule features_conservation_GERP_hg38_process:
     conda:
         "../../envs/default.yaml"
     input:
-        "/fast/groups/ag_kircher/CADD/dependencies/annotations/gerp/gerp2_elements_hg38_MAM.bg.gz",
+        features["GerpRS"]["hg38"]["url"]
     output:
         "results/features/download/gerpElement/hg38/gerpElement.all.bed.gz",
     log:
