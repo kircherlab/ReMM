@@ -158,7 +158,7 @@ rule scores_replaceScores:
         python workflow/scripts/replaceScores.py \
         --replace-score-file {input.predictions} \
         {params.comments} \
-        | bgzip -c > {output.score} 2> {log};
+        | uniq | bgzip -c > {output.score} 2> {log};
         """
 
 

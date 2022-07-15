@@ -200,7 +200,7 @@ correlation_correlate_score:
 ########################
 scores_extract_features:
   time: "0-06:00"
-  mem: 40000
+  mem: 55G
   queue: medium
 scores_parSMURF_test:
   time: "0-00:20"
