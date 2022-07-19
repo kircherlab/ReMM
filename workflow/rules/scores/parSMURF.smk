@@ -9,7 +9,7 @@ rule scores_parSMURF_data:
         temp("results/logs/scores/parSMURF_data.{score_name}.{split}.log"),
     shell:
         """
-        zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4- > {output}
+        zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4- > {output} 2> {log}
         """
 
 
@@ -24,7 +24,7 @@ rule scores_parSMURF_labels:
         temp("results/logs/scores/parSMURF_labels.{score_name}.{split}.log"),
     shell:
         """
-        zcat {input} | egrep -v "^CHR\sPOSITION\sID" | awk '{{print 1}}' > {output}
+        zcat {input} | egrep -v "^CHR\sPOSITION\sID" | awk '{{print 1}}' > {output} 2> {log}
         """
 
 
@@ -82,7 +82,7 @@ rule scores_parSMURF_test:
         temp("results/logs/scores/parSMURF_test.{score_name}.{split}.log"),
     shell:
         """
-        workflow/bin/parSMURF1 --cfg {input.config}
+        workflow/bin/parSMURF1 --cfg {input.config} > {log}
         """
 
 
@@ -103,5 +103,5 @@ rule scores_parSMURF_combine:
         paste \
         <(zcat {input.positions} | egrep -v "^CHR\sPOSITION\sID" | cut -f 1,2) \
         <(cat {input.predictions} | cut -f 1 ) | \
-        bgzip -c > {output}
+        bgzip -c > {output} 2> {log}
         """

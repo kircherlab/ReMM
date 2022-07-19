@@ -26,20 +26,10 @@ validate(features, schema="../schemas/features.schema.yaml")
 
 
 include: "features/GCfeatures.smk"
-
-
 include: "features/conservation.smk"
-
-
 include: "features/encodeEpigenetics.smk"
-
-
 include: "features/population.smk"
-
-
 include: "features/fantom.smk"
-
-
 include: "features/geneticVariation.smk"
 
 
@@ -59,9 +49,7 @@ rule features_createPropertyFile:
             "results/features/single_vcf/{feature}/{genomeBuild}/{feature}.properties"
         ),
     params:
-        file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[
-            -1
-        ],
+        file_type=lambda wc: features[wc.feature][wc.genomeBuild]["type"].split(".")[-1],
         column=(
             lambda wc: "column=%d" % features[wc.feature][wc.genomeBuild]["column"]
             if features[wc.feature][wc.genomeBuild]["type"].split(".")[-1] == "bed"
@@ -69,6 +57,8 @@ rule features_createPropertyFile:
         ),
         method=lambda wc: features[wc.feature][wc.genomeBuild]["method"],
         description=lambda wc: features[wc.feature]["description"],
+    log:
+        "results/logs/features/createPropertyFile.{feature}.{genomeBuild}.log",
     run:
         files = " \n".join(["file = %s" % file for file in input])
         shell(
@@ -102,6 +92,8 @@ rule features_createSingleFeatureVCF:
         mem="5g",
     conda:
         "../envs/jdk11.yaml"
+    log:
+        "results/logs/features/createSingleFeatureVCF.{feature}.{genomeBuild}.log",
     shell:
         """
         export LC_ALL=C;
@@ -112,36 +104,46 @@ rule features_createSingleFeatureVCF:
             zcat {output.temp} | \
             grep  -v "#" | \
             sort -k1,1 -k2,2n
-        ) | bgzip -c > {output.vcf}
+        ) | bgzip -c > {output.vcf} 2> {log}
         """
 
 
 # index single feature vcf
 rule features_indexSingleFeatureVCF:
+    conda:
+        "../envs/default.yml"
     input:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
     output:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz.tbi",
+    log:
+        "results/logs/features/indexSingleFeatureVCF.{feature}.{genomeBuild}.log",
     shell:
         """
-        tabix {input}
+        tabix {input} &> {log}
         """
 
 
 # Average feature of defined position
 rule features_average:
+    conda:
+        "../envs/default.yml"
     input:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
     output:
         "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.avg.tsv.gz",
+    log:
+        "results/logs/features/average.{feature}.{genomeBuild}.log",
     shell:
         """
-        zcat {input} | egrep -v "#" | awk -F'=' '{{ sum+=$2 }} END {{ print sum / NR }}' |  gzip -c > {output}
+        zcat {input} | egrep -v "#" | awk -F'=' '{{ sum+=$2 }} END {{ print sum / NR }}' |  gzip -c > {output} 2> {log}
         """
 
 
 # Create a feature set defined in config file
 rule features_mergeSingleFeatureVCF:
+    conda:
+        "../envs/default.yml"
     input:
         files=lambda wc: expand(
             "results/features/single_vcf/{feature}/{genomeBuild}/single/{feature}.vcf.gz",
@@ -156,8 +158,10 @@ rule features_mergeSingleFeatureVCF:
     output:
         vcf="results/features/feature_sets/{feature_set}.vcf.gz",
         idx="results/features/feature_sets/{feature_set}.vcf.gz.tbi",
+    log:
+        "results/logs/features/mergeSingleFeatureVCF.{feature_set}.log",
     shell:
         """
-        bcftools merge {input.files} | bgzip -c > {output.vcf};
-        tabix {output.vcf};
+        bcftools merge {input.files} | bgzip -c > {output.vcf} 2> {log};
+        tabix {output.vcf} 2>> {log};
         """

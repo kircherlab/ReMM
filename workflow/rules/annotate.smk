@@ -25,15 +25,19 @@ rule annotate_features:
         ),
     output:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
+    log:
+        "results/logs/annotate/features.{variant_set}.{feature_set}.log",
     shell:
         """
         java -Xmx2g -jar workflow/bin/attributedb-cli-0.0.1-jar-with-dependencies.jar annotate-vcf \
-        --annotation-vcf {input.feature_set} --file {input.variants_file} | bgzip -c > {output}
+        --annotation-vcf {input.feature_set} --file {input.variants_file} | bgzip -c > {output} 2> {log}
         """
 
 
 # Sort features and replace NaN value with default of feature defined in config
 rule annotate_sort_features:
+    conda:
+        "../envs/default.yml"
     input:
         "results/annotation/{variant_set}/{variant_set}.{feature_set}.unsorted.tsv.gz",
     output:
@@ -53,7 +57,9 @@ rule annotate_sort_features:
                 for feature in getFeaturesOfFeatureSet(wc.feature_set)
             ]
         ),
+    log:
+        "results/logs/annotate/sort_features.{variant_set}.{feature_set}.{missing_value}.log",
     shell:
         """
-        python workflow/scripts/sortAnnotationFile.py --input {input} --output {output} {params.features}
+        python workflow/scripts/sortAnnotationFile.py --input {input} --output {output} {params.features} &> {log}
         """

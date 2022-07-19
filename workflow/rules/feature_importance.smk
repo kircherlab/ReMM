@@ -13,6 +13,8 @@ Replaces features with headers and generates average importance scores.
 
 # add a header to the featuire importance files (required before merging)
 rule featureImportance_header:
+    conda:
+        "../envs/default.yml"
     input:
         "results/training/{training}/predictions/models/{model_number}.out.importance",
     output:
@@ -21,12 +23,14 @@ rule featureImportance_header:
         ),
     params:
         model_number=lambda wc: wc.model_number,
+    log:
+        temp("results/logs/featureImportance/header.{training}.{model_number}.log"),
     shell:
         """
         (
             echo -e "Feature\\tImportance_{params.model_number}";
             cat {input} | sed 's/\:\s/\\t/g';
-        ) | gzip -c > {output}
+        ) | gzip -c > {output} 2> {log}
         """
 
 
@@ -41,6 +45,8 @@ rule featureImportance_concat:
         "results/training/{training}/feature_importance/feature_importance.tsv.gz",
     params:
         index="Feature",
+    log:
+        temp("results/logs/featureImportance/concat.{training}.log"),
     wrapper:
         getWrapper("file_manipulation/concat")
 
@@ -59,6 +65,8 @@ rule featureImportance_replace:
             "%d" % i for i in range(len(getFeaturesOfTraining(wc.training)))
         ],
         replace=lambda wc: getFeaturesOfTraining(wc.training),
+    log:
+        temp("results/logs/featureImportance/replace.{training}.log"),
     wrapper:
         getWrapper("file_manipulation/replace")
 
@@ -73,5 +81,7 @@ rule featureImportance_aucRepetitiveMean:
         columns=lambda wc: ["Importance_%d" % num for num in range(100)],
         new_columns=["mean", "std", "min", "max"],
         operations=["mean", "std", "min", "max"],
+    log:
+        temp("results/logs/featureImportance/aucRepetitiveMean.{training}.log"),
     wrapper:
         getWrapper("file_manipulation/summarize_columns")

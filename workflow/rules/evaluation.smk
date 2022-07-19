@@ -27,6 +27,8 @@ rule evaluation_auc:
         label_column="LABEL",
         prediction_column="SCORE",
         positive_label=1,
+    log:
+        temp("results/logs/evaluation/auc.{training_run}.log"),
     wrapper:
         getWrapper("evaluate/auc")
 
@@ -43,6 +45,8 @@ rule evaluation_aucRepetitive:
         label_column="LABEL",
         prediction_column="SCORE",
         positive_label=1,
+    log:
+        temp("results/logs/evaluation/aucRepetitive.{training_run}.{seed}.log"),
     wrapper:
         getWrapper("evaluate/auc")
 
@@ -55,6 +59,8 @@ rule evaluation_aucRepetitiveRename:
         temp("results/evaluation/{training_run}/metrics/repetitive/auc.{seed}.tsv.gz"),
     params:
         columns=lambda wc: {"value": "seed_%d" % int(wc.seed)},
+    log:
+        temp("results/logs/evaluation/aucRepetitiveRename.{training_run}.{seed}.log"),
     wrapper:
         getWrapper("file_manipulation/rename")
 
@@ -70,6 +76,8 @@ rule evaluation_aucRepetitiveCombine:
         "results/evaluation/{training_run}/metrics/repetitive/auc_all.tsv.gz",
     params:
         index="metric",
+    log:
+        temp("results/logs/evaluation/aucRepetitiveCombine.{training_run}.log"),
     wrapper:
         getWrapper("file_manipulation/concat")
 
@@ -86,6 +94,8 @@ rule evaluation_aucRepetitiveMean:
         ],
         new_columns=["mean", "std", "min", "max"],
         operations=["mean", "std", "min", "max"],
+    log:
+        temp("results/logs/evaluation/aucRepetitiveMean.{training_run}.log"),
     wrapper:
         getWrapper("file_manipulation/summarize_columns")
 
@@ -103,6 +113,8 @@ rule evaluation_metrics_per_threshold:
         prediction_column="SCORE",
         positive_label=1,
         decimals=3,
+    log:
+        temp("results/logs/evaluation/metrics_per_threshold.{training_run}.log"),
     wrapper:
         getWrapper("evaluate/metrics_per_threshold")
 
@@ -120,6 +132,8 @@ rule evaluation_plot_metrics:
         label_column="LABEL",
         score_column="SCORE",
         positive_label=1,
+    log:
+        temp("results/logs/evaluation/plot_metrics.{training_run}.log"),
     wrapper:
         getWrapper("plots/metric_curves")
 
@@ -131,6 +145,8 @@ rule evaluation_plot_pre_re_f1_f2:
         "results/evaluation/{training_run}/metrics/pre_re_f1_f2.png",
     params:
         xname="'ReMM score'",
+    log:
+        temp("results/logs/evaluation/plot_pre_re_f1_f2.{training_run}.log"),
     wrapper:
         getWrapper("plots/pre_re_f1_f2")
 
@@ -149,6 +165,6 @@ rule evaluation_plot_combined:
         names=lambda wc: config["evaluation_combined"][wc.evaluation]["names"][wc.type],
         type=lambda wc: wc.type,
     log:
-        temp("results/logs/evaluate/evaluation_plot_combined.{evaluation}.{type}.log"),
+        temp("results/logs/evaluation/evaluation_plot_combined.{evaluation}.{type}.log"),
     wrapper:
         getWrapper("plots/PR_ROC_curves_metric")

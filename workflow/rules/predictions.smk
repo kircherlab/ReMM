@@ -1,7 +1,10 @@
 
 include: "predictions_defs.smk"
 
+
 checkpoint predictions_createInputData:
+    conda:
+        "../envs/default.yml"
     input:
         lambda wc: expand(
             "results/annotation/{{variant_set}}/{{variant_set}}.{feature_set}.{missing_value}.sorted.tsv.gz",
@@ -13,16 +16,19 @@ checkpoint predictions_createInputData:
             "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt"
         ),
     params:
-        lines=100000,
-        prefix=(
-            "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data."
-        ),
+        lines=lambda wc: 100000,
+        prefix=lambda wc: "results/predictions/%s/%s/input/parsmurf/parsmurf.data."
+        % (wc.training, wc.variant_set),
         suffix=".txt",
+    log:
+        temp(
+            "results/logs/prediction/createInputData.{training}.{variant_set}.{split}.log"
+        ),
     shell:
         """
         split --additional-suffix={params.suffix} -a 4 -l {params.lines} <(
             zcat {input} | egrep -v "^CHR\sPOSITION\sID" | cut -f 4-
-        ) {params.prefix}
+        ) {params.prefix} &> {log}
         """
 
 
@@ -44,22 +50,30 @@ checkpoint predictions_createInputData:
 
 
 rule predictions_createInputLabels:
+    conda:
+        "../envs/default.yml"
     input:
         "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
     output:
         temp(
             "results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.labels.{split}.txt"
         ),
+    log:
+        temp(
+            "results/logs/prediction/createInputLabels.{training}.{variant_set}.{split}.log"
+        ),
     shell:
         """
-        cat {input} | awk '{{print 1}}' > {output}
+        cat {input} | awk '{{print 1}}' > {output} 2> {log}
         """
 
 
 rule predictions_parSMURF_conf:
+    conda:
+        "../envs/default.yml"
     input:
         data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
-        models=expand(
+        models=lambda wc: expand(
             "results/training/{{training}}/predictions/models/{model_number}.out.forest",
             model_number=list(range(0, 100)),
         ),
@@ -76,11 +90,17 @@ rule predictions_parSMURF_conf:
         seed=lambda wc: config["training"][wc.training]["config"]["seed"],
         mode="predict",
         ensThrd="30",
+    log:
+        temp(
+            "results/logs/prediction/parSMURF_conf.{training}.{variant_set}.{split}.log"
+        ),
     script:
         "../scripts/generateParsmurfConfig.py"
 
 
 rule predictions_parSMURF_run:
+    conda:
+        "../envs/default.yml"
     input:
         data="results/predictions/{training}/{variant_set}/input/parsmurf/parsmurf.data.{split}.txt",
         config="results/predictions/{training}/{variant_set}/input/model/parsmurf.config.{split}.json",
@@ -93,25 +113,35 @@ rule predictions_parSMURF_run:
         temp(
             "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.{split}.txt"
         ),
+    log:
+        temp(
+            "results/logs/prediction/parSMURF_run.{training}.{variant_set}.{split}.log"
+        ),
     shell:
         """
-        workflow/bin/parSMURF1 --cfg {input.config}
+        workflow/bin/parSMURF1 --cfg {input.config} > {log}
         """
 
 
 rule predictions_parSMURF_aggregate:
+    conda:
+        "../envs/default.yml"
     input:
         predictions=aggregate_PredictedScores,
         data=aggregate_Data,
     output:
         "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.txt",
+    log:
+        temp("results/logs/prediction/parSMURF_run.{training}.{variant_set}.log"),
     shell:
         """
-        cat {input.predictions} > {output};
+        cat {input.predictions} > {output} 2> {log}
         """
 
 
 rule predictionsparSMURF_combine_labels:
+    conda:
+        "../envs/default.yml"
     input:
         predictions=(
             "results/predictions/{training}/{variant_set}/predictions/parsmurf/predictions.txt",
@@ -123,6 +153,10 @@ rule predictionsparSMURF_combine_labels:
         ),
     output:
         "results/predictions/{training}/{variant_set}/predictions/predictions.with_IDs.tsv.gz",
+    log:
+        temp(
+            "results/logs/prediction/parSMURF_combine_labels.{training}.{variant_set}.log"
+        ),
     shell:
         """
         (
@@ -134,5 +168,5 @@ rule predictionsparSMURF_combine_labels:
             <(cat {input.predictions} | cut -f 1 ) | \
             sort -k 1,1 -k2,2n;
         ) | \
-        bgzip -c > {output}
+        bgzip -c > {output} 2> {log}
         """

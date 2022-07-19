@@ -9,7 +9,7 @@ rule process_getUtils_getCytoband:
         temp("results/logs/process/getUtils/getCytoband.{genomeBuild}.log"),
     shell:
         """
-        curl {params.url}  > {output}
+        curl {params.url}  > {output} 2> {log}
         """
 
 
@@ -27,5 +27,5 @@ rule process_getUtils_getChainFile:
         temp("results/logs/process/getUtils/getChainFile.{genomeBuild}.{chain}.log"),
     shell:
         """
-        curl {params.url}  > {output}
+        curl {params.url}  > {output} 2> {log}
         """
