@@ -42,7 +42,6 @@ rule features_1KG_hg38_process:
 #        zcat  | cut -f 1-9 | \
 #        ruby scripts/rareVariantFractionInWindow.rb 500 0.005 {output.bed};
 #        cat {output.bed}| bgzip -c > {output.bed_gz}
-
 # rule convert_feature_1kG:
 #    input:
 #       "input/features/{genomeBuild}/1KG/1KG.{chr}.vcf.gz"

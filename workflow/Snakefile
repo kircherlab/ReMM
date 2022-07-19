@@ -48,44 +48,24 @@ configfile: "config/featuresConfig38.json"
 
 # Workflow common
 include: "rules/common.smk"
-
-
 # Workflow features
 include: "rules/features.smk"
-
-
 # Workflow variant generation
 include: "rules/variant_generation.smk"
-
-
 # Workflow variants
 include: "rules/variants.smk"
-
-
 # Workflow annotate
 include: "rules/annotate.smk"
-
-
 # Workflow training
 include: "rules/training.smk"
-
-
 # Workflow evaluation
 include: "rules/evaluation.smk"
-
-
 # Workflow predictions
 include: "rules/predictions.smk"
-
-
 # Workflow feature_importance
 include: "rules/feature_importance.smk"
-
-
 # Workflow scores
 include: "rules/scores.smk"
-
-
 # Workflow correlation
 include: "rules/correlation.smk"
 
@@ -98,8 +78,6 @@ include: "rules/correlation.smk"
 
 
 include: "rules/process/getUtils.smk"
-
-
 include: "rules/process/createModelData.smk"
 
 
@@ -112,8 +90,8 @@ include: "rules/process/createModelData.smk"
 # TODO Add all configs to all rule
 rule all:
     input:
-        getAllVariantsInput(), # variants
-         # feature sets
+        getAllVariantsInput(),  # variants
+        # feature sets
         expand(
             "results/evaluation/{training_run}/metrics/auc.tsv.gz",
             training_run=list(config["training"].keys()),

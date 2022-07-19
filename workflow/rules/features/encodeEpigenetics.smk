@@ -4,7 +4,8 @@ rule features_encodeEpigenetics_get:
     output:
         "results/features/download/{encodeEpigenetic}/{genomeBuild}/{encodeEpigenetic}.{file}.bigWig",
     params:
-        url=lambda wc: "%s%s.bigWig" % (
+        url=lambda wc: "%s%s.bigWig"
+        % (
             features[wc.encodeEpigenetic][wc.genomeBuild]["url"],
             wc.file,
         ),

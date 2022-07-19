@@ -61,7 +61,9 @@ rule training_parSMURF_generateRepetitiveConfig:
         seed=lambda wc: wc.seed,
         mode=lambda wc: wc.mode,
     log:
-        temp("results/logs/training/parSMURF/generateRepetitiveConfig.{training_run}.{seed}.{mode}.log"),
+        temp(
+            "results/logs/training/parSMURF/generateRepetitiveConfig.{training_run}.{seed}.{mode}.log"
+        ),
     script:
         "../../scripts/generateParsmurfConfig.py"
 
@@ -116,7 +118,9 @@ rule training_parSMURF_combine:
     wildcard_constraints:
         predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)",
     log:
-        temp("results/logs/training/parSMURF/combine.{training_run}.{predictions_alone_or_repetitive}.log"),
+        temp(
+            "results/logs/training/parSMURF/combine.{training_run}.{predictions_alone_or_repetitive}.log"
+        ),
     shell:
         """
         paste \
@@ -141,7 +145,9 @@ rule training_parSMURF_combine_labels:
     wildcard_constraints:
         predictions_alone_or_repetitive="(repetitive/predictions.\d+)|(predictions)",
     log:
-        temp("results/logs/training/parSMURF/combine_labels.{training_run}.{predictions_alone_or_repetitive}.log"),
+        temp(
+            "results/logs/training/parSMURF/combine_labels.{training_run}.{predictions_alone_or_repetitive}.log"
+        ),
     shell:
         """
         (

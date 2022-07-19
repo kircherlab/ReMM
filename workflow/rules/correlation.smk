@@ -102,7 +102,9 @@ rule correlation_correlate_feature:
         value_a="{featureA}_A",
         value_b="{featureB}_B",
     log:
-        temp("results/logs/correlation/correlation_correlate_feature.{correlation}.{featureA}.{featureB}.log"),
+        temp(
+            "results/logs/correlation/correlation_correlate_feature.{correlation}.{featureA}.{featureB}.log"
+        ),
     wrapper:
         getWrapper("evaluate/correlation")
 

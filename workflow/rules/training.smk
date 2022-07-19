@@ -20,7 +20,7 @@ rule getFolds:
     output:
         "resources/{genomeBuild}/folds.txt.gz",
     log:
-        "resuls/logs/training/getFolds.{genomeBuild}.log"
+        "resuls/logs/training/getFolds.{genomeBuild}.log",
     script:
         "../scripts/createFolds.py"
 
