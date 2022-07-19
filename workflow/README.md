@@ -4,17 +4,15 @@
 
 This folder (`workflow`) contains several subfolders:
 
-- bin: binaries used by Snakemake rules
+ - bin: binaries used by Snakemake rules
 - envs: YAML file for creating the main working environment 'ReMM' as well as files for some additional environments required by certain rules
 - rules: Snakemake rules separated into subfolders according to the workflow steps
 - schemas: JSON Schema files for validation of config files.
 - scripts: (external) scripts used by Snakemake rules
 
-Some directories contain README files with more detailed information on the content of folders. A DAG (directed acyclical graph) of the workflow (schematic representation) starting from the step *4. Variants* can be found in WorkflowDAG.jpg. The DAG for steps 1-3 is not shown for the sake of clarity because they contain more than one hundred rule executions.
-
 ## Naming convention
 
-All rules are named like `<sub-workflow>_nameOfTheRule` to make it creal where they belong to. `all` rules are special and documented in the main wokflow.
+All rules are named like `<sub-workflow>_nameOfTheRule` to make it clear where they belong to. `all` rules are special and documented in the main wokflow.
 
 Functions are normally written like `get<SubWorkflow><nameOfTheFunction>`. There are simple (or not so simple) getters for paths, configurations etc. E.g. the simple `getVariantSetGenomeBuild(variant_set)` returns the genome build of a variant set . The more complex `getVariantsInput(variant_set, step, idx=False)` returns the path to the vcf variant file taken into account that a variant file might be processed multiple times before.
 
@@ -24,41 +22,47 @@ This is the `Snakefile` file. It includes the multiple subworkflows. Also it con
 
 ## Main sub-workflows
 
-Main workflows needed ti generate a while-genome score file for ReMM.
+Main workflows needed to generate a while-genome score file for ReMM. Config describes the entry in the in `config/config.yaml` file.
 
 ### Variants
 
-Snakemake file: `rules/variants.smk`
+Filter and liftover input variants.
 
-Config: `variants`
-
-Output path: `results/variants/<variant_set>`
+- Snakemake file: `rules/variants.smk`
+- Config: `variants`
+- Output path: `results/variants/<variant_set>`
 
 ### Features
 
-Snakemake file: `rules/features.smk`
+Download features, create vcf files and finally merge them together in one hughe annotation file (feature set).
 
-Config: `feature_sets` and additional `config/features.yaml` config file for single features.
-
-Output path: `results/features/single_vcf/<feature_name>` and `results/features/feature_sets/<feature_set_name>`
+- Snakemake file: `rules/features.smk`
+- Config: `feature_sets` and additional `config/features.yaml` config file for single features.
+- Output path: `results/features/single_vcf/<feature_name>` and `results/features/feature_sets/<feature_set_name>`
 
 ### Annotate
 
-Snakemake file: `rules/annotate.smk`
+Annotate list of variants with feature sets.
 
-Config: Not configured right now in the config file. Annotation of vcf files with feature sets are configured later in the training step.
-
-Output path: `results/annotation/<variant_set>`
+- Snakemake file: `rules/annotate.smk`
+- Config: Not configured right now in the config file. Annotation of vcf files with feature sets are configured later in the training step.
+- Output path: `results/annotation/<variant_set>`
 
 ### Training
 
-Snakemake file: `rules/training.smk`
+Train variants (positive/negative) using features by cytoband aware 10-fold cross-validation.
 
-Config: `training` with properties `positives`, `negatives`, `feature_set`, and `implementation`
-
-Output path: `results/training/<training_run>`
+- Snakemake file: `rules/training.smk`
+- Config: `training` with properties `positives`, `negatives`, `feature_set`, and `implementation`
+- Output path: `results/training/<training_run>`
 
 ### Scores
+
+Generate whole genome wide scores.
+
+- Snakemake file: `rules/scores.smk`
+- Config: `scores` with property `training` to select the training that should be used.
+- Output path: `results/scores/<score>`
 
 ## Other sub-workflows
 
@@ -66,49 +70,39 @@ Other workflows written around the main subwokflows like evaluation of predictio
 
 ### Evaluation
 
-Snakemake file: `rules/evaluation.smk`
-
-Config: Not configured. Just uses all configured training runs.
-
-Output path: `results/evaluation/<training_run>`
-
-Description: Evaluation of training runs like AUPRC, AUROC or curves. 
+Evaluation of training runs like AUPRC, AUROC or curves. 
 Also mean AURPRC and AUROC for repetetive (100 times) CV training.
+
+- Snakemake file: `rules/evaluation.smk`
+- Config: Not configured. Just uses all configured training runs.
+- Output path: `results/evaluation/<training_run>`
 
 ### Correlation
 
-Snakemake file: `rules/correlation.smk`
+Correlates features from variant annotations and predictions from training runs.
 
-Config: `correlation` with name of the correlation and properties `A`, `B`, `correlate`. `A` and `B` are the contrasting sets. All of them contain `variants` `training`, `feature_set`, `missing_value`. `correlate` has the key `features` with a list of features that should be correlated. In the form of `feature_set_A=feature_set_b`.
-
-Output path: `results/correlation/<correlation_set>`
-
-Final file: `results/correlation/<correlation>/feature.correlate.tsv.gz`
-
-Description: Correlates features from variant annotations and predictions from training runs.
+- Snakemake file: `rules/correlation.smk`
+- Config: `correlation` with name of the correlation and properties `A`, `B`, `correlate`. `A` and `B` are the contrasting sets. All of them contain `variants` `training`, `feature_set`, `missing_value`. `correlate` has the key `features` with a list of features that should be correlated. In the form of `feature_set_A=feature_set_b`.
+- Output path: `results/correlation/<correlation_set>`
+- Final file: `results/correlation/<correlation>/feature.correlate.tsv.gz`
 
 ### Feature importance
 
-Snakemake file: `rules/feature_importance.smk`
-
-Config: Not configured. Just uses all configured training runs.
-
-Output path: `results/training/<training_run>/feature_importance`
-
-Description: Reads the feature importance files for each tree, generated by parSMURF.
+Reads the feature importance files for each tree, generated by parSMURF.
 Replaces features with headers and generates average importance scores.
 
-## Variant generation
+- Snakemake file: `rules/feature_importance.smk`
+- Config: Not configured. Just uses all configured training runs.
+- Output path: `results/training/<training_run>/feature_importance`
 
-Snakemake file: `rules/variant_generation.smk`
+### Variant generation
 
-Config: `variant_generation` followed by the varaint set name. This has the properties `type` and `properties`. Where type can be `region` or `random`. `region` has properties `file` with the file path to a bed file (must be hg38). `random` has properties `n` (number of variants that should be generated) and `seed` a seed for the random generator.
+Generates variants (same variant set for hg19 and hg38). Uses single positions from a bed file (config type regions) or generates random variants (config type random) of a defined length.
 
-Output path: `results/variant_generation/<name>`
-
-Final file: `results/variant_generation/<name>/hg19/<name>.vcf.gz"`
-
-Description: Generates variants (same variant set for hg19 and hg38). Uses single positions from a bed file (config type regions) or generates random variants (config type random) of a defined length.
+- Snakemake file: `rules/variant_generation.smk`
+- Config: `variant_generation` followed by the varaint set name. This has the properties `type` and `properties`. Where type can be `region` or `random`. `region` has properties `file` with the file path to a bed file (must be hg38). `random` has properties `n` (number of variants that should be generated) and `seed` a seed for the random generator.
+- Output path: `results/variant_generation/<name>`
+- Final file: `results/variant_generation/<name>/hg19/<name>.vcf.gz"`
 
 ## 1. Collecting annotations
 

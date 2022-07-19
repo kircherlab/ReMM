@@ -50,10 +50,10 @@ The `workflow` folder contains a graph of the workflow and more detailed informa
 To launch a snakemake workflow, you need to tell snakemake which file you want to generate. We defined all rules for multiple steps. They can be found here: `workflow/Snakefile`. For example, you want to generate all feature sets defined in a config file you can run:
 
 ```
-snakemake --configfile config/config.yaml all_feature_sets
+snakemake -c1 all_feature_sets
 ```
 
-To execute any step separately (see `README.md` in the `workflow` folder for details on workflow steps), you need to look up the name of the desired output file in the scripts and call Snakemake with the exact name. Using a flag -n, you can initiate a 'dry run': Snakemake will check the consistency of all rules and files and show the number of steps. However, a clean dry run does not necessarily mean that no errors will occur during a normal run. ReMM score is not allele-specific so that you get only one score independent of the variant itself. The workflow from the download of data up to computing the scores may take several days or weeks depending on the computing power and internet connection.
+To execute any step separately (see `README.md` in the `workflow` folder for details on workflow steps), you need to look up the name of the desired output file in the scripts and call Snakemake with the exact name. Using a flag `-n`, you can initiate a 'dry run': Snakemake will check the consistency of all rules and files and show the number of steps. However, a clean dry run does not necessarily mean that no errors will occur during a normal run. ReMM score is not allele-specific so that you get only one score independent of the variant itself. The workflow from the download of data up to computing the scores may take several days or weeks depending on the computing power and internet connection.
 
 
 ### The config files
